@@ -1,2 +1,1 @@
-{{title}}
-<h>Backup Server</h>
+<h1>Backup Server</h1>

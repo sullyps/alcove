@@ -29,6 +29,7 @@ var config = {
       name: 'backup'
     },
     port: 3443,
+    auth: rootPath + '/resources/htpassword',
     db: 'sqlite://localhost/backup-production',
     storage: rootPath + '/data/backup-production'
   }

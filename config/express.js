@@ -1,4 +1,5 @@
 var express = require('express');
+var fs = require('fs');
 var glob = require('glob');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
@@ -21,8 +22,21 @@ module.exports = function(app, config) {
   app.use(logger('dev'));
 
   // Setup basic HTTP AUTH
-  var basic = auth.basic({ realm: 'Bioneos System Backup', file: config.root + '/resources/htpassword'});
-  app.use(auth.connect(basic));
+  if (config.authFile)
+  {
+    try
+    {
+      var basic = auth.basic({ realm: 'Bioneos System Backup', file: config.authFile});
+      app.use(auth.connect(basic));
+    }
+    catch (e)
+    {
+      console.log(e + '\n\n');
+      console.log('Looks like we cannot accesss your configured HTTP Auth file: "' + 
+        config.authFile + '"');
+      exit(-1);
+    }
+  }
 
   //app.use(favicon(config.root + '/public/img/favicon.ico'));
   app.use(bodyParser.json());
