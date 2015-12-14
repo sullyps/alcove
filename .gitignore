@@ -1,0 +1,4 @@
+node_modules
+resources/htpassword
+resources/ssl/*key
+resources/ssl/*crt

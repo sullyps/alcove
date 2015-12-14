@@ -1,0 +1,26 @@
+{
+  "name": "bioneos-system-backup",
+  "version": "1.0.0",
+  "description": "Our internal backup system",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.14.1",
+    "compression": "^1.6.0",
+    "express": "^4.13.3",
+    "glob": "^6.0.1",
+    "http-auth": "^2.2.8",
+    "https": "^1.0.0",
+    "method-override": "^2.3.5",
+    "morgan": "^1.6.1",
+    "path": "^0.12.7",
+    "sequelize": "^3.14.2",
+    "serve-favicon": "^2.3.0",
+    "sqlite3": "^3.1.1",
+    "swig": "^1.4.2"
+  }
+}

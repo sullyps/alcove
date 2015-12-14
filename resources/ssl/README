@@ -1,0 +1,17 @@
+# Generating a self-signed Certificate for Testing
+
+When you do not have access to a valid X.509 OpenSSL Certificate, in order to
+run the NodeJS server, you need to generate a self-signed Certificate since it
+requires HTTPS communication. 
+
+Use the following two commands to create an ECDSA key and self-signed cert.
+
+```
+openssl ecparam -out ssl.key -name secp521r1 -genkey
+openssl req -x509 -new -key ssl.key -out ssl.crt -days 365 -subj "/C=US/ST=Iowa/L=Coralville/O=Bio::Neos, Inc./CN=localhost"
+```
+
+Trouble? Try RSA instead:
+```
+openssl genrsa -out ssl.key 2048
+```
