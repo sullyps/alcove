@@ -3,7 +3,6 @@ var fs = require('fs');
 // Every day for the last 7 days, every Monday for the past 5 Mondays, 
 // Monday, Wednesday, Friday, for the past 3 times.
 
-// Parses schedule and creates an easily transversible object.
 var app = {
    dates_sort: function (date1, date2) {
     if (date1 > date2) return 1;
@@ -11,6 +10,11 @@ var app = {
     return 0;
   },
 
+  // Parses schedule and creates an easily traversable object.
+  // @param schedule (string)
+  //   The schedule in the intial string format.
+  // @return
+  //   schedule object that making schedule data easier.
   parseSchedule: function (schedule) { 
     var scheduleObj = {};
     var partialSplit = schedule.split('_');
@@ -19,7 +23,6 @@ var app = {
     var time = partialSplit[1].replace(/[\[\]]/g,'').split(':');
     scheduleObj.time.hours = parseInt(time[0]);
     scheduleObj.time.minutes = parseInt(time[1]);
-    console.log(scheduleObj.time);
     scheduleObj.daysSets = [];
     partialSplit[0].split('|').forEach(function(schedSet) {
       var daysSet = {};
@@ -35,24 +38,25 @@ var app = {
     return scheduleObj;
   },
 
-  // Function to add buckets in order from smallest to largest.
-  //  If it already exists it doesn't add it again.
-  addBucketToList: function (bucket, buckets) {
+  //  Add buckets in chronological order to the bucket list. 
+  //    If a date overlaps multiple schedules it only gets 
+  //    added to the list one time.
+  addBucketToList: function (bucket, bucketList) {
     var added = false;
-    for (var i=0; i< buckets.length; i++) {
-      if (bucket.date.getTime() < buckets[i].date.getTime()) {
-        buckets.splice(i, 0, bucket);
+    for (var i=0; i< bucketList.length; i++) {
+      if (bucket.date.getTime() < bucketList[i].date.getTime()) {
+        bucketList.splice(i, 0, bucket);
         added = true;
         break;
       }
-      else if (bucket.date.getTime() == buckets[i].date.getTime()) {
+      else if (bucket.date.getTime() == bucketList[i].date.getTime()) {
         // If it already exists, don't add and move on.
         added = true; 
         break;
       }
     }
     if (!added) {
-      buckets.push(bucket);
+      bucketList.push(bucket);
     }
   },
   
@@ -71,11 +75,6 @@ var app = {
           date.getHours() == schedObj.time.hours && date.getMinutes() >= schedObj.time.minutes)
     var day = date.getDay();
     schedObj.daysSets.forEach(function(daysObj) {
-      console.log('date: ' + date);
-      console.log('  hour: ' + date.getHours());
-      console.log('  minute: ' + date.getMinutes());
-      console.log(includeDay);
-      
       // Find index of days array to create first bucket.
       var index = -1;
       for (var i=0; i<daysObj.days.length; i++) {
@@ -113,6 +112,8 @@ var app = {
         bucket.date.setDate(date.getDate() - difference);
         bucket.date.setHours(schedObj.time.hours);
         bucket.date.setMinutes(schedObj.time.minutes);
+        bucket.date.setSeconds(0);
+        bucket.date.setMilliseconds(0);
         app.addBucketToList(bucket, buckets);
         startingDay = daysObj.days[index];
         if (index == 0) { startingDay = 7 + daysObj.days[index]; }
@@ -122,15 +123,15 @@ var app = {
         if (index < 0) { index = daysObj.days.length - 1 }
         count--;
       }
-  
-    });
-    buckets.forEach(function(bucket) {
-      console.log(bucket);
     });
     return buckets;
   },
   
-  
+  // Returns the next scheduled backup time.
+  // @param schedule (string)
+  //   the raw unparsed schedule.
+  // @param date
+  //   the date that you wish to find the next scheduled time from.  Usually the current time.
   findNextScheduledTime: function (schedule, date)  {
     var scheduleObject = app.parseSchedule(schedule);
     var includeDay = (date.getHours() > scheduleObject.time.hours || 
@@ -157,11 +158,9 @@ var app = {
       if (index == daysObj.days.length) {
         index = 0;
       }
-      console.log('INDEX: ' + index);
       var tempNumDays = 0;
       if (index > 0)  { tempNumDays = daysObj.days[index] - day; }
       else  { tempNumDays = 7 - day + daysObj.days[index]; }
-      console.log(' TEMP DAYS: ' + tempNumDays) ;
       if (tempNumDays < numberOfDaysFromNow) {
         numberOfDaysFromNow = tempNumDays;
       }
@@ -170,24 +169,25 @@ var app = {
     nextScheduledBackup.setDate( date.getDate() + numberOfDaysFromNow );
     nextScheduledBackup.setHours(scheduleObject.time.hours);
     nextScheduledBackup.setMinutes(scheduleObject.time.minutes);
-    console.log(' CURRENT DATE: ' + date);
-    console.log(' NUMBER OF DAYS FROM NOW: ' + numberOfDaysFromNow);
-    console.log( ' NEXT SCHEDULED BACKUP:  ' + nextScheduledBackup);
+    nextScheduledBackup.setSeconds(0);
+    nextScheduledBackup.setMilliseconds(0);
     return nextScheduledBackup;
   },
   
-  fillBuckets: function (buckets, dateArr) {
-    var dates = [];
-    fs.readdir('../../resources/test_backups/', function(err, backupsData) {
+  // Fills the buckets obtained from the method getBuckets with the directories
+  // in the directory passed as a parameter.
+  fillBuckets: function (buckets, dir, callback) {
+    var dateArr = [];
+    fs.readdir(dir, function(err, backupsData) {
       if (err) {
         console.log(err);
       }
       else {
         backupsData.forEach(function(datedDir) {
-          dates.push(new Date(datedDir));
+          dateArr.push(new Date(datedDir));
         });
       }
-      dateArr = dates;
+
       // Make sure the dates array is sorted in chronological order.
       dateArr.sort(app.dates_sort);
       console.log('\nDirectory Dates: ');
@@ -195,32 +195,58 @@ var app = {
         console.log('  ' + date);
       });
       
-      removedDates = [];
       for (var i=dateArr.length-1; i>=0; i--) {
         for (var j=buckets.length-1; j>=0; j--) {
+          // If the directory date is greater than the bucket date and bucket date
+          //   doesn't already exist add the directory date to the bucket.
           if (dateArr[i] >= buckets[j].date && buckets[j].backup == null) {
             buckets[j].backup = dateArr[i];
             break;
           }
           else if (dateArr[i] >= buckets[j].date && dateArr[i] < buckets[j].backup) {
-            removedDates.push(buckets[j].backup);
+            // If it the directory date is greater than the bucket date and smaller than
+            //   the existing date in the bucket replace it with the smaller date.
             buckets[j].backup = dateArr[i];
             break;
           }
-          else removedDates.push(dateArr[i]);
         }
       }
-      console.log('\nRemoved Dates: ');
-      removedDates.forEach(function(date) {
-        console.log('  ' + date);
-      });
-  
-      console.log('\nBuckets: ');
+      console.log('\nBackups: ');
       buckets.forEach(function(bucket) {
         console.log('  ' + bucket.backup);
       });
+
+      callback(dir, buckets);
+    });    
+  },
+
+  // Returns a list of directories to remove.
+  getRemovedDirectoriesList: function(dir, buckets) {
+    var removedDirectories = [];
+    fs.readdir(dir, function(err, backupsData) {
+      if (err) {
+        console.log(err);
+      }
+      else {
+        backupsData.forEach(function(datedDir) {
+          var directoryDate = new Date(datedDir);
+          var remove = true;
+          buckets.forEach(function(bucket) {
+            if (bucket.backup != null && bucket.backup.getTime() == directoryDate.getTime()) {
+              remove = false;
+            }
+          });
+          if (remove) {
+            removedDirectories.push(datedDir);
+          }
+        });
+      }
+      console.log('\nRemoved Directories:');
+      removedDirectories.forEach(function(date) {
+        console.log('  ' + date);
+      });
+      return removedDirectories;
     });
   }
 }
-module.exports = app;
-   
+module.exports = app;  
