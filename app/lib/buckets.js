@@ -1,4 +1,5 @@
-var fs = require('fs');
+var fs = require('fs'),
+    rmdir = require('rmdir');
 
 // Every day for the last 7 days, every Monday for the past 5 Mondays, 
 // Monday, Wednesday, Friday, for the past 3 times.
@@ -63,7 +64,6 @@ var app = {
   // Returns an array of buckets which is an array of date objects
   //   that defines the day and time of a backup that needs to be stored.
   getBuckets: function (sched, date) {
-    //date = new Date(2015, 6, 9, 2, 3, 0, 0);
     date = new Date();
     app.findNextScheduledTime(sched, date);
     schedObj = app.parseSchedule(sched);
@@ -118,8 +118,10 @@ var app = {
         startingDay = daysObj.days[index];
         if (index == 0) { startingDay = 7 + daysObj.days[index]; }
         index = (index - 1) % daysObj.days.length;
+        //
         // Javascript modulo of negative numbers doesn't work as expected
         // so once it gets negative we start over at the end of the list.
+        // 
         if (index < 0) { index = daysObj.days.length - 1 }
         count--;
       }
@@ -137,7 +139,10 @@ var app = {
     var includeDay = (date.getHours() > scheduleObject.time.hours || 
           date.getHours() == scheduleObject.time.hours && date.getMinutes() >= scheduleObject.time.minutes)
     var day = date.getDay();
-    // Set to high number so it is easy to be less than the first time through.
+    //
+    // Set variable numberOfDaysFromNow to high number so it has
+    // to be less than this many days the first time through.
+    // 
     var numberOfDaysFromNow = 999999;
     scheduleObject.daysSets.forEach(function(daysObj) {
       var index = -1;
@@ -165,6 +170,8 @@ var app = {
         numberOfDaysFromNow = tempNumDays;
       }
     });
+
+    // Set the date and times for the next backup date.
     var nextScheduledBackup = new Date(date.toString());
     nextScheduledBackup.setDate( date.getDate() + numberOfDaysFromNow );
     nextScheduledBackup.setHours(scheduleObject.time.hours);
@@ -179,8 +186,8 @@ var app = {
   fillBuckets: function (buckets, dir, callback) {
     var dateArr = [];
     fs.readdir(dir, function(err, backupsData) {
-      if (err) {
-        console.log(err);
+      if (err != null) {
+        throw err;
       }
       else {
         backupsData.forEach(function(datedDir) {
@@ -219,13 +226,38 @@ var app = {
       callback(dir, buckets);
     });    
   },
+ 
+  // Makes a call to getRemovedDirectoriesList and passes a callback
+  // to list them out.
+  listDirectoriesToRemove: function(dir, buckets) {
+    app.getRemovedDirectoriesList(dir, buckets, function(removedDirectories) {
+      console.log("\nRemove directories:");
+      removedDirectories.forEach(function(unusedBackupDir) {
+        console.log(unusedBackupDir);
+      });
+    });
+  },
 
-  // Returns a list of directories to remove.
-  getRemovedDirectoriesList: function(dir, buckets) {
+  // Makes a call to getRemovedDirectoriesList and passes a callback
+  // to delete them from the filesystem.
+  removeDirectories: function (dir, buckets) {
+    app.getRemovedDirectoriesList(dir, buckets, function(removedDirectories) {
+      removedDirectories.forEach(function(unusedBackupDir) {
+        console.log('Removing ' + unusedBackupDir);
+        rmdir(dir + unusedBackupDir, function(err, dirs, files) {
+          if (err)  throw err;
+        });
+      });
+    });
+  },
+
+  // Asynchronous call takes in callback and does something with
+  // the list of directories that need to be removed.
+  getRemovedDirectoriesList: function(dir, buckets, callback) {
     var removedDirectories = [];
     fs.readdir(dir, function(err, backupsData) {
-      if (err) {
-        console.log(err);
+      if (err) { 
+        throw err;
       }
       else {
         backupsData.forEach(function(datedDir) {
@@ -241,11 +273,7 @@ var app = {
           }
         });
       }
-      console.log('\nRemoved Directories:');
-      removedDirectories.forEach(function(date) {
-        console.log('  ' + date);
-      });
-      return removedDirectories;
+      callback(removedDirectories);
     });
   }
 }
