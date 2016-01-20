@@ -64,7 +64,6 @@ var app = {
   // Returns an array of buckets which is an array of date objects
   //   that defines the day and time of a backup that needs to be stored.
   getBuckets: function (sched, date) {
-    date = new Date();
     app.findNextScheduledTime(sched, date);
     schedObj = app.parseSchedule(sched);
     // Initialize our buckets array.
@@ -136,8 +135,9 @@ var app = {
   //   the date that you wish to find the next scheduled time from.  Usually the current time.
   findNextScheduledTime: function (schedule, date)  {
     var scheduleObject = app.parseSchedule(schedule);
-    var includeDay = (date.getHours() > scheduleObject.time.hours || 
-          date.getHours() == scheduleObject.time.hours && date.getMinutes() >= scheduleObject.time.minutes)
+    // boolean for including date given as a possible next scheduled backup day.
+    var includeDay = (date.getHours() < scheduleObject.time.hours || 
+          date.getHours() == scheduleObject.time.hours && date.getMinutes() < scheduleObject.time.minutes)
     var day = date.getDay();
     //
     // Set variable numberOfDaysFromNow to high number so it has
@@ -147,25 +147,23 @@ var app = {
     scheduleObject.daysSets.forEach(function(daysObj) {
       var index = -1;
       for (var i=0; i<daysObj.days.length; i++) {
-        if (day > daysObj.days[i]) {
-          index = i;
-          continue;
-        }
-        else if (day == daysObj.days[i] && !includeDay || day < daysObj.days[i]) {
+        if (day == daysObj.days[i] && includeDay || day < daysObj.days[i]) {
           index = i;
           break;
         }
-        else if (day == daysObj.days[i] && includeDay) {
+        else if (day == daysObj.days[i] && !includeDay) {
           index = i + 1;
           break;
         }
       }
-      if (index == daysObj.days.length) {
+      if (index == daysObj.days.length || index < 0) {
         index = 0;
       }
       var tempNumDays = 0;
       if (index > 0)  { tempNumDays = daysObj.days[index] - day; }
-      else  { tempNumDays = 7 - day + daysObj.days[index]; }
+      else  { 
+        tempNumDays = 7 - day + daysObj.days[index];
+      }
       if (tempNumDays < numberOfDaysFromNow) {
         numberOfDaysFromNow = tempNumDays;
       }
@@ -181,8 +179,13 @@ var app = {
     return nextScheduledBackup;
   },
   
-  // Fills the buckets obtained from the method getBuckets with the directories
-  // in the directory passed as a parameter.
+  // Fills the buckets obtained from the method getBuckets with the backup dirs.
+  // @param buckets
+  //   array of buckets obtained from getBuckets.
+  // @param dir
+  //   directory that holds the backup directories for a given machine.
+  // @param callback
+  //   callback function that does what you want to the directories to remove.
   fillBuckets: function (buckets, dir, callback) {
     var dateArr = [];
     fs.readdir(dir, function(err, backupsData) {
