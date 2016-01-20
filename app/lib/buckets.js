@@ -187,6 +187,7 @@ var app = {
   //   callback function that does what you want to the directories to remove.
   fillBuckets: function (buckets, dir, callback) {
     var dateArr = [];
+    var backups = [];
     fs.readdir(dir, function(err, backupsData) {
       if (err != null) {
         throw err;
@@ -194,6 +195,8 @@ var app = {
       else {
         backupsData.forEach(function(datedDir) {
           dateArr.push(new Date(datedDir));
+          // Add to the array of directories that contain backups
+          backups.push(datedDir);
         });
       }
 
@@ -225,14 +228,18 @@ var app = {
         console.log('  ' + bucket.backup);
       });
 
-      callback(dir, buckets);
+      callback(backups, buckets);
     });    
   },
  
   // Makes a call to getRemovedDirectoriesList and passes a callback
   // to list them out.
-  listDirectoriesToRemove: function(dir, buckets) {
-    app.getRemovedDirectoriesList(dir, buckets, function(removedDirectories) {
+  // @param backups
+  //   list of the backup directories from different dates.
+  // @param buckets
+  //   list of buckets obtained from the getBuckets and fillBuckets functions.
+  listDirectoriesToRemove: function(backups, buckets) {
+    app.getRemovedDirectoriesList(backups, buckets, function(removedDirectories) {
       console.log("\nRemove directories:");
       removedDirectories.forEach(function(unusedBackupDir) {
         console.log(unusedBackupDir);
@@ -242,8 +249,12 @@ var app = {
 
   // Makes a call to getRemovedDirectoriesList and passes a callback
   // to delete them from the filesystem.
-  removeDirectories: function (dir, buckets) {
-    app.getRemovedDirectoriesList(dir, buckets, function(removedDirectories) {
+  // @param backups
+  //   list of the backup directories from different dates.
+  // @param buckets
+  //   list of buckets obtained from the getBuckets and fillBuckets functions.
+  removeDirectories: function (backups, buckets) {
+    app.getRemovedDirectoriesList(backups, buckets, function(removedDirectories) {
       removedDirectories.forEach(function(unusedBackupDir) {
         console.log('Removing ' + unusedBackupDir);
         rmdir(dir + unusedBackupDir, function(err, dirs, files) {
@@ -253,30 +264,29 @@ var app = {
     });
   },
 
-  // Asynchronous call takes in callback and does something with
+  // Call takes in callback and does something with
   // the list of directories that need to be removed.
-  getRemovedDirectoriesList: function(dir, buckets, callback) {
+  // @param backups
+  //   list of the backup directories from different dates.
+  // @param buckets
+  //   buckets that are obtained with getBuckets and modified with fillBuckets functions.
+  // @param callback
+  //   function to do something with the directories to remove list.
+  getRemovedDirectoriesList: function(backups, buckets, callback) {
     var removedDirectories = [];
-    fs.readdir(dir, function(err, backupsData) {
-      if (err) { 
-        throw err;
+    backups.forEach(function(datedDir) {
+      var directoryDate = new Date(datedDir);
+      var remove = true;
+      buckets.forEach(function(bucket) {
+        if (bucket.backup != null && bucket.backup.getTime() == directoryDate.getTime()) {
+          remove = false;
+        }
+      });
+      if (remove) {
+        removedDirectories.push(datedDir);
       }
-      else {
-        backupsData.forEach(function(datedDir) {
-          var directoryDate = new Date(datedDir);
-          var remove = true;
-          buckets.forEach(function(bucket) {
-            if (bucket.backup != null && bucket.backup.getTime() == directoryDate.getTime()) {
-              remove = false;
-            }
-          });
-          if (remove) {
-            removedDirectories.push(datedDir);
-          }
-        });
-      }
-      callback(removedDirectories);
     });
+    callback(removedDirectories);
   }
 }
 module.exports = app;  
