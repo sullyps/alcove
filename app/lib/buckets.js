@@ -156,12 +156,11 @@ var app = {
           break;
         }
       }
-      if (index == daysObj.days.length || index < 0) {
-        index = 0;
-      }
+      
       var tempNumDays = 0;
-      if (index > 0)  { tempNumDays = daysObj.days[index] - day; }
+      if (index >= 0 && index < daysObj.days.length)  { tempNumDays = daysObj.days[index] - day; }
       else  { 
+        index = 0;
         tempNumDays = 7 - day + daysObj.days[index];
       }
       if (tempNumDays < numberOfDaysFromNow) {
