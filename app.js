@@ -48,10 +48,8 @@ fs.readdir('config/machines/', function(error, files) {
 function mainLoop(machine) {
   var backupDirectory = backupConfig.destinationDir + machine.name;
   var buckets = bucketUtil.getBuckets(machine.schedule, new Date(Date.now()));
-
+  
   // Asynchronous method call to fill buckets that were obtained from getBuckets
-  // TODO: Call to rsync needs to be within this method or it won't know if it needs to back up or not.
-  //   since that is the case, we need to pass in the machine variable as well.
   bucketUtil.fillBuckets(buckets, backupDirectory, machine, bucketUtil.removeDirectories, rsync.runRsync);
   var currentTime = new Date(Date.now());
   var nextBackup = bucketUtil.findNextScheduledTime(machine.schedule, currentTime);
