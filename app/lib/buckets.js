@@ -18,7 +18,7 @@ var app = {
   //   schedule object that making schedule data easier.
   parseSchedule: function (schedule) { 
     var scheduleObj = {};
-    var partialSplit = schedule.split('_');
+    var partialSplit = schedule.split(';');
     // Remove the brackets from the time.
     scheduleObj.time = {};
     var time = partialSplit[1].replace(/[\[\]]/g,'').split(':');
@@ -185,12 +185,21 @@ var app = {
   //   directory that holds the backup directories for a given machine.
   // @param callback
   //   callback function that does what you want to the directories to remove.
-  fillBuckets: function (buckets, dir, callback) {
+  // TODO: pass in machine so it can run rsync on the correct machine.
+  fillBuckets: function (buckets, dir, machine, removeDirs, runRsync) {
     var dateArr = [];
     var backups = [];
     fs.readdir(dir, function(err, backupsData) {
       if (err != null) {
-        throw err;
+        fs.mkdir(dir, function(mkdirErr) {
+          if (mkdirErr != null) {
+            // TODO: instead of throwing error, notify correct person.
+            throw err;
+          }
+          else {
+            // TODO: Run rsync
+          }
+        });
       }
       else {
         backupsData.forEach(function(datedDir) {
@@ -198,38 +207,40 @@ var app = {
           // Add to the array of directories that contain backups
           backups.push(datedDir);
         });
-      }
+        // Make sure the dates array is sorted in chronological order.
+        dateArr.sort(app.dates_sort);
+        console.log('\nDirectory Dates: ');
+        dateArr.forEach(function(date) {
+          console.log('  ' + date);
+        });
 
-      // Make sure the dates array is sorted in chronological order.
-      dateArr.sort(app.dates_sort);
-      console.log('\nDirectory Dates: ');
-      dateArr.forEach(function(date) {
-        console.log('  ' + date);
-      });
-      
-      for (var i=dateArr.length-1; i>=0; i--) {
-        for (var j=buckets.length-1; j>=0; j--) {
-          // If the directory date is greater than the bucket date and bucket date
-          //   doesn't already exist add the directory date to the bucket.
-          if (dateArr[i] >= buckets[j].date && buckets[j].backup == null) {
-            buckets[j].backup = dateArr[i];
-            break;
-          }
-          else if (dateArr[i] >= buckets[j].date && dateArr[i] < buckets[j].backup) {
-            // If it the directory date is greater than the bucket date and smaller than
-            //   the existing date in the bucket replace it with the smaller date.
-            buckets[j].backup = dateArr[i];
-            break;
+        for (var i=dateArr.length-1; i>=0; i--) {
+          for (var j=buckets.length-1; j>=0; j--) {
+            // If the directory date is greater than the bucket date and bucket date
+            //   doesn't already exist add the directory date to the bucket.
+            if (dateArr[i] >= buckets[j].date && buckets[j].backup == null) {
+              buckets[j].backup = dateArr[i];
+              break;
+            }
+            else if (dateArr[i] >= buckets[j].date && dateArr[i] < buckets[j].backup) {
+              // If it the directory date is greater than the bucket date and smaller than
+              //   the existing date in the bucket replace it with the smaller date.
+              buckets[j].backup = dateArr[i];
+              break;
+            }
           }
         }
-      }
-      console.log('\nBackups: ');
-      buckets.forEach(function(bucket) {
-        console.log('  ' + bucket.backup);
-      });
+        console.log('\nBackups: ');
+        buckets.forEach(function(bucket) {
+          console.log('  ' + bucket.backup);
+        });
 
-      callback(backups, buckets);
-    });    
+        // Call to delete directories that aren't contained in a bucket.
+        removeDirs(backups, buckets);
+        runRsync(machine);
+        // TODO: call to rsync if last bucket is not full.
+      }
+    });
   },
  
   // Makes a call to getRemovedDirectoriesList and passes a callback
