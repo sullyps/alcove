@@ -1,66 +1,23 @@
 var express = require('express'),
-  config = require('./config/config'),
-  db = require('./app/models'),
-  https = require('https'),
-  app = express(),
   fs = require('fs'),
-  bucketUtil = require('./app/lib/buckets'),
-  ssl = {
+  https = require('https'),
+  db = require('./app/models'),
+  system = require('./lib/system'),
+  config = require('./lib/config/config').config;
+
+
+  // TODO: Do not hardcode these values.
+var ssl = {
     key: fs.readFileSync('./resources/ssl/ssl.key'),
     cert: fs.readFileSync('./resources/ssl/ssl.crt')
   },
-  backupConfig = require('./config/backup'),
-  rsync = require('./app/lib/rsync'),
-  machines = [];
-  
-
-// Main operation call here and then set up listening port?
-// So basically set timeouts first and then start the web app.
-// TODO: Should I move this to another file?
-// TODO: add loggers for each machine here too.
-//
-// Read in each of the machine config files as a machine.
-fs.readdir('config/machines/', function(error, files) {
-  files.forEach(function(file) {
-    var machine = require('./config/machines/' + file);
-    machines.push(machine);
-  });
-  // SetTimeout on each machine for backups and perform at the first scheduled time.
-  machines.forEach(function(machine) {
-    var currentTime = new Date(Date.now());
-    var nextBackup = bucketUtil.findNextScheduledTime(machine.schedule, currentTime);
-    console.log('Setting timeout for ' + (nextBackup));
-    setTimeout(function() { mainLoop(machine) }, nextBackup.getTime() - currentTime.getTime());
-  });
-});
-
-/**
- *  Main application loop.
- *  Gets called after a setTimeout of whenever the next scheduled backup is for the machine.
- *  Follows the steps:
- *    1. Gets a list of buckets (Times when the machine should be backed up)
- *    2. Fills buckets (checks all the times that the machine was actually backed up)
- *    3. Performs backup if necessary (It should be necessary).
- *    4. Set timeout to repeat the cycle.
- *  @params
- *    machine-machine that is scheduled to backup.
- * */
-function mainLoop(machine) {
-  var backupDirectory = backupConfig.destinationDir + machine.name;
-  var buckets = bucketUtil.getBuckets(machine.schedule, new Date(Date.now()));
-  
-  // Asynchronous method call to fill buckets that were obtained from getBuckets
-  bucketUtil.fillBuckets(buckets, backupDirectory, machine, bucketUtil.removeDirectories, rsync.runRsync);
-  var currentTime = new Date(Date.now());
-  var nextBackup = bucketUtil.findNextScheduledTime(machine.schedule, currentTime);
-  console.log('Setting timeout for ' + (nextBackup));
-  setTimeout(function() { mainLoop(machine) }, nextBackup.getTime() - currentTime.getTime());
-}
-
+  backupConfig = require('./etc/backup/backup'),
+  rsync = require('./lib/rsync');
 
 var app = express();
-
-require('./config/express')(app, config);
+app.locals.machines = [];
+require('./lib/config/config').configMachines(app);
+require('./lib/config/express')(app, config);
 
 console.log('Starting up on: ' + config.port);
 console.log('  DB: ' + config.db);
