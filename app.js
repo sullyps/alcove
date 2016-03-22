@@ -10,13 +10,11 @@ var express = require('express'),
 var ssl = {
     key: fs.readFileSync('./resources/ssl/ssl.key'),
     cert: fs.readFileSync('./resources/ssl/ssl.crt')
-  },
-  backupConfig = require('./etc/backup/backup'),
-  rsync = require('./lib/rsync');
+  };
 
 var app = express();
 app.locals.machines = [];
-require('./lib/config/config').configMachines(app);
+require('./lib/config/config').configureMachines(app);
 require('./lib/config/express')(app, config);
 
 console.log('Starting up on: ' + config.port);
@@ -30,5 +28,4 @@ db.sequelize
   }).catch(function (e) {
     throw new Error(e);
   });
-
 
