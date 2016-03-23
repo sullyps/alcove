@@ -1,30 +1,31 @@
 var express = require('express'),
   fs = require('fs'),
+  http = require('http'),
   https = require('https'),
+  log4js = require('log4js'),
   db = require('./app/models'),
   system = require('./lib/system'),
-  config = require('./lib/config/config').config;
-
-
-  // TODO: Do not hardcode these values.
-var ssl = {
-    key: fs.readFileSync('./resources/ssl/ssl.key'),
-    cert: fs.readFileSync('./resources/ssl/ssl.crt')
+  config = require('./lib/config/config').config,
+  logger = require('./lib/config/log4js')(config),
+  ssl = {
+    key: fs.readFileSync(config.key),
+    cert: fs.readFileSync(config.cert)
   };
 
 var app = express();
+
 app.locals.machines = [];
 require('./lib/config/config').configureMachines(app);
 require('./lib/config/express')(app, config);
 
-console.log('Starting up on: ' + config.port);
-console.log('  DB: ' + config.db);
+logger.info('Starting up on: ' + config.port);
+logger.info('  DB: ' + config.db);
 
 db.sequelize
   .sync()
   .then(function () {
-    https.createServer(ssl, app).listen(config.port);
-    //app.listen(config.port);
+    http.createServer(app).listen(config.port, config.ip);
+    https.createServer(ssl, app).listen(config.ssl_port, config.ip);
   }).catch(function (e) {
     throw new Error(e);
   });
