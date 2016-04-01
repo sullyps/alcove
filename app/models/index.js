@@ -3,10 +3,10 @@
 var fs = require('fs'),
   path = require('path'),
   Sequelize = require('sequelize'),
-  config = require('../../lib/config/config').config,
+  config = require('../../lib/config/config').environmentVar,
   db = {};
 
-var sequelize = new Sequelize(config.db, {
+var sequelize = new Sequelize(config.environment.db_url, {
   storage: config.storage
 });
 

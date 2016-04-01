@@ -1,8 +1,8 @@
 # Ignore these.
 node_modules
 resources/htpassword
-resources/ssl/*key
-resources/ssl/*crt
+etc/ssl/*key
+etc/ssl/*crt
 logs/*
 etc/backup/*
 
