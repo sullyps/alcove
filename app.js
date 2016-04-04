@@ -4,11 +4,11 @@ var express = require('express'),
   https = require('https'),
   db = require('./app/models'),
   system = require('./lib/system'),
-  config = require('./lib/config/config').config,
+  config = require('./lib/config/config').environmentVar,
   logger = require('./lib/config/log4js').configure(config);
   ssl = {
-    key: fs.readFileSync(config.key),
-    cert: fs.readFileSync(config.cert)
+    key: fs.readFileSync(config.environment.key),
+    cert: fs.readFileSync(config.environment.cert)
   };
 
 var app = express();
@@ -27,6 +27,7 @@ db.sequelize
   .then(function () {
     http.createServer(app).listen(config.port, config.ip);
     https.createServer(ssl, app).listen(config.ssl_port, config.ip);
+    // TODO: change to app so system can hold onto the whole app variable.
     system.init(app.locals.machines);
   }).catch(function (e) {
     throw new Error(e);
