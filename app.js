@@ -18,17 +18,17 @@ app.locals.machines = [];
 require('./lib/config/config').configureMachines(app);
 require('./lib/config/express')(app, config);
 
-logger.info('Starting up on: ' + config.port);
-logger.info('  DB: ' + config.db);
+logger.info('Starting up on: ' + config.environment.port);
+logger.info('  DB: ' + config.environment.db_url);
 
-// Sync the database then start the server and the main backup prcess.
+// Sync the database then start the server and the main backup process.
 db.sequelize
   .sync()
   .then(function () {
-    http.createServer(app).listen(config.port, config.ip);
-    https.createServer(ssl, app).listen(config.ssl_port, config.ip);
+    http.createServer(app).listen(config.environment.port, config.environment.ip);
+    https.createServer(ssl, app).listen(config.environment.ssl_port, config.environment.ip);
     // TODO: change to app so system can hold onto the whole app variable.
-    system.init(app.locals.machines);
+    system.init(app);
   }).catch(function (e) {
     throw new Error(e);
   });
