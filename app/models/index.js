@@ -7,7 +7,7 @@ var fs = require('fs'),
   db = {};
 
 var sequelize = new Sequelize(config.environment.db_url, {
-  storage: config.storage
+  storage: config.environment.db_storage
 });
 
 fs.readdirSync(__dirname).filter(function (file) {
