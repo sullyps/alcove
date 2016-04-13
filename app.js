@@ -27,7 +27,6 @@ db.sequelize
   .then(function () {
     http.createServer(app).listen(config.environment.port, config.environment.ip);
     https.createServer(ssl, app).listen(config.environment.ssl_port, config.environment.ip);
-    // TODO: change to app so system can hold onto the whole app variable.
     system.init(app);
   }).catch(function (e) {
     throw new Error(e);
