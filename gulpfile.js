@@ -12,6 +12,11 @@ gulp.task('init', function() {
   gutil.log('Synchronously creating required directories');
   fs.ensureDirSync('./public/');
   fs.ensureDirSync('./data/');
+  fs.ensureDirSync('./var/');
+  fs.ensureDirSync('./var/log/');
+  fs.ensureDirSync('./etc/');
+  fs.ensureDirSync('./etc/ssl/');
+  fs.ensureDirSync('./resources/');
   // Add any other required directories here
 });
 
