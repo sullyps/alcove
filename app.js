@@ -33,6 +33,9 @@ db.sequelize
       }
       https.createServer(ssl, app).listen(config.environment.ssl_port, config.environment.ip);
     }
+    else {
+      logger.info('Starting the application without using ssl/https');
+    }
     system.init(app);
   }).catch(function (e) {
     throw new Error(e);
