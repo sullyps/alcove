@@ -6,6 +6,18 @@ var fs = require('fs'),
   config = require('../../lib/config/config').environmentVar,
   db = {};
 
+// Check to make sure the data directory exists before running the application
+(function() {
+  var parentDataDir = path.normalize(path.join(config.environment.db_storage, '..'));
+  try {
+    fs.statSync(parentDataDir);
+  }
+  catch (error) {
+    throw new Error('Please make sure the parent directory, ' + parentDataDir + ' of your' +
+        ' data storage file exists before running the application.\nError: ' + error.message);
+  }
+})();
+
 var sequelize = new Sequelize(config.environment.db_url, {
   storage: config.environment.db_storage
 });
