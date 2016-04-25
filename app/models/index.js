@@ -9,12 +9,14 @@ var fs = require('fs'),
 // Check to make sure the data directory exists before running the application
 (function() {
   var parentDataDir = path.normalize(path.join(config.environment.db_storage, '..'));
-  try {
+  try 
+  {
     fs.statSync(parentDataDir);
   }
-  catch (error) {
-    throw new Error('Please make sure the parent directory, ' + parentDataDir + ' of your' +
-        ' data storage file exists before running the application.\nError: ' + error.message);
+  catch (error) 
+  {
+    throw new Error('Please create the parent directory, ' + parentDataDir + ' of your' +
+        ' data storage file before running the application.');
   }
 })();
 

@@ -11,7 +11,15 @@ var app = express();
 app.locals.machines = [];
 
 // Configure the machines and push them to the array of machines.
-require('./lib/config/config').configureMachines(app);
+try
+{
+  require('./lib/config/config').configureMachines(app);
+}
+catch(error)
+{
+  logger.error('Error:  ' + error.message);
+  process.exit(-1);
+}
 require('./lib/config/express')(app, config);
 
 logger.info('Starting up on: ' + config.environment.port);
@@ -23,12 +31,15 @@ db.sequelize
   .then(function () {
     http.createServer(app).listen(config.environment.port, config.environment.ip);
     if (config.environment.run_securely) {
-      try {
+      try
+      {
           ssl.key = fs.readFileSync(config.environment.key);
           ssl.cert = fs.readFileSync(config.environment.cert);
-      } catch(error) {
+      }
+      catch(error)
+      {
         logger.error('Please make sure you have correctly defined your ssl key and certification in the backup.ini '+
-        'config file, or set the environment.run_securely variable to false. \nError: ' + error.message);
+        'config file, or set the environment.run_securely variable to false.\nError: ' + error.message);
         process.exit(-1);
       }
       https.createServer(ssl, app).listen(config.environment.ssl_port, config.environment.ip);
@@ -38,6 +49,7 @@ db.sequelize
     }
     system.init(app);
   }).catch(function (e) {
-    throw new Error(e);
+    logger.error('Unable to set up/read from the database.\nError:  ' + e.message);
+    process.exit(1);
   });
 
