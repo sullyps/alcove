@@ -1,4 +1,5 @@
 var test = require('tape');
+var path = require('path');
 var system = require('./../lib/system');
 
 // Tests for parsing the schedule string into an object.
@@ -75,9 +76,66 @@ test('Bucket creation', function(assert) {
 });
 
 //Testing filling buckets given a directory structure and buckets.
+test('Filling buckets', function (assert) {
+  //var sched = '1,3,5(6)|4,5,6(6);3:00';
+  //var date = new Date('Fri Apr 29 2016 03:02:00 GMT-0500 (CDT)');
+  assert.plan(2);
+  var buckets = [ { date: new Date('Sat Apr 16 2016 03:00:00 GMT-0500 (CDT)') },
+                  { date: new Date('Mon Apr 18 2016 03:00:00 GMT-0500 (CDT)') },
+                  { date: new Date('Wed Apr 20 2016 03:00:00 GMT-0500 (CDT)') },
+                  { date: new Date('Thu Apr 21 2016 03:00:00 GMT-0500 (CDT)') },
+                  { date: new Date('Fri Apr 22 2016 03:00:00 GMT-0500 (CDT)') },
+                  { date: new Date('Sat Apr 23 2016 03:00:00 GMT-0500 (CDT)') },
+                  { date: new Date('Mon Apr 25 2016 03:00:00 GMT-0500 (CDT)') },
+                  { date: new Date('Wed Apr 27 2016 03:00:00 GMT-0500 (CDT)') },
+                  { date: new Date('Thu Apr 28 2016 03:00:00 GMT-0500 (CDT)') },
+                  { date: new Date('Fri Apr 29 2016 03:00:00 GMT-0500 (CDT)') } ];
+
+  var machine = { name: 'test' };
+  system.fillBuckets(buckets, path.join(__dirname,'/backup_test'), machine, function() {
+    assert.deepEqual(buckets, [
+        { date: new Date('Sat Apr 16 2016 03:00:00 GMT-0500 (CDT)') },
+        { date: new Date('Mon Apr 18 2016 03:00:00 GMT-0500 (CDT)') },
+        { date: new Date('Wed Apr 20 2016 03:00:00 GMT-0500 (CDT)') },
+        { date: new Date('Thu Apr 21 2016 03:00:00 GMT-0500 (CDT)') },//
+        { date: new Date('Fri Apr 22 2016 03:00:00 GMT-0500 (CDT)') },
+        { date: new Date('Sat Apr 23 2016 03:00:00 GMT-0500 (CDT)') },
+        { date: new Date('Mon Apr 25 2016 03:00:00 GMT-0500 (CDT)') },
+        { date: new Date('Wed Apr 27 2016 03:00:00 GMT-0500 (CDT)') },
+        { date: new Date('Thu Apr 28 2016 03:00:00 GMT-0500 (CDT)') },
+        { date: new Date('Fri Apr 29 2016 03:00:00 GMT-0500 (CDT)') } ]);
+  });
+
+  system.fillBuckets(buckets, path.join(__dirname,'/backup_test_2'), machine, function() {
+      assert.deepEqual(buckets, [
+          { backup: new Date('Sat Apr 16 2016 03:00:00 GMT-0500 (CDT)'), date: new Date('Sat Apr 16 2016 03:00:00 GMT-0500 (CDT)') },
+          { backup: new Date('Mon Apr 18 2016 03:00:00 GMT-0500 (CDT)'), date: new Date('Mon Apr 18 2016 03:00:00 GMT-0500 (CDT)') },
+          { backup: new Date('Wed Apr 20 2016 03:07:00 GMT-0500 (CDT)'), date: new Date('Wed Apr 20 2016 03:00:00 GMT-0500 (CDT)') },
+          { date: new Date('Thu Apr 21 2016 03:00:00 GMT-0500 (CDT)') },
+          { backup: new Date('Fri Apr 22 2016 04:00:00 GMT-0500 (CDT)'), date: new Date('Fri Apr 22 2016 03:00:00 GMT-0500 (CDT)') },
+          { backup: new Date('Sat Apr 23 2016 03:01:00 GMT-0500 (CDT)'), date: new Date('Sat Apr 23 2016 03:00:00 GMT-0500 (CDT)') },
+          { backup: new Date('Mon Apr 25 2016 03:00:00 GMT-0500 (CDT)'), date: new Date('Mon Apr 25 2016 03:00:00 GMT-0500 (CDT)') },
+          { backup: new Date('Thu Apr 28 2016 02:59:00 GMT-0500 (CDT)'), date: new Date('Wed Apr 27 2016 03:00:00 GMT-0500 (CDT)') },
+          { backup: new Date('Thu Apr 28 2016 03:01:00 GMT-0500 (CDT)'), date: new Date('Thu Apr 28 2016 03:00:00 GMT-0500 (CDT)') },
+          { date: new Date('Fri Apr 29 2016 03:00:00 GMT-0500 (CDT)') } ]);
+    });
+});
 
 
-
-// Identify which backups to remove given schedule and directory
-
-
+test('Removing correct backups', function(assert) {
+  assert.plan(1);
+  var buckets = [
+       { backup: new Date('Sat Apr 16 2016 03:00:00 GMT-0500 (CDT)'), date: new Date('Sat Apr 16 2016 03:00:00 GMT-0500 (CDT)') },
+       { backup: new Date('Mon Apr 18 2016 03:00:00 GMT-0500 (CDT)'), date: new Date('Mon Apr 18 2016 03:00:00 GMT-0500 (CDT)') },
+       { backup: new Date('Wed Apr 20 2016 03:07:00 GMT-0500 (CDT)'), date: new Date('Wed Apr 20 2016 03:00:00 GMT-0500 (CDT)') },
+       { date: new Date('Thu Apr 21 2016 03:00:00 GMT-0500 (CDT)') },
+       { backup: new Date('Fri Apr 22 2016 04:00:00 GMT-0500 (CDT)'), date: new Date('Fri Apr 22 2016 03:00:00 GMT-0500 (CDT)') },
+       { backup: new Date('Sat Apr 23 2016 03:01:00 GMT-0500 (CDT)'), date: new Date('Sat Apr 23 2016 03:00:00 GMT-0500 (CDT)') },
+       { backup: new Date('Mon Apr 25 2016 03:00:00 GMT-0500 (CDT)'), date: new Date('Mon Apr 25 2016 03:00:00 GMT-0500 (CDT)') },
+       { backup: new Date('Thu Apr 28 2016 02:59:00 GMT-0500 (CDT)'), date: new Date('Wed Apr 27 2016 03:00:00 GMT-0500 (CDT)') },
+       { backup: new Date('Thu Apr 28 2016 03:01:00 GMT-0500 (CDT)'), date: new Date('Thu Apr 28 2016 03:00:00 GMT-0500 (CDT)') },
+       { date: new Date('Fri Apr 29 2016 03:00:00 GMT-0500 (CDT)') } ];
+    system.getDirectoriesToRemove(path.join(__dirname,'/backup_test_2'), buckets, function(removedDirectories) {
+      assert.deepEqual(removedDirectories, [path.join(__dirname, 'backup_test_2', '2016-04-16T07:59:00.000Z')]);
+    });
+});
