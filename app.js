@@ -2,22 +2,27 @@ var express = require('express'),
   fs = require('fs'),
   http = require('http'),
   https = require('https');
-var db = require('./app/models'),
-  system = require('./lib/system'),
-  config = require('./lib/config/config').environmentVar,
-  logger = require('./lib/config/log4js').configure(config);
-var ssl = {};
-var app = express();
-app.locals.machines = [];
 
-// Configure the machines and push them to the array of machines.
 try
 {
+  // Safely capture any library Errors
+  var
+    config = require('./lib/config/config').environmentVar,
+    logger = require('./lib/config/log4js').configure(config),
+    db = require('./app/models'),
+    system = require('./lib/system');
+  var ssl = {};
+  var app = express();
+  app.locals.machines = [];
+
+
+  // Configure the machines and push them to the array of machines.
   require('./lib/config/config').configureMachines(app);
 }
 catch(error)
 {
-  logger.error('Error:  ' + error.message);
+  if (logger) logger.error('Startup Error:  ' + error.message);
+  else console.log('Startup Error:  ' + error.message);
   process.exit(-1);
 }
 require('./lib/config/express')(app, config);
