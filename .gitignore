@@ -1,11 +1,12 @@
 # Ignore these.
 node_modules
 resources/htpassword
-logs/*
+data
+logs
 etc/backup/*
 
 # Reallow these
-!etc/backup/backup.example.ini
-!etc/backup/machines/machine.example.ini
+!etc/backup/backup.ini.example
+!etc/backup/machines/machine.ini.example
 !etc/backup/ssl/README
 

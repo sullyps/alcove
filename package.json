@@ -40,7 +40,6 @@
     "gulp-sass": "^2.1.1",
     "gulp-util": "^3.0.7",
     "jshint": "^2.8.0",
-    "nodemailer-sendmail-transport": "^1.0.0",
     "tape": "^4.5.1"
   }
 }
