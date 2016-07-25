@@ -28,7 +28,7 @@
     "rsyncwrapper": "^1.0.0",
     "sequelize": "^3.14.2",
     "serve-favicon": "^2.3.0",
-    "sqlite3": "^3.1.1",
+    "sqlite3": "^3.1.4",
     "swig": "^1.4.2",
     "tape": "^4.5.1"
   },

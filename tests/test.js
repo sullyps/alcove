@@ -139,3 +139,9 @@ test('Removing correct backups', function(assert) {
       assert.deepEqual(removedDirectories, [path.join(__dirname, 'backup_test_2', '2016-04-16T07:59:00.000Z')]);
     });
 });
+
+test('Human Readable schedule format', function(assert) {
+  var scheduleObj = system.parseSchedule('0,1,2,3,4,5,6(7)|1(5);3:00');
+  console.log(scheduleObj);
+  console.log(system.convertSchedObjToReadable(scheduleObj));
+})
