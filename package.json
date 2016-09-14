@@ -1,6 +1,6 @@
 {
-  "name": "bioneos-system-backup",
-  "version": "1.0.0",
+  "name": "bioneos-backup-system",
+  "version": "0.1.0",
   "description": "Our internal backup system",
   "main": "app.js",
   "scripts": {
