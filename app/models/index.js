@@ -23,7 +23,10 @@ module.exports = {
     }
 
     // Read our model definitions and associate relationships
-    var sequelize = new Sequelize(DB_URL, { storage: path.join(config.data_dir, config.db) });
+    var sequelize = new Sequelize(DB_URL, { 
+      storage: path.join(config.data_dir, config.db),
+      logging: false
+    });
     fs.readdirSync(__dirname).filter(function (file) {
       return (file.indexOf('.') !== 0) && (file !== 'index.js');
     }).forEach(function (file) {
