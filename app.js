@@ -1,28 +1,87 @@
+'use strict';
+
+// Include 3rd party libraries
 var express = require('express'),
   fs = require('fs'),
   http = require('http'),
   https = require('https');
+// TODO:
+//  wrap = require('word-wrap');
 
+// Include our libraries
+var logging = require('./lib/config/log4js'),
+  init = require('./lib/config/init'),
+  models = require('./app/models'),
+  system = require('./lib/system');
+
+// Application logger and global Config
+var logger = logging.getLogger();
+var config, db;
+
+// Config
 try
 {
+  logger.debug('Processing configuration...');
+  config = init.getConfig();
+  logger.debug('Configured!');
+}
+catch (error)
+{
+  logger.error('Error processing configuration file: ' + error.message);
+  logger.debug(error.stack);
+  process.exit(-3);
+}
+
+logger.info(config.app.name + ' v' + config.app.version + ' starting up!');
+
+
+// Startup chain
+new Promise(function(resolve, reject) {
+  // DB
+  logger.debug('Loading the Events DB...');
+  db = models.init(config);
+  logger.trace('  models.init() complete...');
+  resolve(db.sequelize.sync());
+})
+.catch(function(err) {
+  logger.error('Error loading the Events DB. Check your configuration and data files: ' + error.message);
+  logger.debug(error.stack);
+  process.exit(-2);
+})
+.then(function() {
+  // System
+  return new Promise(function(resolve, reject) {
+    logger.debug('Starting main process...');
+    system.init(config, db);
+    resolve();
+  });
+})
+.catch(function(err) {
+  logger.error('Error during Backup System startup: ' + error.message);
+  logger.debug(error.stack);
+  process.exit(-1);
+})
+.then(function() {
+  // Webapp
+  // TODO
+});
+
+/*try
+{
   // Safely capture any library Errors
-  var
-    config = require('./lib/config/config').environmentVar,
-    logger = require('./lib/config/log4js').configure(config),
-    db = require('./app/models'),
-    system = require('./lib/system');
+
   var ssl = {};
   var app = express();
   app.locals.machines = [];
 
 
   // Configure the machines and push them to the array of machines.
-  require('./lib/config/config').configureMachines(app);
+  config.configureMachines(app);
 }
 catch(error)
 {
-  if (logger) logger.error('Startup Error:  ' + error.message);
-  else console.log('Startup Error:  ' + error.message);
+  if (logger) logger.error('Startup Error:  ', error);
+  else console.log('Startup Error:  ', error.stack);
   process.exit(-1);
 }
 require('./lib/config/express')(app, config);
@@ -38,8 +97,8 @@ db.sequelize
     if (config.environment.run_securely) {
       try
       {
-          ssl.key = fs.readFileSync(config.environment.key);
-          ssl.cert = fs.readFileSync(config.environment.cert);
+        ssl.key = fs.readFileSync(config.environment.key);
+        ssl.cert = fs.readFileSync(config.environment.cert);
       }
       catch(error)
       {
@@ -57,4 +116,4 @@ db.sequelize
     logger.error('Unable to set up/read from the database.\nError:  ' + e.message);
     process.exit(1);
   });
-
+*/
