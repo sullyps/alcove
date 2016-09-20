@@ -27,6 +27,7 @@ try
 }
 catch (error)
 {
+  // TODO: Perhaps command line output wrapper to 80 cols here instead
   logger.error('Error processing configuration file: ' + error.message);
   logger.debug(error.stack);
   process.exit(-3);
