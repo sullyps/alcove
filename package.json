@@ -24,7 +24,6 @@
     "morgan": "^1.6.1",
     "nodemailer": "^2.3.0",
     "path": "^0.12.7",
-    "rmdir": "^1.2.0",
     "rsyncwrapper": "^1.0.0",
     "sequelize": "^3.14.2",
     "serve-favicon": "^2.3.0",
