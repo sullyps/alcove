@@ -29,6 +29,7 @@
     "serve-favicon": "^2.3.0",
     "sqlite3": "^3.1.4",
     "swig": "^1.4.2",
+    "textbelt": "0.0.3",
     "word-wrap": "^1.1.0"
   },
   "devDependencies": {
