@@ -17,7 +17,7 @@ module.exports = {
     {
       fs.accessSync(config.data_dir);
     }
-    catch (error) 
+    catch (error)
     {
       throw new Error('Cannot access the data directory, or it does not exist (' + config.data_dir + ')');
     }
@@ -43,6 +43,7 @@ module.exports = {
     db.sequelize = sequelize;
     // Class reference
     db.Sequelize = Sequelize;
+    process.exit();
 
     return db;
   }
