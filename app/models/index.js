@@ -43,7 +43,6 @@ module.exports = {
     db.sequelize = sequelize;
     // Class reference
     db.Sequelize = Sequelize;
-    process.exit();
 
     return db;
   }
