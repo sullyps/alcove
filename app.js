@@ -52,11 +52,8 @@ new Promise(function(resolve, reject) {
 })
 .then(function() {
   // System
-  return new Promise(function(resolve, reject) {
-    logger.debug('Starting main process...');
-    system.init(config, db);
-    resolve();
-  });
+  logger.debug('Starting main process...');
+  system.init(config, db);
 })
 .catch(function(err) {
   logger.error('Error during Backup System startup: ' + err.message);
