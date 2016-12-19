@@ -1,4 +1,5 @@
 'use strict';
+process.env.NODE_ENV = process.env.NODE_ENV || "production";
 
 // Include 3rd party libraries
 var express = require('express'),
@@ -45,8 +46,8 @@ new Promise(function(resolve, reject) {
   resolve(db.sequelize.sync());
 })
 .catch(function(err) {
-  logger.error('Error loading the Events DB. Check your configuration and data files: ' + error.message);
-  logger.debug(error.stack);
+  logger.error('Error loading the Events DB. Check your configuration and data files: ' + err.message);
+  logger.debug(err.stack);
   process.exit(-2);
 })
 .then(function() {
@@ -58,8 +59,8 @@ new Promise(function(resolve, reject) {
   });
 })
 .catch(function(err) {
-  logger.error('Error during Backup System startup: ' + error.message);
-  logger.debug(error.stack);
+  logger.error('Error during Backup System startup: ' + err.message);
+  logger.debug(err.stack);
   process.exit(-1);
 })
 .then(function() {
