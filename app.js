@@ -5,9 +5,8 @@ process.env.NODE_ENV = process.env.NODE_ENV || "production";
 var express = require('express'),
   fs = require('fs'),
   http = require('http'),
-  https = require('https');
-// TODO:
-//  wrap = require('word-wrap');
+  https = require('https'),
+  wrap = require('wordwrapjs');
 
 // Include our libraries
 var logging = require('./lib/config/log4js'),
@@ -28,9 +27,12 @@ try
 }
 catch (error)
 {
-  // TODO: Perhaps command line output wrapper to 80 cols here instead
-  logger.error('Error processing configuration file: ' + error.message);
+  // Record startup error in the log
+  var msg = '[Config ERROR] ' + error.message;
+  logger.error(msg);
   logger.debug(error.stack);
+  // And output to the console (for immediate feedback to sys-admin)
+  console.log(wrap.wrap(msg, {width: 80, noTrim: true}));
   process.exit(-3);
 }
 
