@@ -1,4 +1,5 @@
 'use strict';
+/** Force production mode, unless explicitly set otherwise: **/
 process.env.NODE_ENV = process.env.NODE_ENV || "production";
 
 // Include 3rd party libraries
