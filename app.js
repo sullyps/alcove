@@ -1,6 +1,13 @@
 'use strict';
-/** Force production mode, unless explicitly set otherwise: **/
-process.env.NODE_ENV = process.env.NODE_ENV || "production";
+const DEVEL = (process.env.NODE_ENV !== "production");
+const CONFIG = (DEVEL ? "." : "") + "/etc/backup/backup.ini";
+// Explicitly warn about non-production modes
+if (DEVEL)
+{
+  console.log("*** Non-production environment        ***");
+  console.log("*** Are you sure you want to do this? ***");
+  console.log("(In a production deployment, you should not ever run 'app.js' directly)\n\n");
+}
 
 // Include 3rd party libraries
 var express = require('express'),
@@ -11,36 +18,48 @@ var express = require('express'),
 
 // Include our libraries
 var logging = require('./lib/config/log4js'),
-  init = require('./lib/config/init'),
+  configInit = require('./lib/config/init'),
   models = require('./app/models'),
   system = require('./lib/system');
 
 // Application logger and global Config
-var logger = logging.getLogger();
-var config, db;
+var logger, config, db;
 
-// Config
+//
+// Config file parsing
+// 
+// NOTE: No logger available yet so minimize output and wrap all messages to
+// fit to an 80 character screen.
+// NOTE2: This is intended to be a system service so the config is hardcoded
+//
 try
 {
-  logger.debug('Processing configuration...');
-  config = init.getConfig();
-  logger.debug('Configured!');
+  config = configInit.getConfig(CONFIG);
 }
 catch (error)
 {
   // Record startup error in the log
-  var msg = '[Config ERROR] ' + error.message;
-  logger.error(msg);
-  logger.debug(error.stack);
+  let msg = '[Config ERROR] ' + error.message;
   // And output to the console (for immediate feedback to sys-admin)
-  console.log(wrap.wrap(msg, {width: 80, noTrim: true}));
+  console.error(wrap.wrap(msg, {width: 80, noTrim: true}));
+  // NOTE: This isn't recommended but until unless we replaced the uncaught
+  // exception handler (requires Node >=9.3), it really is the best way. 
   process.exit(-3);
 }
 
+//
+// Create the logger as configured
+//
+logger = logging.getLogger(config);
 logger.info(config.app.name + ' v' + config.app.version + ' starting up!');
 
 
-// Startup chain
+//
+// Main Startup chain
+//   1) Load events DB
+//   2) Initialize the Backup system
+//   3) Startup the webapp
+//
 new Promise(function(resolve, reject) {
   // DB
   logger.debug('Loading the Events DB...');

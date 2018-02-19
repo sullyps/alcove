@@ -12,51 +12,33 @@
 
 ; BASIC SETTINGS:
 
-; Network address to bind the web server to, defaulting to all addresses.
-; Specify "127.0.0.1" or "localhost" to only serve locally (a good idea
-; unless you have a firewall in place.
-;ip='0.0.0.0'
+; Network address (or domainname) to bind the web server to, defaulting to 
+; 127.0.0.1. Specify 0.0.0.0 to attach to all IPs including external.
+;ip='127.0.0.1'
 
 ; Port for the web server to run.
 ;port=3000
 
-; FIXME: remove this and make condition on the presence of ssl_port, or a secure{} object
-; Run securely or not, defaults to false and doesn't require ssl key and cert.  If true
-;     the application will run using https and ssl.
-; run_securely = false
-
-; Port to run https application.  Defaults to none and doesn't run securely.
-;ssl_port='8080'
-
-; Location of the ssl key if running in secure mode.
-;ssl_key='etc/ssl/ssl.key'
-
-; Location of the ssl cert if running in secure mode.
-;ssl_cert='etc/ssl/ssl.crt'
-
-; File storing username and encrypted passwords
-;auth='resources/htpassword'
-
-; URL of the database to use.
-;db_url='sqlite://localhost/backup-development'
-
-; Storage location of the database.
-;db_storage='data/development'
-
 ; Storage location of the log files.
-;log_directory='var/log/backup-system'
+;logs_dir='/var/log/backup-system'
 
+; Destination for the backup data.
+;data_dir='data/'
+
+; HTTPS CONFIG
+; Location of the ssl key / cert. If specified, the webserver will only run in
+; HTTPS mode.
+[secure]
+;key='/etc/ssl/ssl.key'
+;cert='/etc/ssl/ssl.crt'
 
 ; RSYNC VARIABLES
 [rsync]
-; Place to store the backups on the machine that the files are being copied to.
-;destination_dir = '/home/backup'
-
 ; Maximum amount of backups allowed to run at the same time
-;max_backups = 6
+;max_simultaneous = 6
 
-; ssh key location to use to connect to the remote machines (Optional)
-;ssh_key = 'path/to/ssh'
+; ssh key location to use as the identity to connect to the remote machines.
+;identity = '/etc/backup/private.key'
 
 ; User to connect to the remote machines. Defaults to root.
 ;user = 'root'
@@ -64,64 +46,47 @@
 
 ; RSYNC RETRY VARIABLES
 [rsync.retry]
-;   The program will retry the backup attempt if rsync fails to run successfully for whatever reason.
-;   The following variables are here for a user to determine how often it tries to backup before giving up.  If it is one,
-;   it will try once whether it is successful or not.  It retries in a time that is exponential.  If the first time is set
-;   to retry in 3 minutes the next retry will be 9 minutes and then the next retry will be 27 minutes after that attempt.
+; The program will retry the backup attempt if rsync fails to run successfully 
+; for any reason. The following variables control that retry process. The first
+; retry attempt will occur as specified, but subsequent attempts will be
+; delayed by increasing amounts.
 
-; Maximum attempts that a machine tries to backup before giving up if there is an error.
+; Maximum attempts made to backup a machine when an error occurs. After the 
+; retry attempts are exhausted, the system will not attempt another backup of
+; this machine until the next scheduled backup time.
 ;max_attempts=4
 
-; Multiplier for the time until the next retry attempt. Multiplies the last retry time with this number to come
-;     up with the time until a retry is made.
-;multiplier = 3
-
-; Time (in minutes) to wait for the first retry attempt ater rsync completes unsucessfully for a particular machine.
-;    Can tenths and hundreths of minutes as well (eg. 2.5 or 3.75).
+; Time (in minutes) to wait for the first retry attempt ater rsync completes
+;   unsucessfully for a particular machine. Can be fractional (eg. 3.75).
 ;time = 3
 
 ; NOTIFICATIONS VARIABLES
-;   these are variables having to do with sending email and sms notifications.
 [notifications]
-; Boolean to  receive  notifications via email.  Email designated email addresses if an error occurs
-;    and summary of backups at every scheduled summary email.
-;receive_email_notifications = true
-
-; The email address that the email is sent from if there is an error.
-;from_email_addr='info@bioneos.com'
-
 ; Emails to be notified if there is an error in the backup process.
 ; Specify one address per line, but repeat this option as many times as needed.
-;receiving_email_addr[]='user@bioneos.com'
-;receiving_email_addr[]='user2@bioneos.com'
+;email_to[]='user@bioneos.com'
+;email_to[]='user2@bioneos.com'
 
-; SMS location notified if there is an error in the backup process.
-; Specify one locations per line, but repeat this option as many times as needed.
-;receiving_sms_addr[]='mobile-phone#@vtext.com'
-;receiving_sms_addr[]='mobile-phone#@txt.att.net'
+; The email address that the email is sent from if there is an error.
+;email_from='info@bioneos.com'
 
-; Schedule for summary backups to be sent out.  Defaults to every Monday at 8:00am.
-;     comma separated days if you wish more than one. ex 1,3,5;13:30 = mon, wed, friday at 1:30pm
-;summary_email_sched: '1;8:00'
+; SMS TODO
 
-; SMTP Email options.
+; Schedule for summary report emails to be sent out. Defaults to 8:00am on 
+; Mondays. Use comma separated schedules if you wish more than one. 
+; Ex] 1,3,5;13:30 = Mon, Wed, Fri at 1:30pm
+;summary_sched: '1;8:00'
+
+; SMTP CONFIG
 [notifications.smtp]
-; Host email smtp server that the emails are sent through.
+; Hostname for the smtp server through which the emails are sent.
 ;host='smtp.gmail.com'
 
-; Port that the email server listens on.
-;port=25
+; Port on which the email server listens.
+;port=587
 
-; Send the emails securly.
-;secure=false
-
-; Pooled connections (defaults to false), otherwise creates a new connection for every e-mail.
-;pool=false
-; Will maybe need to add others to fit more people's needs all arguments come from nodemailer npm module.
-
-[notifications.smtp.auth]
-; Authentication user of the email server
+; Authentication username for the outgoing emails.
 ;user='example@gmail.com'
 
-; Authentication password for the email server user.
+; Authentication password for the outgoing emails.
 ;pass='password1234'
