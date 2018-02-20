@@ -50,7 +50,8 @@ catch (error)
 //
 // Create the logger as configured
 //
-logger = logging.getLogger(config);
+logging.configure(config);
+logger = logging.getLogger();
 logger.info(config.app.name + ' v' + config.app.version + ' starting up!');
 
 

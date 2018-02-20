@@ -20,7 +20,11 @@
 ;port=3000
 
 ; Storage location of the log files.
-;logs_dir='/var/log/backup-system'
+;log_dir='/var/log/backup-system'
+
+; Logging level: ALL < TRACE < DEBUG < INFO < WARN < ERROR < FATAL < MARK | OFF
+; (Defaults to ERROR)
+;log_level='ERROR'
 
 ; Destination for the backup data.
 ;data_dir='data/'
