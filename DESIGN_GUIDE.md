@@ -8,7 +8,7 @@ other maintainers) will make the same decision.
 
 This guide will record why certain architecture related decisions are made. This can relate to the
 organization of the code, the technologies used, or the workflow of the system. This is not a style
-guide and should only address deeper problems.
+guide and should only address deeper architectural decisions.
 
 This guide should be opinionated but malleable. Even if a decision is made a particular way for a
 particular reason at a time in the past, as development continues we may find a new reason that
@@ -25,7 +25,7 @@ I intend for this guide to be a living document, and reviewed on a periodic basi
 * This system is intended to be used by expert system administrators. While intuitive, it should not
   reduce functionality for the sake of simple and easy use.
 * This system has two tightly integrated components: The backup system (NodeJS process) and its
-  external reporting system (ExpressJS webapp). 
+  external monitoring system (ExpressJS webapp). 
 * To minimize runtime issues, all configuration most be explicitly checked for sanity before the
   process is allowed to startup.
 * All important information should be written to a well organized set of log files. Even in the
