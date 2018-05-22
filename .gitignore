@@ -6,6 +6,8 @@ resources/htpassword
 data
 logs
 etc/backup/*
+.*.swo
+*~
 
 # Reallow these
 !etc/backup/backup.ini.example
