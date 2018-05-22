@@ -22,7 +22,7 @@ Both the `data` and `logs` directories will need to be written to by the
 to your user id, you need to execute the following:
 
 ``` 
-$ chmod o+w -R data && chown o+w -R logs
+$ chmod o+w -R data && chmod o+w -R logs
 ```
 
 ### Bind Mounts
@@ -58,7 +58,7 @@ and suggest it is named `bioneos/backup`.
 ```
 $ cd <project workdir>
 $ cd docker; docker build -t bioneos/backup .; cd ..
-$ chown o+w -R ./data && chown o+w -R ./logs
+$ chmod o+w -R ./data && chmod o+w -R ./logs
 $ docker run -p 3333:3000 --mount type=bind,source="$(pwd)"/,target=/opt/backup -ti bioneos/backup 
 ```
 
