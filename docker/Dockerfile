@@ -7,6 +7,9 @@ WORKDIR /opt/backup/
 # Install the global gulp executable
 RUN npm install gulp -g
 
+# Install sendmail compatible executable
+RUN apt-get update && apt-get install ssmtp && echo "FromLineOverride=YES" >> /etc/ssmtp/ssmtp.conf
+
 # Drop privileges
 USER node
 EXPOSE 3000
