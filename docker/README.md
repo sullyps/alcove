@@ -25,6 +25,13 @@ to your user id, you need to execute the following:
 $ chmod o+w -R data && chmod o+w -R logs
 ```
 
+If you are editing the SASS files you need to update the permissions on the
+target CSS as well.
+
+``` 
+$ chmod o+w public/css/style.css
+```
+
 ### Bind Mounts
 
 The source code is intended to be mounted in `/opt/backup` on the container.
@@ -58,7 +65,7 @@ and suggest it is named `bioneos/backup`.
 ```
 $ cd <project workdir>
 $ cd docker; docker build -t bioneos/backup .; cd ..
-$ chmod o+w -R ./data && chmod o+w -R ./logs
+$ chmod o+w -R ./data && chmod o+w -R ./logs && chmod o+w public/css/style.css
 $ docker run -p 3333:3000 --mount type=bind,source="$(pwd)"/,target=/opt/backup -ti bioneos/backup 
 ```
 
