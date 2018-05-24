@@ -10,6 +10,9 @@ RUN npm install gulp -g
 # Install sendmail compatible executable
 RUN apt-get update && apt-get install ssmtp && echo "FromLineOverride=YES" >> /etc/ssmtp/ssmtp.conf
 
+# Install rsync
+RUN apt-get install -y rsync
+
 # Drop privileges
 USER node
 EXPOSE 3000
