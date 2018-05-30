@@ -1,4 +1,5 @@
 var system = require('../lib/system.js');
+var path = require('path');
 
 // Tests for parsing the schedule string into an object
 test('Schedule parsing', function () {
@@ -69,4 +70,4 @@ test('Bucket creation', function() {
       { date: new Date('Mon Dec 28 2015 03:00:00 GMT-0600 (CST)') },
       { date: new Date('Wed Dec 30 2015 03:00:00 GMT-0600 (CST)') },
       { date: new Date('Fri Jan 01 2016 03:00:00 GMT-0600 (CST)') } ]);
-  });
+});
