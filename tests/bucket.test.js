@@ -80,25 +80,11 @@ test('Filling buckets', function(){
         { date: new Date('Thu Apr 28 2016 03:00:00 GMT-0500 (CDT)') },
         { date: new Date('Fri Apr 29 2016 03:00:00 GMT-0500 (CDT)') } ]);
   });
-
- // A test from the original test file, I do not believe the toDelete array that is returned contains these attributes
- /* system.fillBuckets(buckets, path.join(__dirname,'/backup_test_2'), machine, function() {
-      expect(buckets).toEqual( [
-          { backup: new Date('Sat Apr 16 2016 03:00:00 GMT-0500 (CDT)'), date: new Date('Sat Apr 16 2016 03:00:00 GMT-0500 (CDT)') },
-          { backup: new Date('Mon Apr 18 2016 03:00:00 GMT-0500 (CDT)'), date: new Date('Mon Apr 18 2016 03:00:00 GMT-0500 (CDT)') },
-          { backup: new Date('Wed Apr 20 2016 03:07:00 GMT-0500 (CDT)'), date: new Date('Wed Apr 20 2016 03:00:00 GMT-0500 (CDT)') },
-          { date: new Date('Thu Apr 21 2016 03:00:00 GMT-0500 (CDT)') },
-          { backup: new Date('Fri Apr 22 2016 04:00:00 GMT-0500 (CDT)'), date: new Date('Fri Apr 22 2016 03:00:00 GMT-0500 (CDT)') },
-          { backup: new Date('Sat Apr 23 2016 03:01:00 GMT-0500 (CDT)'), date: new Date('Sat Apr 23 2016 03:00:00 GMT-0500 (CDT)') },
-          { backup: new Date('Mon Apr 25 2016 03:00:00 GMT-0500 (CDT)'), date: new Date('Mon Apr 25 2016 03:00:00 GMT-0500 (CDT)') },
-          { backup: new Date('Thu Apr 28 2016 02:59:00 GMT-0500 (CDT)'), date: new Date('Wed Apr 27 2016 03:00:00 GMT-0500 (CDT)') },
-          { backup: new Date('Thu Apr 28 2016 03:01:00 GMT-0500 (CDT)'), date: new Date('Thu Apr 28 2016 03:00:00 GMT-0500 (CDT)') },
-          { date: new Date('Fri Apr 29 2016 03:00:00 GMT-0500 (CDT)') } ]);
-   return;       
-  });
-  */      
 });
 
+// Testing removing directories without current backup
+// NOTE: This test itself relies on directories existing on the file system, should reorganize function so
+// that if we run tests on the server that this is not necessary
 test('Removing correct backups', function(done) {
   var buckets = [
        { date: new Date('Sat Apr 16 2016 03:00:00 GMT-0500 (CDT)') },
@@ -115,10 +101,11 @@ test('Removing correct backups', function(done) {
   };
   system.getDirectoriesToRemove(path.join(__dirname,'/backup_test_2'), buckets, callback);
 });
-/*
-test('Human Readable schedule format', function(assert) {
+
+// Testing converting schedule into a human readable format
+test('Human Readable schedule format', function() {
   var scheduleObj = system.parseSchedule('0,1,2,3,4,5,6(7)|1(5);3:00');
   console.log(scheduleObj);
   console.log(system.convertSchedObjToReadable(scheduleObj));
 })
-*/
+
