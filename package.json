@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "gulp",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest" 
   },
   "author": "",
   "license": "ISC",
@@ -40,6 +40,7 @@
     "gulp-plumber": "^1.2.0",
     "gulp-sass": "^3.2.1",
     "gulp-util": "^3.0.8",
+    "jest": "^23.0.1",
     "jshint": "^2.9.5",
     "tape": "^4.9.0"
   }

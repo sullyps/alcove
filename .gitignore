@@ -1,5 +1,4 @@
 # Ignore these.
-.*.swp
 .idea/workspace.xml
 .idea/tasks.xml
 node_modules
@@ -7,8 +6,14 @@ resources/htpassword
 data
 logs
 etc/backup/*
+
+# Temporary disk storage for tests
+tests/backup_test*
+
+# Temporary/Swap files
 .*.swo
 *~
+.*.swp
 
 # Reallow these
 !etc/backup/backup.ini.example
