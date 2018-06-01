@@ -1,21 +1,6 @@
 var system = require('../lib/system.js');
 var path = require('path');
 
-// Test finding the next expected backup date given date and schedule object
-// NOTE: getNextScheduledTime(scheduleStr) is not a public method
-// This test will have to change slightly since the function implemented 
-//    does not rely  on a date provided to calculate the next backup
-/*
-test('Find next scheduled backup time', function() {
-  var date = new Date('2016-04-22');
-  var date2 = new Date('2015-12-31');
-  date2.setHours(9);
-  date2.setMinutes(15);
-  var schedule = '0,2(7)|1(5);[9:15]';
-  var nextBackup = system.getNextScheduledTime()
-});
-*/
-
 // Testing bucket generation from a schedule object and date
 test('Bucket creation', function() {
   var schedule = '0,1,2,3,4,5,6(7)|1,3,5(12);0:00';
@@ -83,9 +68,12 @@ test('Filling buckets', function(){
 });
 
 // Testing removing directories without current backup
-// NOTE: This test itself relies on directories existing on the file system, should reorganize function so
+// NOTE: This test itself relies on directories existing on the file system, 
+// so the function getDirectoriestoRemove should be reorganized so
 // that if we run tests on the server that this is not necessary
-test('Removing correct backups', function(done) {
+// NOTE: We could also implement Jest's beforeAll() afterAll() functions
+// to initialize a fake directory 
+/*test('Removing correct backups', function(done) {
   var buckets = [
        { date: new Date('Sat Apr 16 2016 03:00:00 GMT-0500 (CDT)') },
        { backup: new Date('Mon Apr 18 2016 03:00:00 GMT-0500 (CDT)'), date: new Date('Mon Apr 18 2016 03:00:00 GMT-0500 (CDT)') },
@@ -101,6 +89,7 @@ test('Removing correct backups', function(done) {
   };
   system.getDirectoriesToRemove(path.join(__dirname,'/backup_test_2'), buckets, callback);
 });
+*/
 
 // Testing converting schedule into a human readable format
 test('Human Readable schedule format', function() {
