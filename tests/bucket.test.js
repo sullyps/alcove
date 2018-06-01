@@ -94,7 +94,9 @@ test('Filling buckets', function(){
 // Testing converting schedule into a human readable format
 test('Human Readable schedule format', function() {
   var scheduleObj = system.parseSchedule('0,1,2,3,4,5,6(7)|1(5);3:00');
-  console.log(scheduleObj);
-  console.log(system.convertSchedObjToReadable(scheduleObj));
+  expect(scheduleObj).toEqual({ time: { hours: 3, minutes: 0 },
+        daysSets: [ { number: 7, days: [0,1,2,3,4,5,6] }, { number: 5, days: [1] } ] 
+  });
+  expect(system.convertSchedObjToReadable(scheduleObj)).toEqual('Last 7 Days Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday\nLast 5 Days Monday\n  at 3 a.m.');
 })
 
