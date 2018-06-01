@@ -22,6 +22,7 @@ describe('Schedule Manipulation', function(){
   /*
   // Testing getting the next scheduled time given the schedule and a date
   // NOTE: These tests cannot be implemented until there is a way to input a relative date to the function
+  // TODO: Reorganize getNextScheduledTime to take in a date
   test('Next scheduled time', function() {
     var nextSummaryDate = system.__getNextScheduledTime(schedule, new Date('Sun May 20 2018 08:20:00 GMT-0500 (CDT)'));
     expect(nextSummaryDate).toEqual(new Date('Sun May 20 2018 09:15:00 GMT-0500 (CDT)'));
