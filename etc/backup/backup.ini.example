@@ -75,13 +75,11 @@
 ;email_from='info@bioneos.com'
 
 ; SMS
+; If SMS is configured, expect to get around 4-5 messges per month given the backup system is working. The free tier for AWS is 100 messages per month. If sending more messages, consider paying for SNS services
 ; 10 digit phone number to be notified if there is an error in the backup process
 ; OR AWS Topic ARN. Do not provide both values.
 ;sms_to='1234567890'
 ;sms_to='arn:aws:sns:region:subscriber:topicname'
-
-; The caller ID that the message is given if there is an error.
-;sms_to='1234567890'
 
 ; The AWS access key for your account
 ;sms_accessKey=012345678999
@@ -92,11 +90,6 @@
 ; The region that supports SMS from AWS
 ;sms_region='us-east-1'
 
-; The maximum price to spend on a single SMS dispatch
-;sms_maxPrice=.50
-
-; The type of message to send "Transactional" or "Promotional"
-;sms_smsType='Promotional'
 
 ; Schedule for summary report emails to be sent out. Defaults to 8:00am on 
 ; Mondays. Use comma separated schedules if you wish more than one. 

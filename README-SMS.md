@@ -3,10 +3,12 @@ This project uses AWS Simple Notification Service to push SMS to mobile devices.
 
 To use this service, you will need an AWS account. The first 100 messages sent in the month are free, and additional SMS pushes are $0.00645 for all networks.
 
+For a working backup system, expect to receive around 4-5 texts per month containing the weekly summary of backups. If you believe you will receive more than 100 messages, consider paying for a higher tier service from AWS.
+
 # Configuring SMS notifications
 
 ## IMPORTANT NOTE:
-If you are planning on sending messages to only 1 phone number, skip steps 2 and 3.
+If you are planning on sending messages to only 1 phone number, skip steps 2 and 3. You will provide a single phone number in the configuration file in step 4. 
 
 ## Step 1: Initializing Credentials
 
