@@ -20,5 +20,6 @@ For each phone number you would like to receive messages, you need to create a s
 
 ## Step 4: Configure the config files
 - backup.ini under 'notifications' should contain a 'sms_to' field with the topic ARN OR a single phone number if you only want to send messages to one number
+**The phone number or ARN need to be surrounded by "" (double quotes) so they evaluate to strings**
 - the initialization file also should include the sms region, access key, and secret key
-
+**The program will not configure SMS notifications without all 4 configurations specified**
