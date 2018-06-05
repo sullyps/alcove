@@ -75,16 +75,18 @@
 ;email_from='info@bioneos.com'
 
 ; SMS
-; If SMS is configured, expect to get around 4-5 messges per month given the backup system is working. The free tier for AWS is 100 messages per month. If sending more messages, consider paying for SNS services
+; If SMS is configured, expect to get around 4-5 messges per month given the
+; backup system is working. The free tier for AWS is 100 messages per month.
+; If sending more messages, consider paying for SNS services
 ; 10 digit phone number to be notified if there is an error in the backup process
 ; OR AWS Topic ARN. Do not provide both values.
-;sms_to='1234567890'
-;sms_to='arn:aws:sns:region:subscriber:topicname'
+;sms_to="1234567890"
+;sms_to="arn:aws:sns:region:subscriber:topicname"
 
 ; The AWS access key for your account
 ;sms_accessKey=012345678999
 
-; The AWS secrete key for your account
+; The AWS secret key for your account
 ;sms_secretKey=123456EXAMPLE
 
 ; The region that supports SMS from AWS
