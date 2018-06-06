@@ -14,7 +14,8 @@ RUN apt-get update && apt-get install ssmtp && echo "FromLineOverride=YES" >> /e
 RUN apt-get install -y openssh-client && mkdir /home/node/.ssh && ssh-keygen -t rsa -N '' -f /home/node/.ssh/id_rsa && chown node:node -R /home/node/.ssh
 
 # Configure StrictHostKeyChecking to 'no'
-#RUN sed -i -e '/StrictHostKeyChecking/ s/ .*/ StrictHostKeyChecking no/' /etc/ssh/ssh_config
+RUN echo "StrictHostKeyChecking no" >> /etc/ssh/ssh_config
+
 # Install rsync
 RUN apt-get install -y rsync
 
