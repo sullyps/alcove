@@ -4,13 +4,24 @@ name = machine
 ; ip/dns to use to connect to your machine via ssh.
 ip = machine.company.com
 
-; file/directory inclusion patterns, 
-inclusionPatterns[] = ~
+; Optional top level directories to add to backup.
+;   If not specified, defaults are /home and /etc.
+;   If specified, be sure to include /home and /etc if you want those directories backed up.
+;   All listed directories need to be absolute paths beginning with a forward slash.
+;   There should be no wildcards (*).
+topLevelInclusion[] = /home
+topLevelInclusion[] = /etc
+topLevelInclusion[] = /dev/project1
 
-; file/directory exclusion patterns
-exclusionPatterns[] = *.mp3
-exclusionPatterns[] = Downloads/
+; File extensions/directories to always ignore.
+;   These should never be absolute paths and should always begin with a period.
+extensionExclusion[] = .mp3
+extensionExclusion[] = .mp4
 
+; Specific files or directories to ignore.
+;   These should always be absolute paths beginning with a forward slash and
+;   not contain any wildcards (*).
+;fileExclusion[] = /home/usr/.steam
 
 ; Describe the backup schedule
 ;   comma separated values are the days of the week, parenthesis is amount of designated days backed up.
