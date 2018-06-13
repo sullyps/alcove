@@ -51,7 +51,7 @@ catch (error)
 if (DEVEL && config.rsync.identity)
 {
   console.log('** Warning **');
-  console.log('*** You are running in a non-production environment and have' + 
+  console.log('*** You are running in a non-production environment and have' +
       ' specified a file with private and public keys.***');
   console.log('Configured keys use may cause potential permissions issues');
 }
