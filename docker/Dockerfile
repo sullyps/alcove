@@ -10,7 +10,8 @@ RUN npm install gulp -g
 # Install sendmail compatible executable
 RUN apt-get update && apt-get install ssmtp && echo "FromLineOverride=YES" >> /etc/ssmtp/ssmtp.conf
 
-# Install openssh-client package for key generation
+# Install openssh-client package for key generation, use rsa protocol
+# Place keys inside /home/node/.ssh and set ownership to node user
 RUN apt-get install -y openssh-client && mkdir /home/node/.ssh && ssh-keygen -t rsa -N '' -f /home/node/.ssh/id_rsa && chown node:node -R /home/node/.ssh
 
 # Configure StrictHostKeyChecking to 'no'
