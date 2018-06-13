@@ -47,6 +47,15 @@ catch (error)
   process.exit(-3);
 }
 
+// If in development mode and an rsync key file is specified, give warning
+if (DEVEL && config.rsync.identity)
+{
+  console.log('** Warning **');
+  console.log('*** You are running in a non-production environment and have' +
+      ' specified a file with private and public keys.***');
+  console.log('Configured keys use may cause potential permissions issues');
+}
+
 //
 // Create the logger as configured
 //
