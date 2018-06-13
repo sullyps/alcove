@@ -4,9 +4,9 @@ const CONFIG = (DEVEL ? "." : "") + "/etc/backup/backup.ini";
 // Explicitly warn about non-production modes
 if (DEVEL)
 {
-  console.log("*** Non-production environment        ***");
-  console.log("*** Are you sure you want to do this? ***");
-  console.log("(In a production deployment, you should not ever run 'app.js' directly)\n\n");
+  console.warn("*** Non-production environment        ***");
+  console.warn("*** Are you sure you want to do this? ***");
+  console.warn("(In a production deployment, you should not ever run 'app.js' directly)\n\n");
 }
 
 // Include 3rd party libraries
@@ -50,10 +50,12 @@ catch (error)
 // If in development mode and an rsync key file is specified, give warning
 if (DEVEL && config.rsync.identity)
 {
-  console.log('** Warning **');
-  console.log('*** You are running in a non-production environment and have' +
-      ' specified a file with private and public keys.***');
-  console.log('Configured keys use may cause potential permissions issues');
+  console.warn('**  Warning **');
+  console.warn('*** You are running in a development environment and have ***');
+  console.warn('*** configured an SSH identity in your config file.       ***');
+  console.warn('If you are using a docker container, make sure the file permissions');
+  console.warn('for your keys match the docker user, or your rsync connections');
+  console.warn('will always fail.');
 }
 
 //
