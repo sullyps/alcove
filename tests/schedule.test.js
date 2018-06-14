@@ -21,27 +21,29 @@ describe('Schedule Manipulation', function(){
 
 
   // Testing getting the next scheduled time given the schedule and a date
-  // NOTE: These tests cannot be implemented until there is a way to input a relative date to the function
-  // TODO: Reorganize getNextScheduledTime to take in a date
-  test('Same day scheduled time', function() {
-    var nextSummaryDate = system.__getNextScheduledTime(schedule, new Date('Sun May 20 2018 08:20:00 GMT-0500 (CDT)'));
+  test('1 second before', function() {
+    var nextSummaryDate = system.__getNextScheduledTime(schedule, new Date('Sun May 20 2018 09:14:59 GMT-0500 (CDT)'));
     expect(nextSummaryDate).toEqual(new Date('Sun May 20 2018 09:15:00 GMT-0500 (CDT)'));
   });
-  test('Next day scheduled time', function() {
-    var nextSummaryDate1_1 = system.__getNextScheduledTime(schedule, new Date('Wed May 23 2018 23:59:00 GMT-0500 (CDT)'));
-    expect(nextSummaryDate1_1).toEqual(new Date('Thu May 24 2018 09:15:00 GMT-0500 (CDT)'));
+  test('1 second after', function() {
+    var nextSummaryDate2 = system.__getNextScheduledTime(schedule, new Date('Wed May 23 2018 09:15:01 GMT-0500 (CDT)'));
+    expect(nextSummaryDate2).toEqual(new Date('Thu May 24 2018 09:15:00 GMT-0500 (CDT)'));
   });
-  test('Next day scheduled time', function() {
-    var nextSummaryDate2 = system.__getNextScheduledTime(schedule, new Date('Sat May 26 2018 10:15:00 GMT-0500 (CDT)'));
-    expect(nextSummaryDate2).toEqual(new Date('Sun May 27 2018 09:15:00 GMT-0500 (CDT)'));
+  test('1 second before midnight', function() {
+    var nextSummaryDate3 = system.__getNextScheduledTime(schedule, new Date('Sat May 26 2018 23:59:59 GMT-0500 (CDT)'));
+    expect(nextSummaryDate3).toEqual(new Date('Sun May 27 2018 09:15:00 GMT-0500 (CDT)'));
   });
-  test('Same day scheduled time', function() {
-    var nextSummaryDate3 = system.__getNextScheduledTime(schedule2, new Date('Sat May 26 2018 00:00:00 GMT-0500 (CDT)'));
-    expect(nextSummaryDate3).toEqual(new Date('Sat May 26 2018 23:59:00 GMT-0500 (CDT)'));
+  test('1 second after midnight', function() {
+    var nextSummaryDate4 = system.__getNextScheduledTime(schedule, new Date('Sun May 27 2018 00:00:01 GMT-0500 (CDT)'));
+    expect(nextSummaryDate4).toEqual(new Date('Sun May 27 2018 09:15:00 GMT-0500 (CDT)'));
+  });
+  test('Same time as scheduled', function() {
+    var nextSummaryDate4 = system.__getNextScheduledTime(schedule2, new Date('Sat May 26 2018 23:59:00 GMT-0500 (CDT)'));
+    expect(nextSummaryDate4).toEqual(new Date('Mon May 28 2018 23:59:00 GMT-0500 (CDT)'));
   });
   test('Future scheduled time', function() {
-    var nextSummaryDate4 = system.__getNextScheduledTime(schedule2, new Date('Wed May 23 2018 23:59:30 GMT-0500 (CDT)'));
-    expect(nextSummaryDate4).toEqual(new Date('Fri May 25 2018 23:59:00 GMT-0500 (CDT)'));
+    var nextSummaryDate5 = system.__getNextScheduledTime(schedule2, new Date('Wed May 23 2018 23:59:01 GMT-0500 (CDT)'));
+    expect(nextSummaryDate5).toEqual(new Date('Fri May 25 2018 23:59:00 GMT-0500 (CDT)'));
   });
 });
 
