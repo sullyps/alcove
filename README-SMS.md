@@ -14,7 +14,7 @@ than 100 messages, consider paying for a higher tier service from AWS.
 ## IMPORTANT NOTE:
 If you are planning on sending messages to only 1 phone number, skip steps 2
 and 3. You will provide a single phone number in the configuration file in
-step 4. 
+step 4.
 
 ## Step 1: Initializing Credentials
 
