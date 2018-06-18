@@ -9,9 +9,11 @@ ip = machine.company.com
 ;   If specified, be sure to include /home and /etc if you want those directories backed up.
 ;   All listed directories need to be absolute paths beginning with a forward slash.
 ;   There should be no wildcards (*).
+;   In general, keep these as only top level directories and specify which
+;   specific files/directories to exclude within these paths.
 topLevelInclusion[] = /home
 topLevelInclusion[] = /etc
-topLevelInclusion[] = /dev/project1
+topLevelInclusion[] = /dev
 
 ; File extensions/directories to always ignore.
 ;   These should never be absolute paths and should always begin with a period.
@@ -22,9 +24,11 @@ extensionExclusion[] = .mp4
 ;   These should always be absolute paths beginning with a forward slash and
 ;   not contain any wildcards (*).
 ;fileExclusion[] = /home/usr/.steam
+;fileExclusion[] = /dev/project1
+;fileExclusion[] = /dev/project3
 
 ; Describe the backup schedule
 ;   comma separated values are the days of the week, parenthesis is amount of designated days backed up.
 ;   pipe separates any number of schedules. after semi colon = time to backup.
 ;   Must be surrounded with quotes.
-schedule = "0,1,2,3,4,5,6(7)|1(5);3:00"
+schedule = "0,1,2,3,4,5,6(7)|1(5);[3:00]"
