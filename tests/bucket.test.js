@@ -52,7 +52,7 @@ test('Filling buckets', function(){
                   { date: new Date('Thu Apr 28 2016 03:00:00 GMT-0500 (CDT)') },
                   { date: new Date('Fri Apr 29 2016 03:00:00 GMT-0500 (CDT)') }];
   var machine = { name: 'test' };
-  system.fillBuckets(buckets, path.join(__dirname,'/backup_test'),machine, function () {
+  system.fillBuckets(buckets, path.join(__dirname,'tmp','backup_test'),machine, function () {
     expect(buckets).toEqual([
         { date: new Date('Sat Apr 16 2016 03:00:00 GMT-0500 (CDT)') },
         { date: new Date('Mon Apr 18 2016 03:00:00 GMT-0500 (CDT)') },

@@ -8,7 +8,7 @@ logs
 etc/backup/*
 
 # Temporary disk storage for tests
-tests/backup_test*
+tests/tmp**
 
 # Temporary/Swap files
 .*.swo
