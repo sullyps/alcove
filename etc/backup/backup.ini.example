@@ -75,17 +75,18 @@
 ;email_from='info@bioneos.com'
 
 ; SMS
-; If SMS is configured, expect to get around 4-5 messges per month given the
+; If SMS is configured, expect to get around 4-5 messages per month given the
 ; backup system is working. The free tier for AWS is 100 messages per month.
 ; If sending more messages, consider paying for SNS services.
 ; Provide a phone number in E.164 format - a maximum of 15 digits prefixed with
 ;   a country code. Do not prefix with a '+'.
-;   For example, a US phone number may look like "15551234567".
+;   For example, a US phone number may look like "+13195550000".
 ;   See (https://docs.aws.amazon.com/sns/latest/dg/sms_publish-to-phone.html)
 ;   for more details.
 ; OR Provide the AWS Topic ARN with subscribers who will receive messages.
+;
 ; Do not provide both values.
-;sms_to="11234567890"
+;sms_to="+13195550000"
 ;sms_to="arn:aws:sns:region:subscriber:topicname"
 
 ; The AWS access key for your account
