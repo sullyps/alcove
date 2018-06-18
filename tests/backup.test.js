@@ -60,7 +60,7 @@ describe('Files and directories with valid names', function() {
       fs.writeFileSync(path.join(dir,filename));
     });
     dirDates.forEach(function(dirname) {
-      fs.mkdir(path.join(dir,dirname));
+      fs.mkdirSync(path.join(dir,dirname));
     });
   });
   test('File is more recent than directory', function() {
@@ -71,7 +71,7 @@ describe('Files and directories with valid names', function() {
 describe('Directories with no valid names', function() {
   beforeEach(function() {
     invalidNames.forEach(function(dirname) {
-      fs.mkdir(path.join(dir,dirname));
+      fs.mkdirSync(path.join(dir,dirname));
     });
   });
   test('No valid directory name', function() {
