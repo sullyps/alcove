@@ -96,5 +96,7 @@ new Promise(function(resolve, reject) {
 })
 .then(function() {
   // Webapp
-  // TODO
+  let app = express();
+  require('./lib/config/express')(app, config);
+  app.listen(config.port);
 });
