@@ -4,16 +4,34 @@ name = machine
 ; ip/dns to use to connect to your machine via ssh.
 ip = machine.company.com
 
-; file/directory inclusion patterns, 
-inclusionPatterns[] = ~
+; Optional top level directories to add to backup.
+;   If not specified, defaults are /home and /etc.
+;   If specified, be sure to include /home and /etc if you want those directories backed up.
+;   All listed directories need to be absolute paths beginning with a forward slash.
+;   There should be no wildcards (*).
+;   Keep these as only top level directories and specify the exact
+;   files/directories to exclude within these paths.
+topLevelInclusion[] = /home
+topLevelInclusion[] = /etc
+topLevelInclusion[] = /dev
 
-; file/directory exclusion patterns
-exclusionPatterns[] = *.mp3
-exclusionPatterns[] = Downloads/
+; File extensions to always ignore.
+;   These should never be absolute paths and should always begin with a period.
+;   If a directory is named 'exDir.ext' and '.ext' is excluded, the directory
+;   'exDir.ext' will not be included in the backup.
+extensionExclusion[] = .mp3
+extensionExclusion[] = .swp
+extensionExclusion[] = .swo
 
+; Specific files or directories to ignore.
+;   These should always be absolute paths beginning with a forward slash and
+;   not contain any wildcards (*).
+;fileExclusion[] = /home/usr/.steam
+;fileExclusion[] = /dev/project1
+;fileExclusion[] = /dev/project3
 
 ; Describe the backup schedule
 ;   comma separated values are the days of the week, parenthesis is amount of designated days backed up.
 ;   pipe separates any number of schedules. after semi colon = time to backup.
 ;   Must be surrounded with quotes.
-schedule = "0,1,2,3,4,5,6(7)|1(5);3:00"
+schedule = "0,1,2,3,4,5,6(7)|1(5);[3:00]"
