@@ -9,16 +9,19 @@ ip = machine.company.com
 ;   If specified, be sure to include /home and /etc if you want those directories backed up.
 ;   All listed directories need to be absolute paths beginning with a forward slash.
 ;   There should be no wildcards (*).
-;   In general, keep these as only top level directories and specify which
-;   specific files/directories to exclude within these paths.
+;   Keep these as only top level directories and specify the exact
+;   files/directories to exclude within these paths.
 topLevelInclusion[] = /home
 topLevelInclusion[] = /etc
 topLevelInclusion[] = /dev
 
-; File extensions/directories to always ignore.
+; File extensions to always ignore.
 ;   These should never be absolute paths and should always begin with a period.
+;   If a directory is named 'exDir.ext' and '.ext' is excluded, the directory
+;   'exDir.ext' will not be included in the backup.
 extensionExclusion[] = .mp3
-extensionExclusion[] = .mp4
+extensionExclusion[] = .swp
+extensionExclusion[] = .swo
 
 ; Specific files or directories to ignore.
 ;   These should always be absolute paths beginning with a forward slash and
