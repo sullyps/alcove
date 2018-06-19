@@ -31,7 +31,7 @@ describe('Only valid directories inside backup directory', function() {
   });
 
   test('Get the most recent backup directory', function() {
-    expect(rsync.getLastBackupDir(dir)).toBe(path.join(dir,'2018-06-15T18:49:00.010Z'));
+    expect(rsync.getLastBackupDir(dir)).toBe(path.join('..','2018-06-15T18:49:00.010Z'));
   });
 });
 
@@ -59,7 +59,7 @@ describe('Files and directories with valid names', function() {
     });
   });
   test('File is more recent than directory', function() {
-    expect(rsync.getLastBackupDir(dir)).toBe(path.join(dir,'2018-06-15T07:59:59.000Z'));
+    expect(rsync.getLastBackupDir(dir)).toBe(path.join('..','2018-06-15T07:59:59.000Z'));
   });
 });
 
