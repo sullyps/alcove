@@ -42,7 +42,7 @@ gulp.task('develop', ['init'], function () {
   livereload.listen();
   nodemon({
     script: 'app.js',
-    ext: 'js swig',
+    ext: 'js njk',
     ignore: ['data/']
   }).on('restart', function () {
     setTimeout(function () {
