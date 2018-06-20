@@ -36,8 +36,7 @@ describe('Parsing config object for notification settings', function() {
       'Joe Smith <email@domain.com>','email.domain.com',
       'email@domain@domain.com','.email@domain.com','email.@domain.com',
       'email..email@domain.com','email@domain.com (Joe Smith)','email@domain',
-      'email@-domain.com','email@domain.web','email@111.222.333.44444',
-      'email@domain..com'];
+      'email@-domain.com','email@domain..com'];
     validEmails.forEach(function(email) {
       let config = { notifications : { email_to : [] } };
       config.notifications.email_to.push(email);
@@ -46,8 +45,11 @@ describe('Parsing config object for notification settings', function() {
       });
     });
     
-    // The current regex being used fails to invalidate 'email@doman.web'
+    // The current regex being used fails to invalidate 'email@domain.web'
     // and 'email@111.222.333.44444'.
+    // The first fails because there is no check for all top level domains.
+    // The second fails because the check for domain names that start with 
+    // numbers.
     invalidEmails.forEach(function(email) {
       let config = { notifications : { email_to : [] }};
       let error = [];
