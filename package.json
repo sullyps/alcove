@@ -30,7 +30,6 @@
     "sequelize": "^4.37",
     "serve-favicon": "^2.5",
     "sqlite3": "^3.1",
-    "swig": "^1.4",
     "wordwrapjs": "^3.0"
   },
   "devDependencies": {
