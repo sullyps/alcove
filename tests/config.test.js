@@ -37,6 +37,7 @@ describe('Parsing config object for notification settings', function() {
       'email@domain@domain.com','.email@domain.com','email.@domain.com',
       'email..email@domain.com','email@domain.com (Joe Smith)','email@domain',
       'email@-domain.com','email@domain..com'];
+
     validEmails.forEach(function(email) {
       let config = { notifications : { email_to : [] } };
       config.notifications.email_to.push(email);
@@ -50,15 +51,30 @@ describe('Parsing config object for notification settings', function() {
     // The first fails because there is no check for all top level domains.
     // The second fails because the check for domain names that start with 
     // numbers.
+    
+    let totalErrors = [];
+    
     invalidEmails.forEach(function(email) {
       let config = { notifications : { email_to : [] }};
       let error = [];
       error.push('Invalid email address: ' + email);
+      totalErrors.push('Invalid email address: ' + email);
       config.notifications.email_to.push(email);
-      test('Invalid emails', function() {
-        
+      test('Individual invalid emails', function() {
         expect(init.__validateNotifications(config)).toEqual(error);
       });
+    });
+
+    test('All invalid emails', function() {
+      let config = { notifications : { email_to : invalidEmails }}
+      expect(init.__validateNotifications(config)).toEqual(totalErrors);
+    });
+
+    test('Both valid and invalid emails', function() {
+      let config = { notifications : 
+        { email_to : validEmails.concat(invalidEmails) }
+      };
+      expect(init.__validateNotifications(config)).toEqual(totalErrors);
     });
 
   });
