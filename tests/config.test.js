@@ -76,6 +76,23 @@ describe('Parsing config object for notification settings', function() {
       };
       expect(init.__validateNotifications(config)).toEqual(totalErrors);
     });
+  });
 
+  describe('Testing sms phone numbers', function() {
+    const validSMSPhones = ['+12345678909','12345678909','21234567890',
+        '+31234567890'];
+    const invalidSMSPhones = ['1234567890','01234567890','1-123-456-7890',
+        '+1-123-456-7890','123456789091','1234556789a','#12345678909'];
+
+    // With valid phone numbers, there should be no errors returned
+    validSMSPhones.forEach(function(phoneNum) {
+      let config = { notifications: { sms_to : phoneNum }};
+      expect(init.__validateNotifications(config)).toEqual([]);
+    });
+
+    invalidSMSPhones.forEach(function(phoneNum) {
+      let config = { notifications : { sms_to : phoneNum }};
+      expect(init.__validateNotifications(config)).toEqual(['Invalid notifications sms recipient field.'])
+    });
   });
 });
