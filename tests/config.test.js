@@ -25,20 +25,25 @@ describe('Verifying isNumeric function', function(){
 });
 
 describe('Parsing config object for notification settings', function() {
-  describe('Testing email addresses', function() {
-    // Per this post - https://blogs.msdn.microsoft.com/testing123/2009/02/06/email-address-test-cases/
-    const validEmails = ['email@domain.com','firstname.lastname@domain.com',
-      'email@subdomain.domain.com','firstname+lastname@domain.com',
-      'email@123.123.123.123','email@[123.123.123.123]','"email"@domain.com',
-      '1234567890@domain.com','email@domain-one.com','_______@domain.com',
-      'email@domain.name','email@domain.co.jp','firstname-lastname@domain.com'];
-    const invalidEmails = ['plainaddress','#@%^%#$@#$@#.com','@domain.com',
-      'Joe Smith <email@domain.com>','email.domain.com',
-      'email@domain@domain.com','.email@domain.com','email.@domain.com',
-      'email..email@domain.com','email@domain.com (Joe Smith)','email@domain',
-      'email@-domain.com','email@domain..com'];
+  // Per this post - https://blogs.msdn.microsoft.com/testing123/2009/02/06/email-address-test-cases/
+  const validEmails = ['email@domain.com','firstname.lastname@domain.com',
+    'email@subdomain.domain.com','firstname+lastname@domain.com',
+    'email@123.123.123.123','email@[123.123.123.123]','"email"@domain.com',
+    '1234567890@domain.com','email@domain-one.com','_______@domain.com',
+    'email@domain.name','email@domain.co.jp','firstname-lastname@domain.com'];
+  const invalidEmails = ['plainaddress','#@%^%#$@#$@#.com','@domain.com',
+    'Joe Smith <email@domain.com>','email.domain.com',
+    'email@domain@domain.com','.email@domain.com','email.@domain.com',
+    'email..email@domain.com','email@domain.com (Joe Smith)','email@domain',
+    'email@-domain.com','email@domain..com'];
 
-    validEmails.forEach(function(email) {
+  const validSMSPhones = ['+12345678909','12345678909','21234567890',
+    '+31234567890'];
+  const invalidSMSPhones = ['1234567890','01234567890','1-123-456-7890',
+    '+1-123-456-7890','1234567890912315','1234556789a','#12345678909'];
+
+  describe('Testing email addresses', function() {
+       validEmails.forEach(function(email) {
       let config = { notifications : { email_to : [] } };
       config.notifications.email_to.push(email);
       test('Valid emails', function() {
@@ -79,11 +84,6 @@ describe('Parsing config object for notification settings', function() {
   });
 
   describe('Testing sms phone numbers', function() {
-    const validSMSPhones = ['+12345678909','12345678909','21234567890',
-        '+31234567890'];
-    const invalidSMSPhones = ['1234567890','01234567890','1-123-456-7890',
-        '+1-123-456-7890','123456789091','1234556789a','#12345678909'];
-
     // With valid phone numbers, there should be no errors returned
     validSMSPhones.forEach(function(phoneNum) {
       let config = { notifications: { sms_to : phoneNum }};
@@ -92,7 +92,7 @@ describe('Parsing config object for notification settings', function() {
 
     invalidSMSPhones.forEach(function(phoneNum) {
       let config = { notifications : { sms_to : phoneNum }};
-      expect(init.__validateNotifications(config)).toEqual(['Invalid notifications sms recipient field.'])
+      expect(init.__validateNotifications(config)).toEqual([phoneNum + ' is an invalid sms recipient address'])
     });
   });
 });
