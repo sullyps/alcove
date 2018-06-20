@@ -4,8 +4,17 @@ describe('Verifying isNumeric function', function(){
   test('Integers are numeric', function() {
     expect(init.__isNumeric(5)).toBe(true);
   });
-  test('Strings are not numeric', function() {
-    expect(init.__isNumeric('5')).toBe(false);
+  test('Strings with numbers are numeric', function() {
+    expect(init.__isNumeric('5')).toBe(true);
+  });
+  test('Strings with alpha chars are not numeric', function() {
+    expect(init.__isNumeric('a')).toBe(false);
+  });
+  test('Hex strings are not numeric', function() {
+    expect(init.__isNumeric('1F3')).toBe(false);
+  });
+  test('Inf is not numeric', function() {
+    expect(init.__isNumeric(Infinity)).toBe(false);
   });
   test('Arrays are not numeric', function() {
     expect(init.__isNumeric([1,2])).toBe(false);
@@ -16,10 +25,8 @@ describe('Verifying isNumeric function', function(){
 });
 
 describe('Parsing config object for notification settings', function() {
-  var config = {};
-
   describe('Testing email addresses', function() {
-  // Per this post - https://blogs.msdn.microsoft.com/testing123/2009/02/06/email-address-test-cases/
+    // Per this post - https://blogs.msdn.microsoft.com/testing123/2009/02/06/email-address-test-cases/
     const validEmails = ['email@domain.com','firstname.lastname@domain.com',
       'email@subdomain.domain.com','firstname+lastname@domain.com',
       'email@123.123.123.123','email@[123.123.123.123]','"email"@domain.com',
@@ -32,13 +39,25 @@ describe('Parsing config object for notification settings', function() {
       'email@-domain.com','email@domain.web','email@111.222.333.44444',
       'email@domain..com'];
     validEmails.forEach(function(email) {
-      beforeEach(function() {
-        config.notifications.email_to = email;
-      });
-
+      let config = { notifications : { email_to : [] } };
+      config.notifications.email_to.push(email);
       test('Valid emails', function() {
         expect(init.__validateNotifications(config)).toEqual([]);
       });
     });
+    
+    // The current regex being used fails to invalidate 'email@doman.web'
+    // and 'email@111.222.333.44444'.
+    invalidEmails.forEach(function(email) {
+      let config = { notifications : { email_to : [] }};
+      let error = [];
+      error.push('Invalid email address: ' + email);
+      config.notifications.email_to.push(email);
+      test('Invalid emails', function() {
+        
+        expect(init.__validateNotifications(config)).toEqual(error);
+      });
+    });
+
   });
 });
