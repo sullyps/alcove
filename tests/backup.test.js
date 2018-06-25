@@ -1,75 +1,75 @@
-var rsync = require('../lib/rsync.js');
-var fs = require('fs-extra');
+const rsync = require('../lib/rsync.js');
+const fs = require('fs-extra');
 const path = require('path');
 
 // This will always be a relative path to the tests directory, where
 // these tests are located.
-var dir = path.join(__dirname,'tmp', 'backup-dirs');
-var validDirectoryNames = ['2018-06-15T18:49:00.010Z','2018-06-15T18:49:00.000Z',
+const dir = path.join(__dirname,'tmp', 'backup-dirs');
+const validDirectoryNames = ['2018-06-15T18:49:00.010Z','2018-06-15T18:49:00.000Z',
     '2018-06-14T18:49:00.010Z','2018-06-13T18:49:00.010Z'];
-var invalidNames = ['incorrect-dir-name','2018-06-15','2018-06-15T18:49:00:000'];
+const invalidNames = ['incorrect-dir-name','2018-06-15','2018-06-15T18:49:00:000'];
 
 // Before each test, remove old test file directory if it exists
 // and create a new directory.
-beforeEach(function() {
+beforeEach(() => {
   if (fs.existsSync(dir))
     fs.removeSync(dir);
   fs.mkdirSync(dir);
 });
 
 // Always remove the directory with the simulated data after each test
-afterEach(function() {
+afterEach(() => {
   if (fs.existsSync(dir))
     fs.removeSync(dir);
 });
 
-describe('Only valid directories inside backup directory', function() {
-  beforeEach(function() {
-    validDirectoryNames.forEach(function(dirname) {
+describe('Only valid directories inside backup directory', () => {
+  beforeEach(() => {
+    validDirectoryNames.forEach((dirname) => {
       fs.mkdirSync(path.join(dir, dirname));
     });
   });
 
-  test('Get the most recent backup directory', function() {
+  test('Get the most recent backup directory', () => {
     expect(rsync.getLastBackupDir(dir)).toBe(path.join('..','2018-06-15T18:49:00.010Z'));
   });
 });
 
-describe('Valid file names but no directories', function() {
-  beforeEach(function() {
-    validDirectoryNames.forEach(function(dirname) {
+describe('Valid file names but no directories', () => {
+  beforeEach(() => {
+    validDirectoryNames.forEach((dirname) => {
       fs.writeFileSync(path.join(dir, dirname),'');
     });
   });
 
-  test('Try to find directory with all files', function() {
+  test('Try to find directory with all files', () => {
     expect(rsync.getLastBackupDir(dir)).toEqual(null);
   });
 });
 
-describe('Files and directories with valid names', function() {
-  beforeEach(function() {
+describe('Files and directories with valid names', () => {
+  beforeEach(() => {
     const fileDates = ['2018-06-15T08:00:00.000Z','2018-06-13T08:00:00.000Z','2018-06-11T08:00:00.000Z','2018-06-09T08:00:00.000Z'];
     const dirDates = ['2018-06-15T07:59:59.000Z','2018-06-13T07:59:59.000Z','2018-06-11T07:59:59.000Z','2018-06-09T07:59:59.000Z'];
-    fileDates.forEach(function(filename) {
+    fileDates.forEach((filename) => {
       fs.writeFileSync(path.join(dir,filename));
     });
-    dirDates.forEach(function(dirname) {
+    dirDates.forEach((dirname) => {
       fs.mkdirSync(path.join(dir,dirname));
     });
   });
-  test('File is more recent than directory', function() {
+  test('File is more recent than directory', () => {
     expect(rsync.getLastBackupDir(dir)).toBe(path.join('..','2018-06-15T07:59:59.000Z'));
   });
 });
 
-describe('Directories with no valid names', function() {
-  beforeEach(function() {
-    invalidNames.forEach(function(dirname) {
+describe('Directories with no valid names', () => {
+  beforeEach(() => {
+    invalidNames.forEach((dirname) =>  {
       fs.mkdirSync(path.join(dir,dirname));
     });
   });
-  test('No valid directory name', function() {
+  test('No valid directory name', () => {
     expect(rsync.getLastBackupDir(dir)).toEqual(null);
   });
 });
