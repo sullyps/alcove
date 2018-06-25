@@ -69,7 +69,7 @@
 ; Schedule for summary report emails to be sent out. Defaults to 8:00am on 
 ; Mondays. Use comma separated schedules if you wish more than one. 
 ; Ex] 1,3,5;[13:30] = Mon, Wed, Fri at 1:30pm
-;summary_sched='1;[8:00]'
+;summary_schedule='1;[8:00]'
 
 ; The tag to prepend to email subject lines, for filtering purposes. This is
 ; disabled if not specified or empty. Default is empty.
