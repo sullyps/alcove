@@ -26,7 +26,7 @@ describe('Parsing config object for notification settings', function() {
     'us-east-10','us-west-0'];
 
   describe('Testing email addresses', function() {
-       validEmails.forEach(function(email) {
+    validEmails.forEach(function(email) {
       let config = { notifications : { email_to : [] } };
       config.notifications.email_to.push(email);
       test('Valid emails', function() {
