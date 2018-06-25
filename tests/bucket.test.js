@@ -1,15 +1,15 @@
-var system = require('../lib/system.js');
-var path = require('path');
+const system = require('../lib/system.js');
+const path = require('path');
 
 // Testing bucket generation from a schedule object and date
-test('Bucket creation', function() {
-  var schedule = '0,1,2,3,4,5,6(7)|1,3,5(12);0:00';
-  var schedule2 = '1,3,5(6)|5(5);3:00';
-  var date = new Date(1420095600000);
-  var date2 = new Date(1451815200000);
+test('Bucket creation', () => {
+  const schedule = '0,1,2,3,4,5,6(7)|1,3,5(12);0:00';
+  const schedule2 = '1,3,5(6)|5(5);3:00';
+  const date = new Date(1420095600000);
+  const date2 = new Date(1451815200000);
 
-  var buckets = system.getBuckets(schedule, date);
-  var buckets2 = system.getBuckets(schedule2, date2);
+  const buckets = system.getBuckets(schedule, date);
+  const buckets2 = system.getBuckets(schedule2, date2);
   
   expect(buckets).toEqual( [{ date: new Date('Fri Dec 05 2014 00:00:00 GMT-0600 (CST)') },
       { date: new Date('Mon Dec 08 2014 00:00:00 GMT-0600 (CST)') },
@@ -40,8 +40,8 @@ test('Bucket creation', function() {
 });
 
 // Testing bucket filling given directory structure and bucket
-test('Filling buckets', function(){
-  var buckets = [ { date: new Date('Sat Apr 16 2016 03:00:00 GMT-0500 (CDT)') },
+test('Filling buckets', () => {
+  const buckets = [ { date: new Date('Sat Apr 16 2016 03:00:00 GMT-0500 (CDT)') },
                   { date: new Date('Mon Apr 18 2016 03:00:00 GMT-0500 (CDT)') },
                   { date: new Date('Wed Apr 20 2016 03:00:00 GMT-0500 (CDT)') },
                   { date: new Date('Thu Apr 21 2016 03:00:00 GMT-0500 (CDT)') },
@@ -51,8 +51,8 @@ test('Filling buckets', function(){
                   { date: new Date('Wed Apr 27 2016 03:00:00 GMT-0500 (CDT)') },
                   { date: new Date('Thu Apr 28 2016 03:00:00 GMT-0500 (CDT)') },
                   { date: new Date('Fri Apr 29 2016 03:00:00 GMT-0500 (CDT)') }];
-  var machine = { name: 'test' };
-  system.fillBuckets(buckets, path.join(__dirname,'tmp','backup_test'),machine, function () {
+  const machine = { name: 'test' };
+  system.fillBuckets(buckets, path.join(__dirname,'tmp','backup_test'),machine, () => {
     expect(buckets).toEqual([
         { date: new Date('Sat Apr 16 2016 03:00:00 GMT-0500 (CDT)') },
         { date: new Date('Mon Apr 18 2016 03:00:00 GMT-0500 (CDT)') },
@@ -92,8 +92,8 @@ test('Filling buckets', function(){
 */
 
 // Testing converting schedule into a human readable format
-test('Human Readable schedule format', function() {
-  var scheduleObj = system.parseSchedule('0,1,2,3,4,5,6(7)|1(5);3:00');
+test('Human Readable schedule format', () => {
+  const scheduleObj = system.parseSchedule('0,1,2,3,4,5,6(7)|1(5);3:00');
   expect(scheduleObj).toEqual({ time: { hours: 3, minutes: 0 },
         daysSets: [ { number: 7, days: [0,1,2,3,4,5,6] }, { number: 5, days: [1] } ] 
   });
