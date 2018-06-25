@@ -74,7 +74,7 @@ test('Filling buckets', () => {
 // NOTE: We could also implement Jest's beforeAll() afterAll() functions
 // to initialize a fake directory 
 /*test('Removing correct backups', function(done) {
-  var buckets = [
+  const buckets = [
        { date: new Date('Sat Apr 16 2016 03:00:00 GMT-0500 (CDT)') },
        { backup: new Date('Mon Apr 18 2016 03:00:00 GMT-0500 (CDT)'), date: new Date('Mon Apr 18 2016 03:00:00 GMT-0500 (CDT)') },
        { backup: new Date('Wed Apr 20 2016 03:07:00 GMT-0500 (CDT)'), date: new Date('Wed Apr 20 2016 03:00:00 GMT-0500 (CDT)') },
