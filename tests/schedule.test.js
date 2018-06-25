@@ -81,8 +81,8 @@ describe('Validating backup schedule', () => {
   });
 
   test('Schedule w/ invalid time (hour >= 24)', () => {
-    var schedule1 = invalidSchedules[1];
-    var schedule2 = invalidSchedules[2];
+    let schedule1 = invalidSchedules[1];
+    let schedule2 = invalidSchedules[2];
     expect(init.__validateBackupSchedule(schedule1)).toEqual(['Backup ' +
     'Schedule: ' + schedule1 + 'contains an invalid time [hh:mm]']);
     expect(init.__validateBackupSchedule(schedule2)).toEqual(['Backup ' +
