@@ -1,29 +1,5 @@
 var init = require('../lib/config/init.js');
 
-describe('Verifying isNumeric function', function(){
-  test('Integers are numeric', function() {
-    expect(init.__isNumeric(5)).toBe(true);
-  });
-  test('Strings with numbers are numeric', function() {
-    expect(init.__isNumeric('5')).toBe(true);
-  });
-  test('Strings with alpha chars are not numeric', function() {
-    expect(init.__isNumeric('a')).toBe(false);
-  });
-  test('Hex strings are not numeric', function() {
-    expect(init.__isNumeric('1F3')).toBe(false);
-  });
-  test('Inf is not numeric', function() {
-    expect(init.__isNumeric(Infinity)).toBe(false);
-  });
-  test('Arrays are not numeric', function() {
-    expect(init.__isNumeric([1,2])).toBe(false);
-  });
-  test('Null is not numeric', function() {
-    expect(init.__isNumeric(null)).toBe(false);
-  });
-});
-
 describe('Parsing config object for notification settings', function() {
   // Per this post - https://blogs.msdn.microsoft.com/testing123/2009/02/06/email-address-test-cases/
   const validEmails = ['email@domain.com','firstname.lastname@domain.com',
@@ -50,7 +26,7 @@ describe('Parsing config object for notification settings', function() {
     'us-east-10','us-west-0'];
 
   describe('Testing email addresses', function() {
-       validEmails.forEach(function(email) {
+    validEmails.forEach(function(email) {
       let config = { notifications : { email_to : [] } };
       config.notifications.email_to.push(email);
       test('Valid emails', function() {
