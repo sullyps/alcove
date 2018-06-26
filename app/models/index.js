@@ -1,16 +1,16 @@
 'use strict';
-var fs = require('fs'),
+const fs = require('fs'),
   path = require('path'),
   Sequelize = require('sequelize');
 
 const DB_URL = 'sqlite://localhost/backup-system';
-var db = {};
+let db = {};
 
 /**
  * Module pattern.
  */
 module.exports = {
-  init: function(config) {
+  init: (config) => {
     // First ensure data directory, or throw exception
     try 
     {
@@ -22,18 +22,18 @@ module.exports = {
     }
 
     // Read our model definitions and associate relationships
-    var sequelize = new Sequelize(DB_URL, { 
+    let sequelize = new Sequelize(DB_URL, { 
       storage: path.join(config.data_dir, "events.db"),
       operatorsAliases: false,
       logging: false
     });
-    fs.readdirSync(__dirname).filter(function (file) {
+    fs.readdirSync(__dirname).filter((file) => {
       return (file.indexOf('.') !== 0) && (file !== 'index.js');
-    }).forEach(function (file) {
-      var model = sequelize['import'](path.join(__dirname, file));
+    }).forEach((file) => {
+      let model = sequelize['import'](path.join(__dirname, file));
       db[model.name] = model;
     });
-    Object.keys(db).forEach(function (modelName) {
+    Object.keys(db).forEach((modelName) => {
       if ('associate' in db[modelName]) {
         db[modelName].associate(db);
       }
