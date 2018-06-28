@@ -19,36 +19,33 @@ router.post('/', (req, res) => {
   })
   .then( user => {
     res.status(200).send(user);
-  })
-  .catch(err) {
+  }).catch( err => {
     return res.status(401).send("There was a problem adding the user to the databse.");
-  }
+  })
 });
 
 // Get a single user from the database
 router.get('/:id', (req, res) => {
   User.findById(req.params.id)
-  .then( user = > {
+  .then( user => {
     if (!user) return res.status(401).send("No user found");
     res.status(200).send(user);
   })
-  .catch(err) {
+  .catch(err => {
     return res.status(401).send("There was a problem finding the user.")
-  }
+  })
 })
 
 // NOTE: I wrote this method thinking that there would be a need for it,
 // but I don't think we will want to allow seeing all of the users in the db.
-/*// Get all the users in the database
+// Get all the users in the database
 router.get('/', (req, res) => {
   User.findAll().then( users => {
     res.send(200).send(users);
   })
-  .catch(err) {
+  .catch(err => {
     return res.status(401).send("There was a problem finding all users");
-  }
-});*/
+  })
+});
 
-module.exports = app => {
-  app.use('/', router);
-}
+module.exports = router;
