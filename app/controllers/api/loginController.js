@@ -6,8 +6,8 @@ const sequelize = require('sequelize');
 const db = require('../../models').getDatabase();
 
 router.use(bodyParser.urlencoded({ extended : true }));
-router.use(bodyParser.json())
 
+// User requests to login with a username and password
 router.post('/', (req, res) => {
   db.User.findOne({
     where: {
@@ -21,7 +21,7 @@ router.post('/', (req, res) => {
     res.status(200).send("Found user in database");
   })
   .catch( err => {
-    return res.status(401).send("There was a problem finding that user in the database");
+    return res.status(401).send("There was a problem finding that user in the database" + err.message);
   });
 });
 
