@@ -48,3 +48,7 @@ router.get('/', (req, res) => {
     return res.status(401).send("There was a problem finding all users");
   }
 });*/
+
+module.exports = app => {
+  app.use('/', router);
+}
