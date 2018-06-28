@@ -3,8 +3,11 @@ const express = require('express'),
   bodyParser = require('body-parser');
 
 router.use(bodyParser.urlencoded({ extended : true }));
-const User = require('../../models/user.js');
+const db = require('../../models');
 
+// TODO: Move the following block of code to an appropriate place where 
+// people would create a user, not what this controller will be used for.
+/*
 // Create a new user
 router.post('/', (req, res) => {
   // TODO: Determine if I need the instance of the db to properly
@@ -36,10 +39,9 @@ router.get('/:id', (req, res) => {
   })
 })
 
-// NOTE: I wrote this method thinking that there would be a need for it,
-// but I don't think we will want to allow seeing all of the users in the db.
 // Get all the users in the database
 router.get('/', (req, res) => {
+  res.status(200).send("Login Landing Page")
   User.findAll().then( users => {
     res.send(200).send(users);
   })
@@ -47,5 +49,8 @@ router.get('/', (req, res) => {
     return res.status(401).send("There was a problem finding all users");
   })
 });
+*/
 
-module.exports = router;
+module.exports = (app => {
+  app.use('/login',router);
+});
