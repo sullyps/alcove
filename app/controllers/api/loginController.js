@@ -3,7 +3,7 @@ const express = require('express'),
   bodyParser = require('body-parser');
 
 const sequelize = require('sequelize');
-const db = require('../../models');
+const db = require('../../models').getDatabase();
 
 router.use(bodyParser.urlencoded({ extended : true }));
 router.use(bodyParser.json())
