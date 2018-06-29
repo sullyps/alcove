@@ -2,8 +2,24 @@ const express = require('express'),
   router = express.Router(),
   bodyParser = require('body-parser');
 
-const sequelize = require('sequelize');
-const db = require('../../models').getDatabase();
+let db = {};
+
+try
+{
+  db = require('../../models').getDatabase();
+}
+catch (err)
+{
+  // TODO: Discuss Methods for handling an un-initialized database at this
+  // point of the program.
+  // Several possible outcomes:
+  // 1. Inside each route, check if db initialized, kill Node if not.
+  // 2. Inside function that returns database, kill Node if not initialized.
+  // 3. Set a flag and check flag for each post/get response (not ideal).
+  // Implementing option 1 until further discussion.
+  console.error('*** The database has NOT been initialized. Exiting program ***');
+  process.exit(-1);
+}
 
 router.use(bodyParser.urlencoded({ extended : true }));
 
