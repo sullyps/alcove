@@ -47,8 +47,11 @@ module.exports = {
     return db;
   },
   getDatabase: () => {
+    // NOTE: This method should never be called before the init method.
+    // If this error occurs during runtime, reorganize your code to ensure
+    // the database is initialized before this method is used.
     if (!db.sequelize)
-      throw new Exception("Database has not been initialized!");
+      throw new Error("Database has not been initialized!");
     return db;
   }
 };
