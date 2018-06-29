@@ -21,6 +21,7 @@ catch (err)
   process.exit(-1);
 }
 
+router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended : true }));
 
 // User requests to login with a username and password
