@@ -1,8 +1,8 @@
 ; Name that you wish to call your machine
 name = machine
 
-; ip/dns to use to connect to your machine via ssh.
-ip = machine.company.com
+; Your machine hostname (can be domain name or IP address)
+host = machine.company.com
 
 ; Optional top level directories to add to backup.
 ;   If not specified, defaults are /home and /etc.
