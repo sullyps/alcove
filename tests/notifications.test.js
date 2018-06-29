@@ -1,4 +1,4 @@
-var init = require('../lib/config/init.js');
+const init = require('../lib/config/init.js');
 
 describe('Parsing config object for notification settings', function() {
   // Per this post - https://blogs.msdn.microsoft.com/testing123/2009/02/06/email-address-test-cases/

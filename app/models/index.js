@@ -1,16 +1,16 @@
 'use strict';
-var fs = require('fs'),
+const fs = require('fs'),
   path = require('path'),
   Sequelize = require('sequelize');
 
 const DB_URL = 'sqlite://localhost/backup-system';
-var db = {};
+let db = {};
 
 /**
  * Module pattern.
  */
 module.exports = {
-  init: function(config) {
+  init: (config) => {
     // First ensure data directory, or throw exception
     try 
     {
@@ -22,18 +22,18 @@ module.exports = {
     }
 
     // Read our model definitions and associate relationships
-    var sequelize = new Sequelize(DB_URL, { 
+    let sequelize = new Sequelize(DB_URL, {
       storage: path.join(config.data_dir, "events.db"),
       operatorsAliases: false,
       logging: false
     });
-    fs.readdirSync(__dirname).filter(function (file) {
+    fs.readdirSync(__dirname).filter((file) => {
       return (file.indexOf('.') !== 0) && (file !== 'index.js');
-    }).forEach(function (file) {
-      var model = sequelize['import'](path.join(__dirname, file));
+    }).forEach((file) => {
+      let model = sequelize['import'](path.join(__dirname, file));
       db[model.name] = model;
     });
-    Object.keys(db).forEach(function (modelName) {
+    Object.keys(db).forEach((modelName) => {
       if ('associate' in db[modelName]) {
         db[modelName].associate(db);
       }
@@ -46,11 +46,12 @@ module.exports = {
 
     return db;
   },
-  getDatabase: function () {
-    // TODO: Fix this implementation - controllers won't be able to access
-    // config file if the database has not been set up, throw error (for now)
+  getDatabase: () => {
+    // NOTE: This method should never be called before the init method.
+    // If this error occurs during runtime, reorganize your code to ensure
+    // the database is initialized before this method is used.
     if (!db.sequelize)
-      return new Exception("Database has not been initialized!")
+      throw new Error("Database has not been initialized!");
     return db;
   }
 };

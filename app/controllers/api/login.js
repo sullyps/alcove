@@ -2,13 +2,13 @@ const express = require('express'),
   router = express.Router(),
   bodyParser = require('body-parser');
 
-const sequelize = require('sequelize');
 const db = require('../../models').getDatabase();
 
+router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended : true }));
 
 // User requests to login with a username and password
-router.post('/', (req, res) => {
+router.post('/login', (req, res) => {
   db.User.findOne({
     where: {
       // TODO: Will want to hash the password and query for that hash
@@ -26,5 +26,5 @@ router.post('/', (req, res) => {
 });
 
 module.exports = (app => {
-  app.use('/login',router);
+  app.use('/api',router);
 });

@@ -1,7 +1,7 @@
 'use strict';
 
-module.exports = function(sequelize, DataTypes) {
-  var BackupEvent = sequelize.define('BackupEvent', {
+module.exports = (sequelize, DataTypes) => {
+  let BackupEvent = sequelize.define('BackupEvent', {
     'machine' : {
       'type' : DataTypes.STRING,
       'validate' : {
@@ -16,7 +16,7 @@ module.exports = function(sequelize, DataTypes) {
     'transferTimeSec' : DataTypes.INTEGER
   }, {
     classMethods: {
-      associate: function(models) {
+      associate: (models) => {
         // associations can be defined here
       }
     },

@@ -1,7 +1,7 @@
 'use strict';
 
-module.exports = function(sequelize, DataTypes) {
-  var ProcessEvent = sequelize.define('ProcessEvent', {
+module.exports = (sequelize, DataTypes) => {
+  let ProcessEvent = sequelize.define('ProcessEvent', {
     'event' : {
       'type' : DataTypes.STRING,
       'validate' : {
@@ -14,7 +14,7 @@ module.exports = function(sequelize, DataTypes) {
     'exitReason' : DataTypes.STRING
   }, {
     classMethods: {
-      associate: function(models) {
+      associate: (models) => {
          // associations can be defined here
       }
     },
