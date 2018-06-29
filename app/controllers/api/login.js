@@ -2,7 +2,7 @@ const express = require('express'),
   router = express.Router(),
   bodyParser = require('body-parser');
 
-let db = require('../../models').getDatabase();
+const db = require('../../models').getDatabase();
 
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended : true }));
