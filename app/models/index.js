@@ -46,9 +46,7 @@ module.exports = {
 
     return db;
   },
-  getDatabase: function () {
-    // TODO: Fix this implementation - controllers won't be able to access
-    // config file if the database has not been set up, throw error (for now)
+  getDatabase: () => {
     if (!db.sequelize)
       throw new Exception("Database has not been initialized!");
     return db;
