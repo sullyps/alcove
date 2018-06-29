@@ -19,8 +19,8 @@
 ;
 ; If not specified, defaults are /home and /etc.
 ;
-;topLevelInclusion[] = /home
-;topLevelInclusion[] = /etc
+;backup_directories[] = /home
+;backup_directories[] = /etc
 
 ; File extensions to always ignore.
 ; + Do not include paths or wildcards in these settings.
@@ -29,17 +29,17 @@
 ; If a directory is named 'exDir.ext' and '.ext' is excluded, the directory
 ;   'exDir.ext' will not be included in the backup.
 ; Ex] Do not backup .swp files
-;   extensionExclusion[] = .swp
+;   ignore_extensions[] = .swp
 ;
-;extensionExclusion[]=
+;ignore_extensions[]=
 
 ; Specific files or directories to ignore.
 ; + These should always be absolute paths
 ; + There should be no wildcards (*).
 ; Ex] Do not backup .cache from the "user1" home account
-;   fileExclusion[] = /home/user1/.cache
+;   ignore_files[] = /home/user1/.cache
 ;
-;fileExclusion[]= 
+;ignore_files[]= 
 
 ; Describe the backup schedule and time
 ;   schedule = "DAYS(N);[HH:MM]"
