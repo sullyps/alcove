@@ -50,7 +50,7 @@ module.exports = {
     // TODO: Fix this implementation - controllers won't be able to access
     // config file if the database has not been set up, throw error (for now)
     if (!db.sequelize)
-      return new Exception("Database has not been initialized!")
+      throw new Exception("Database has not been initialized!");
     return db;
   }
 };
