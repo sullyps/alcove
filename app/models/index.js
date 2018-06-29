@@ -6,7 +6,6 @@ var fs = require('fs'),
 const DB_URL = 'sqlite://localhost/backup-system';
 var db = {};
 
-
 /**
  * Module pattern.
  */
@@ -45,6 +44,13 @@ module.exports = {
     // Class reference
     db.Sequelize = Sequelize;
 
+    return db;
+  },
+  getDatabase: function () {
+    // TODO: Fix this implementation - controllers won't be able to access
+    // config file if the database has not been set up, throw error (for now)
+    if (!db.sequelize)
+      return new Exception("Database has not been initialized!")
     return db;
   }
 };
