@@ -1,9 +1,10 @@
 ; Name that you wish to call your machine
-name = machine
+;name = machine
 
 ; Your machine hostname (can be domain name or IP address)
-host = machine.company.com
+;host = machine.company.com
 
+; Your list of backup directories. Specify all directories you want included in
 ; Optional top level directories to add to backup.
 ;   If not specified, defaults are /home and /etc.
 ;   If specified, be sure to include /home and /etc if you want those directories backed up.
@@ -11,17 +12,17 @@ host = machine.company.com
 ;   There should be no wildcards (*).
 ;   Keep these as only top level directories and specify the exact
 ;   files/directories to exclude within these paths.
-topLevelInclusion[] = /home
-topLevelInclusion[] = /etc
-topLevelInclusion[] = /dev
+;topLevelInclusion[] = /home
+;topLevelInclusion[] = /etc
+;topLevelInclusion[] = /dev
 
 ; File extensions to always ignore.
 ;   These should never be absolute paths and should always begin with a period.
 ;   If a directory is named 'exDir.ext' and '.ext' is excluded, the directory
 ;   'exDir.ext' will not be included in the backup.
-extensionExclusion[] = .mp3
-extensionExclusion[] = .swp
-extensionExclusion[] = .swo
+;extensionExclusion[] = .mp3
+;extensionExclusion[] = .swp
+;extensionExclusion[] = .swo
 
 ; Specific files or directories to ignore.
 ;   These should always be absolute paths beginning with a forward slash and
@@ -30,8 +31,20 @@ extensionExclusion[] = .swo
 ;fileExclusion[] = /dev/project1
 ;fileExclusion[] = /dev/project3
 
-; Describe the backup schedule
-;   comma separated values are the days of the week, parenthesis is amount of designated days backed up.
-;   pipe separates any number of schedules. after semi colon = time to backup.
-;   Must be surrounded with quotes.
-schedule = "0,1,2,3,4,5,6(7)|1(5);[3:00]"
+; Describe the backup schedule and time
+; SCHEDULE 
+;   DAYS
+;     A comma separated values representing the days of the week on which
+;     to perform a backup (valid values are 0-6)
+;   N
+;     The number of backups to keep
+;   + Any number of schedules can be defined, separated by a single pipe (|)
+;     Ex] DAYS1(7)|DAYS2(4)|...
+;   
+; TIME
+;   HH:MM 
+;     The time to initiate the backup (if possible). Seconds cannot be specified.
+;
+; The SCHEDULE and TIME must be separated by a single semi-colon (;)
+; The entire string must be surrounded with quotes ("")
+;schedule = "DAYS(N);[HH:MM]"
