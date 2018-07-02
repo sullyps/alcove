@@ -43,25 +43,23 @@ describe('Parsing config object for notification settings', function() {
     let totalErrors = [];
     
     invalidEmails.forEach(function(email) {
-      let config = { notifications : { email_to : [] }};
+      let config = { email_to : [] };
       let error = [];
       error.push('Invalid email address: ' + email);
       totalErrors.push('Invalid email address: ' + email);
-      config.notifications.email_to.push(email);
+      config.email_to.push(email);
       test('Individual invalid emails', function() {
         expect(init.__validateNotifications(config)).toEqual(error);
       });
     });
 
     test('All invalid emails', function() {
-      let config = { notifications : { email_to : invalidEmails }}
+      let config = { email_to : invalidEmails }
       expect(init.__validateNotifications(config)).toEqual(totalErrors);
     });
 
     test('Both valid and invalid emails', function() {
-      let config = { notifications : 
-        { email_to : validEmails.concat(invalidEmails) }
-      };
+      let config = { email_to : validEmails.concat(invalidEmails) };
       expect(init.__validateNotifications(config)).toEqual(totalErrors);
     });
   });
@@ -69,25 +67,25 @@ describe('Parsing config object for notification settings', function() {
   describe('Testing sms phone numbers', function() {
     // With valid phone numbers, there should be no errors returned
     validSMSPhones.forEach(function(phoneNum) {
-      let config = { notifications: { sms_to : phoneNum }};
+      let config = { sms_to : phoneNum };
       expect(init.__validateNotifications(config)).toEqual([]);
     });
 
     invalidSMSPhones.forEach(function(phoneNum) {
-      let config = { notifications : { sms_to : phoneNum }};
-      expect(init.__validateNotifications(config)).toEqual([phoneNum + ' is an invalid sms recipient address'])
+      let config = { sms_to : phoneNum };
+      expect(init.__validateNotifications(config)).not.toBe([]);
     });
   });
 
   describe('Testing AWS regions', function() {
     validAWSRegions.forEach(function(region) {
-      let config = { notifications : { sms_region : region } };
+      let config = { sms_region : region };
       expect(init.__validateNotifications(config)).toEqual([]);
     });
 
     invalidAWSRegions.forEach(function(region) {
-      let config = { notifications : { sms_region : region } };
-      expect(init.__validateNotifications(config)).toEqual([region + ' is not a valid AWS region']);
+      let config = { sms_region : region };
+      expect(init.__validateNotifications(config)).not.toBe([]);
     });
 
   });
