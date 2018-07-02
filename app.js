@@ -99,4 +99,5 @@ new Promise(function(resolve, reject) {
   let app = express();
   require('./lib/config/express')(app, config);
   app.listen(config.port);
+  logger.info('Monitoring interface ready and listening on port ' + config.port + '...');
 });

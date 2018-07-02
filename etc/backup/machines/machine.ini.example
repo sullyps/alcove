@@ -1,37 +1,66 @@
 ; Name that you wish to call your machine
-name = machine
+; Ex] 
+;   name=machine
+;
+;name=
 
-; ip/dns to use to connect to your machine via ssh.
-ip = machine.company.com
+; Your machine hostname (can be domain name or IP address)
+; Ex]
+;   host=machine.company.com
+;
+;host=
 
-; Optional top level directories to add to backup.
-;   If not specified, defaults are /home and /etc.
-;   If specified, be sure to include /home and /etc if you want those directories backed up.
-;   All listed directories need to be absolute paths beginning with a forward slash.
-;   There should be no wildcards (*).
-;   Keep these as only top level directories and specify the exact
-;   files/directories to exclude within these paths.
-topLevelInclusion[] = /home
-topLevelInclusion[] = /etc
-topLevelInclusion[] = /dev
+; Your list of backup directories. 
+; Specify all directories you want included in the list of backed up 
+; directories, using multiple lines and the [] syntax.
+; + Only specify directories, not individual files.
+; + All listed directories need to be absolute paths.
+; + There should be no wildcards (*).
+;
+; If not specified, defaults are /home and /etc.
+;
+;backup_directories[] = /home
+;backup_directories[] = /etc
 
 ; File extensions to always ignore.
-;   These should never be absolute paths and should always begin with a period.
-;   If a directory is named 'exDir.ext' and '.ext' is excluded, the directory
+; + Do not include paths or wildcards in these settings.
+; + Use caution to ensure these extensions do not match a directory name, as
+;   the entire directory will be skipped. Unless this is the desired behavior...
+; If a directory is named 'exDir.ext' and '.ext' is excluded, the directory
 ;   'exDir.ext' will not be included in the backup.
-extensionExclusion[] = .mp3
-extensionExclusion[] = .swp
-extensionExclusion[] = .swo
+; Ex] Do not backup .swp files
+;   ignore_extensions[] = .swp
+;
+;ignore_extensions[]=
 
 ; Specific files or directories to ignore.
-;   These should always be absolute paths beginning with a forward slash and
-;   not contain any wildcards (*).
-;fileExclusion[] = /home/usr/.steam
-;fileExclusion[] = /dev/project1
-;fileExclusion[] = /dev/project3
+; + These should always be absolute paths
+; + There should be no wildcards (*).
+; Ex] Do not backup .cache from the "user1" home account
+;   ignore_files[] = /home/user1/.cache
+;
+;ignore_files[]= 
 
-; Describe the backup schedule
-;   comma separated values are the days of the week, parenthesis is amount of designated days backed up.
-;   pipe separates any number of schedules. after semi colon = time to backup.
-;   Must be surrounded with quotes.
-schedule = "0,1,2,3,4,5,6(7)|1(5);[3:00]"
+; Describe the backup schedule and time
+;   schedule = "DAYS(N);[HH:MM]"
+; SCHEDULE 
+;   DAYS
+;     A comma separated values representing the days of the week on which
+;     to perform a backup (valid values are 0-6)
+;   N
+;     The number of backups to keep
+;   + Any number of schedules can be defined, separated by a single pipe (|)
+;     Ex] DAYS1(7)|DAYS2(4)|...
+;   
+; TIME
+;   HH:MM 
+;     The time to initiate the backup (if possible). Seconds cannot be specified.
+;
+; The SCHEDULE and TIME must be separated by a single semi-colon (;)
+; The entire string must be surrounded with quotes ("")
+; Ex] Backup every day at 3AM, keep 7 copies
+;   schedule=0,1,2,3,4,5,6(7);[03:00]
+; Ex] Backup every Monday at 1AM, keep 4 copies
+;   schedule=1(4);[01:00]
+;
+;schedule=
