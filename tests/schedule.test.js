@@ -76,54 +76,43 @@ describe('Validating backup schedule', () => {
   
   test('Schedule w/o number of backups', () => {
     expect(init.__validateBackupSchedule(invalidSchedules[0]))
-      .toEqual(['Backup schedule :' + invalidSchedules[0] + ' does not '+ 
-      'match d,d,d(N)|d,d,d,d(N);[hh:mm] format']);
+      .toHaveLength(1);
   });
 
   test('Schedule w/ invalid time (hour >= 24)', () => {
     let schedule1 = invalidSchedules[1];
     let schedule2 = invalidSchedules[2];
-    expect(init.__validateBackupSchedule(schedule1)).toEqual(['Backup ' +
-    'Schedule: ' + schedule1 + 'contains an invalid time [hh:mm]']);
-    expect(init.__validateBackupSchedule(schedule2)).toEqual(['Backup ' +
-    'Schedule: ' + schedule2 + 'contains an invalid time [hh:mm]']);
+    expect(init.__validateBackupSchedule(schedule1)).toHaveLength(1);
+    expect(init.__validateBackupSchedule(schedule2)).toHaveLength(1);
   });
 
   test('Schedule w/ invalid time (min > 59)', () => {
     expect(init.__validateBackupSchedule(invalidSchedules[3]))
-      /*.toEqual(['Backup Schedule :' + invalidSchedules[3] + 
-      'contains an invalid time [hh:mm]']);*/
-      .toEqual(['Backup schedule :' + invalidSchedules[3] + ' does not '+ 
-      'match d,d,d(N)|d,d,d,d(N);[hh:mm] format']);
+      .toHaveLength(1);
   });
 
   test('Schedule with date greater than 6', () => {
     expect(init.__validateBackupSchedule(invalidSchedules[4]))
-      .toEqual(['Backup schedule :' + invalidSchedules[4] + ' does not ' +
-      'match d,d,d(N)|d,d,d,d(N);[hh:mm] format']);
+      .toHaveLength(1);
   });
 
   test('Schedule with seconds in time stamp', () => {
     expect(init.__validateBackupSchedule(invalidSchedules[5]))
-      .toEqual(['Backup schedule :' + invalidSchedules[5] + ' does not ' +
-      'match d,d,d(N)|d,d,d,d(N);[hh:mm] format']);
+      .toHaveLength(1);
   });
 
   test('Second schedule invalid date', () => {
     expect(init.__validateBackupSchedule(invalidSchedules[6]))
-      .toEqual(['Backup schedule :' + invalidSchedules[6] + ' does not ' +
-      'match d,d,d(N)|d,d,d,d(N);[hh:mm] format']);
+      .toHaveLength(1);
   });
 
   test('No date set specified, only pipe', () => {
     expect(init.__validateBackupSchedule(invalidSchedules[7]))
-      .toEqual(['Backup schedule :' + invalidSchedules[7] + ' does not ' +
-      'match d,d,d(N)|d,d,d,d(N);[hh:mm] format']);
+      .toHaveLength(1);
   });
 
   test('No date set specified', () => {
     expect(init.__validateBackupSchedule(invalidSchedules[8]))
-      .toEqual(['Backup schedule :' + invalidSchedules[8] + ' does not ' +
-      'match d,d,d(N)|d,d,d,d(N);[hh:mm] format']);
+      .toHaveLength(1);
   });
 });
