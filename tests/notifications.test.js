@@ -1,6 +1,8 @@
 const init = require('../lib/config/init.js');
 
 describe('Parsing config object for notification settings', function() {
+  const machineName = "test"
+
   // Per this post - https://blogs.msdn.microsoft.com/testing123/2009/02/06/email-address-test-cases/
   const validEmails = ['email@domain.com','firstname.lastname@domain.com',
     'email@subdomain.domain.com','firstname+lastname@domain.com',
@@ -27,10 +29,9 @@ describe('Parsing config object for notification settings', function() {
 
   describe('Testing email addresses', function() {
     validEmails.forEach(function(email) {
-      let config = { notifications : { email_to : [] } };
-      config.notifications.email_to.push(email);
+      let notifications = { email_to : [] };
       test('Valid emails', function() {
-        expect(init.__validateNotifications(config)).toEqual([]);
+        expect(init.__validateNotifications(notifications)).toEqual([]);
       });
     });
     
@@ -40,54 +41,54 @@ describe('Parsing config object for notification settings', function() {
     // The second fails because the check for domain names that start with 
     // numbers.
     
-    let totalErrors = [];
-    
     invalidEmails.forEach(function(email) {
-      let config = { notifications : { email_to : [] }};
-      let error = [];
-      error.push('Invalid email address: ' + email);
-      totalErrors.push('Invalid email address: ' + email);
-      config.notifications.email_to.push(email);
+      let notifications = {  email_to : [ email ] };
       test('Individual invalid emails', function() {
-        expect(init.__validateNotifications(config)).toEqual(error);
+        expect(init.__validateNotifications(notifications)).toHaveLength(1);
       });
     });
 
     test('All invalid emails', function() {
-      let config = { notifications : { email_to : invalidEmails }}
-      expect(init.__validateNotifications(config)).toEqual(totalErrors);
+      let notifications = { email_to : invalidEmails };
+      expect(init.__validateNotifications(notifications)).toHaveLength(invalidEmails.length);
     });
 
     test('Both valid and invalid emails', function() {
-      let config = { notifications : 
-        { email_to : validEmails.concat(invalidEmails) }
-      };
-      expect(init.__validateNotifications(config)).toEqual(totalErrors);
+      let notifications = { email_to : validEmails.concat(invalidEmails) };
+      expect(init.__validateNotifications(notifications)).toHaveLength(invalidEmails.length);
     });
   });
 
   describe('Testing sms phone numbers', function() {
     // With valid phone numbers, there should be no errors returned
     validSMSPhones.forEach(function(phoneNum) {
-      let config = { notifications: { sms_to : phoneNum }};
-      expect(init.__validateNotifications(config)).toEqual([]);
+      let notifications = { sms_to : phoneNum };
+      test('Individual SMS phone numbers', () => {
+        expect(init.__validateNotifications(notifications)).toEqual([]);
+      });
     });
 
     invalidSMSPhones.forEach(function(phoneNum) {
-      let config = { notifications : { sms_to : phoneNum }};
-      expect(init.__validateNotifications(config)).toEqual([phoneNum + ' is an invalid sms recipient address'])
+      let notifications = { sms_to : phoneNum };
+      test('Individual invalid SMS phone numbers', () => {
+        expect(init.__validateNotifications(notifications)).toHaveLength(1);
+      });
     });
   });
 
   describe('Testing AWS regions', function() {
     validAWSRegions.forEach(function(region) {
-      let config = { notifications : { sms_region : region } };
-      expect(init.__validateNotifications(config)).toEqual([]);
+      let notifications = { sms_region : region };
+      test('Individual valid AWS regions', () => {
+        expect(init.__validateNotifications(notifications)).toEqual([]);
+      });
     });
 
     invalidAWSRegions.forEach(function(region) {
-      let config = { notifications : { sms_region : region } };
-      expect(init.__validateNotifications(config)).toEqual([region + ' is not a valid AWS region']);
+      let notifications = { sms_region : region };
+      test('Individual invalid AWS regions', () => {
+        expect(init.__validateNotifications(notifications)).toHaveLength(1);
+       });
     });
 
   });
