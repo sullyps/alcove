@@ -44,7 +44,7 @@ describe('Parsing config object for notification settings', function() {
     invalidEmails.forEach(function(email) {
       let notifications = {  email_to : [ email ] };
       test('Individual invalid emails', function() {
-        expect(init.__validateNotifications(notifications)).toHaveLength(1);
+        expect(init.__validateNotifications(notifications)).not.toBe([]);
       });
     });
 
@@ -71,7 +71,7 @@ describe('Parsing config object for notification settings', function() {
     invalidSMSPhones.forEach(function(phoneNum) {
       let notifications = { sms_to : phoneNum };
       test('Individual invalid SMS phone numbers', () => {
-        expect(init.__validateNotifications(notifications)).toHaveLength(1);
+        expect(init.__validateNotifications(notifications)).not.toBe([]);
       });
     });
   });
@@ -87,9 +87,8 @@ describe('Parsing config object for notification settings', function() {
     invalidAWSRegions.forEach(function(region) {
       let notifications = { sms_region : region };
       test('Individual invalid AWS regions', () => {
-        expect(init.__validateNotifications(notifications)).toHaveLength(1);
-       });
+        expect(init.__validateNotifications(notifications)).not.toBe([]);
+      });
     });
-
   });
 });

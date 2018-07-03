@@ -1,5 +1,5 @@
 const system = require('../lib/system.js');
-const init = require('../lib/config/init.js');
+const config = require('../lib/config/init.js');
 
 describe('Schedule Manipulation', () => {
   const schedule = '0,1,2,3,4,5,6(7)|1(5);[9:15]';
@@ -73,7 +73,7 @@ test('Getting next summary time', () => {
   expect(lastSummaryDate3).toEqual(new Date('Mon May 28 2018 14:00:00 GMT-0500 (CDT)'));
 });
 
-describe('Validating backup schedule', () => {
+describe('Validating config schedule parsing', () => {
   const validSchedules = ['1(5);[8:00]','1(1);[08:00]',
     '0,1,2,3,4,5,6(7);[23:59]','6(6)|1,2,3(3);[0:00]'];
 
@@ -83,49 +83,42 @@ describe('Validating backup schedule', () => {
 
   validSchedules.forEach((schedule) => {
     test('Valid schedule testing',() => {
-      expect(init.__validateBackupSchedule(schedule)).toEqual([]);
+      expect(config.__validateBackupSchedule(schedule)).toEqual([]);
     });
   });
   
   test('Schedule w/o number of backups', () => {
-    expect(init.__validateBackupSchedule(invalidSchedules[0]))
-      .toHaveLength(1);
+    expect(config.__validateBackupSchedule(invalidSchedules[0])).not.toBe([]);
   });
 
   test('Schedule w/ invalid time (hour >= 24)', () => {
     let schedule1 = invalidSchedules[1];
     let schedule2 = invalidSchedules[2];
-    expect(init.__validateBackupSchedule(schedule1)).toHaveLength(1);
-    expect(init.__validateBackupSchedule(schedule2)).toHaveLength(1);
+    expect(config.__validateBackupSchedule(schedule1)).not.toBe([]);
+    expect(config.__validateBackupSchedule(schedule2)).not.toBe([]);
   });
 
   test('Schedule w/ invalid time (min > 59)', () => {
-    expect(init.__validateBackupSchedule(invalidSchedules[3]))
-      .toHaveLength(1);
+    expect(config.__validateBackupSchedule(invalidSchedules[3])).not.toBe([]);
   });
 
   test('Schedule with date greater than 6', () => {
-    expect(init.__validateBackupSchedule(invalidSchedules[4]))
-      .toHaveLength(1);
+    expect(config.__validateBackupSchedule(invalidSchedules[4])).not.toBe([]);
   });
 
   test('Schedule with seconds in time stamp', () => {
-    expect(init.__validateBackupSchedule(invalidSchedules[5]))
-      .toHaveLength(1);
+    expect(config.__validateBackupSchedule(invalidSchedules[5])).not.toBe([]);
   });
 
   test('Second schedule invalid date', () => {
-    expect(init.__validateBackupSchedule(invalidSchedules[6]))
-      .toHaveLength(1);
+    expect(config.__validateBackupSchedule(invalidSchedules[6])).not.toBe([]);
   });
 
   test('No date set specified, only pipe', () => {
-    expect(init.__validateBackupSchedule(invalidSchedules[7]))
-      .toHaveLength(1);
+    expect(config.__validateBackupSchedule(invalidSchedules[7])).not.toBe([]);
   });
 
   test('No date set specified', () => {
-    expect(init.__validateBackupSchedule(invalidSchedules[8]))
-      .toHaveLength(1);
+    expect(config.__validateBackupSchedule(invalidSchedules[8])).not.toBe([]);
   });
 });
