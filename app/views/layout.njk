@@ -6,7 +6,9 @@
     <title>{{ title }}</title>
   </head>
   <body>
-    {% block content %}{% endblock %}
+    <div class="ui container">
+      {% block content %}{% endblock %}
+    </div>
     <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.4/semantic.min.js"></script>
   </body>
