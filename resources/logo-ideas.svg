@@ -26,8 +26,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.7"
-     inkscape:cx="302.65175"
-     inkscape:cy="582.16145"
+     inkscape:cx="-194.49111"
+     inkscape:cy="555.01859"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -101,46 +101,65 @@
          inkscape:connector-curvature="0"
          sodipodi:nodetypes="cccccc" />
     </g>
-    <rect
-       style="opacity:1;fill:#4b94cb;fill-opacity:1;stroke:none;stroke-width:1.75402439;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect948"
-       width="42.828468"
-       height="42.828468"
-       x="-64.530983"
-       y="76.549995"
-       rx="0.35080507"
-       ry="0.35080507"
-       transform="rotate(-45.635183)" />
-    <rect
-       style="opacity:1;fill:#4172b0;fill-opacity:1;stroke:none;stroke-width:1.75402439;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect950"
-       width="35.137913"
-       height="35.137913"
-       x="-56.840427"
-       y="84.24057"
-       rx="0.35080507"
-       ry="0.35080507"
-       transform="rotate(-45.635183)" />
-    <rect
-       style="opacity:1;fill:#009449;fill-opacity:1;stroke:none;stroke-width:1.65587008;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect952"
-       width="27.037994"
-       height="27.037994"
-       x="-56.840427"
-       y="92.3405"
-       rx="0.33117419"
-       ry="0.33117419"
-       transform="rotate(-45.635183)" />
+    <g
+       id="g827"
+       transform="translate(6.8729849,2.8509172)"
+       inkscape:export-filename="/home/sgdavis/workspace/git-backup/public/img/mark.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96">
+      <rect
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
+         inkscape:export-filename="/home/sgdavis/workspace/git-backup/public/logo.png"
+         transform="rotate(-45.635183)"
+         ry="0.35080507"
+         rx="0.35080507"
+         y="74.429108"
+         x="-66.605354"
+         height="42.828468"
+         width="42.828468"
+         id="rect948"
+         style="opacity:1;fill:#4b94cb;fill-opacity:1;stroke:none;stroke-width:1.75402439;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <rect
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
+         inkscape:export-filename="/home/sgdavis/workspace/git-backup/public/logo.png"
+         transform="rotate(-45.635183)"
+         ry="0.35080507"
+         rx="0.35080507"
+         y="82.119682"
+         x="-58.914803"
+         height="35.137913"
+         width="35.137913"
+         id="rect950"
+         style="opacity:1;fill:#4172b0;fill-opacity:1;stroke:none;stroke-width:1.75402439;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <rect
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
+         inkscape:export-filename="/home/sgdavis/workspace/git-backup/public/logo.png"
+         transform="rotate(-45.635183)"
+         ry="0.33117419"
+         rx="0.33117419"
+         y="90.219612"
+         x="-58.914803"
+         height="27.037994"
+         width="27.037994"
+         id="rect952"
+         style="opacity:1;fill:#009449;fill-opacity:1;stroke:none;stroke-width:1.65587008;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    </g>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.3499999px;line-height:125%;font-family:FontAwesome;-inkscape-font-specification:FontAwesome;text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="68.413681"
-       y="118.21726"
-       id="text832"><tspan
+       x="78.140831"
+       y="116.39869"
+       id="text832"
+       inkscape:export-filename="/home/sgdavis/workspace/git-backup/public/logo.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"><tspan
          sodipodi:role="line"
          id="tspan830"
-         x="68.413681"
-         y="118.21726"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:50.79999924px;font-family:Agenda;-inkscape-font-specification:Agenda;stroke-width:0.26458332px">Alcove</tspan></text>
+         x="78.140831"
+         y="116.39869"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:39.51111221px;font-family:Raleway;-inkscape-font-specification:Raleway;stroke-width:0.26458332px">Alcove</tspan></text>
   </g>
 </svg>
