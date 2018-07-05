@@ -1,6 +1,6 @@
 const init = require('../lib/config/init.js');
 
-describe('Parsing config object for notification settings', function() {
+describe('Parsing config object for notification settings', () => {
   const machineName = "test"
 
   // Per this post - https://blogs.msdn.microsoft.com/testing123/2009/02/06/email-address-test-cases/
@@ -27,10 +27,10 @@ describe('Parsing config object for notification settings', function() {
     'us-south-central-1','ap-southwesteast-1','us-east','us-1','east-1',
     'us-east-10','us-west-0'];
 
-  describe('Testing email addresses', function() {
-    validEmails.forEach(function(email) {
+  describe('Testing email addresses', () => {
+    validEmails.forEach( email => {
       let notifications = { email_to : [] };
-      test('Valid emails', function() {
+      test('Valid emails', () => {
         expect(init.__validateNotifications(notifications)).toEqual([]);
       });
     });
@@ -41,34 +41,34 @@ describe('Parsing config object for notification settings', function() {
     // The second fails because the check for domain names that start with 
     // numbers.
     
-    invalidEmails.forEach(function(email) {
+    invalidEmails.forEach( email => {
       let notifications = {  email_to : [ email ] };
-      test('Individual invalid emails', function() {
+      test('Individual invalid emails', () => {
         expect(init.__validateNotifications(notifications)).not.toBe([]);
       });
     });
 
-    test('All invalid emails', function() {
+    test('All invalid emails', () => {
       let notifications = { email_to : invalidEmails };
       expect(init.__validateNotifications(notifications)).toHaveLength(invalidEmails.length);
     });
 
-    test('Both valid and invalid emails', function() {
+    test('Both valid and invalid emails', () => {
       let notifications = { email_to : validEmails.concat(invalidEmails) };
       expect(init.__validateNotifications(notifications)).toHaveLength(invalidEmails.length);
     });
   });
 
-  describe('Testing sms phone numbers', function() {
+  describe('Testing sms phone numbers', () => {
     // With valid phone numbers, there should be no errors returned
-    validSMSPhones.forEach(function(phoneNum) {
+    validSMSPhones.forEach( phoneNum => {
       let notifications = { sms_to : phoneNum };
       test('Individual SMS phone numbers', () => {
         expect(init.__validateNotifications(notifications)).toEqual([]);
       });
     });
 
-    invalidSMSPhones.forEach(function(phoneNum) {
+    invalidSMSPhones.forEach( phoneNum => {
       let notifications = { sms_to : phoneNum };
       test('Individual invalid SMS phone numbers', () => {
         expect(init.__validateNotifications(notifications)).not.toBe([]);
@@ -76,15 +76,15 @@ describe('Parsing config object for notification settings', function() {
     });
   });
 
-  describe('Testing AWS regions', function() {
-    validAWSRegions.forEach(function(region) {
+  describe('Testing AWS regions', () => {
+    validAWSRegions.forEach( region => {
       let notifications = { sms_region : region };
       test('Individual valid AWS regions', () => {
         expect(init.__validateNotifications(notifications)).toEqual([]);
       });
     });
 
-    invalidAWSRegions.forEach(function(region) {
+    invalidAWSRegions.forEach( region => {
       let notifications = { sms_region : region };
       test('Individual invalid AWS regions', () => {
         expect(init.__validateNotifications(notifications)).not.toBe([]);
