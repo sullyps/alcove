@@ -6,6 +6,7 @@ resources/htpassword
 data
 logs
 etc/backup/*
+dist
 
 # Temporary disk storage for tests
 tests/tmp**

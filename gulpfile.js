@@ -53,7 +53,7 @@ gulp.task('develop', ['init'], function () {
   nodemon({
     script: 'app.js',
     ext: 'js njk',
-    ignore: ['data/']
+    ignore: ['data/', 'dist/']
   }).on('restart', function () {
     setTimeout(function () {
       livereload.changed(__dirname);
