@@ -11,7 +11,7 @@ const exec = require('child_process').exec;
 const jsSrc = ['app.js', 'lib/**/*.js', 'app/**.*.js', './public/js/**/*.js'];
 
 // Initialize required directories
-gulp.task('init', function() {
+gulp.task('init', () => {
   gutil.log('Synchronously creating required directories');
   fs.ensureDirSync('./public/');
   fs.ensureDirSync('./data/');
@@ -23,7 +23,7 @@ gulp.task('init', function() {
 });
 
 // Lint Task
-gulp.task('lint', function() {
+gulp.task('lint', () => {
   gulp.src(jsSrc)
     .pipe(jshint({ esversion: 6, node: true }))
     .pipe(jshint.reporter('default', {verbose: true}));
@@ -35,7 +35,7 @@ gulp.task('lint', function() {
   });
 });
 
-gulp.task('sass', function () {
+gulp.task('sass', () => {
   gulp.src('./sass/style.scss')
     .pipe(plumber())
     .pipe(sass().on('error', sass.logError))
@@ -43,19 +43,19 @@ gulp.task('sass', function () {
     .pipe(livereload());
 });
 
-gulp.task('watch', function() {
+gulp.task('watch', () => {
   gulp.watch('./sass/**/*.scss', ['sass']);
   gulp.watch(jsSrc, ['lint']);
 });
 
-gulp.task('develop', ['init'], function () {
+gulp.task('develop', ['init'], () => {
   livereload.listen();
   nodemon({
     script: 'app.js',
     ext: 'js njk',
     ignore: ['data/']
-  }).on('restart', function () {
-    setTimeout(function () {
+  }).on('restart', () => {
+    setTimeout( () => {
       livereload.changed(__dirname);
     }, 500);
   });
