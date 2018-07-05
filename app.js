@@ -10,20 +10,20 @@ if (DEVEL)
 }
 
 // Include 3rd party libraries
-var express = require('express'),
-  fs = require('fs'),
-  http = require('http'),
-  https = require('https'),
-  wrap = require('wordwrapjs');
+const express = require('express'),
+      fs = require('fs'),
+      http = require('http'),
+      https = require('https'),
+      wrap = require('wordwrapjs');
 
 // Include our libraries
-var logging = require('./lib/config/log4js'),
-  configInit = require('./lib/config/init'),
-  models = require('./app/models'),
-  system = require('./lib/system');
+const logging = require('./lib/config/log4js'),
+      configInit = require('./lib/config/init'),
+      models = require('./app/models'),
+      system = require('./lib/system');
 
 // Application logger and global Config
-var logger, config, db;
+let logger, config, db;
 
 //
 // Config file parsing
