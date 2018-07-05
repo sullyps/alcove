@@ -10,20 +10,20 @@ if (DEVEL)
 }
 
 // Include 3rd party libraries
-var express = require('express'),
-  fs = require('fs'),
-  http = require('http'),
-  https = require('https'),
-  wrap = require('wordwrapjs');
+const express = require('express'),
+      fs = require('fs'),
+      http = require('http'),
+      https = require('https'),
+      wrap = require('wordwrapjs');
 
 // Include our libraries
-var logging = require('./lib/config/log4js'),
-  configInit = require('./lib/config/init'),
-  models = require('./app/models'),
-  system = require('./lib/system');
+const logging = require('./lib/config/log4js'),
+      configInit = require('./lib/config/init'),
+      models = require('./app/models'),
+      system = require('./lib/system');
 
 // Application logger and global Config
-var logger, config, db;
+let logger, config, db;
 
 //
 // Config file parsing
@@ -72,29 +72,29 @@ logger.info(config.app.name + ' v' + config.app.version + ' starting up!');
 //   2) Initialize the Backup system
 //   3) Startup the webapp
 //
-new Promise(function(resolve, reject) {
+new Promise( (resolve, reject) => {
   // DB
   logger.debug('Loading the Events DB...');
   db = models.init(config);
   logger.trace('  models.init() complete...');
   resolve(db.sequelize.sync());
 })
-.catch(function(err) {
+.catch( err => {
   logger.error('Error loading the Events DB. Check your configuration and data files: ' + err.message);
   logger.debug(err.stack);
   process.exit(-2);
 })
-.then(function() {
+.then( () => {
   // System
   logger.debug('Starting main process...');
   system.init(config, db);
 })
-.catch(function(err) {
+.catch( err => {
   logger.error('Error during Backup System startup: ' + err.message);
   logger.debug(err.stack);
   process.exit(-1);
 })
-.then(function() {
+.then( () => {
   // Webapp
   let app = express();
   require('./lib/config/express')(app, config);

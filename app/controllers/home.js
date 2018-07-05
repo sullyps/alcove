@@ -1,11 +1,11 @@
-var express = require('express'),
-    router = express.Router(),
-    schedule = ['']
+const express = require('express'),
+      router = express.Router(),
+      schedule = [''];
 
-module.exports = function (app) {
+module.exports = app => {
   app.use('/', router);
 };
 
-router.get('/', function (req, res, next) {
+router.get('/', (req, res, next) => {
   res.render('index', {title: 'BN System Backup'});
 });
