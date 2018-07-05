@@ -1,0 +1,131 @@
+*
+{
+  box-sizing: border-box;
+  font-family: Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* Background colors, text colors, and text formatting */
+.bg-color-dark
+{
+  background-color: #3D4860;
+}
+
+.bg-color-medium
+{
+  background-color: #70A0D0;
+}
+
+.bg-color-light
+{
+  background-color: #BBBBFF;
+}
+
+.color-normal
+{
+  color: #000000;
+}
+
+.color-error
+{
+  color: #FF0000;
+}
+
+.color-most-important
+{
+  color: #0000FF;
+}
+
+.color-least-important
+{
+  color: rgba(0,0,0,.6);
+}
+
+.bold
+{
+  font-weight: bold;
+}
+
+/* Container */
+#backup-summary-container
+{
+  margin: 0 auto;
+  max-width: 1100px;
+  padding: 0 15px 15px 15px;
+  width: calc(100% - 28px);
+}
+
+/* Title */
+#backup-summary-title
+{
+  font-size: 20px;
+  margin-bottom: 15px;
+  padding: 20px;
+  text-align: center;
+}
+
+/* Backup summary information blocks */
+#backup-summary-block-container
+{
+  font-size: 0;
+  text-align: justify;
+}
+
+.backup-summary-block
+{
+  display: inline-block;
+  width: calc(100% / 3);
+}
+
+.backup-summary-block:first-child .backup-summary-block-content
+{
+  margin-right: 10px;
+}
+
+.backup-summary-block:nth-child(2) .backup-summary-block-content
+{
+  margin: 0 5px;
+}
+
+.backup-summary-block:last-child .backup-summary-block-content
+{
+  margin-left: 10px;
+}
+
+.backup-summary-block-content
+{
+  font-size: 16px;
+  padding: 15px;
+  text-align: left;
+}
+
+.backup-summary-block-content p:first-child
+{
+  margin-bottom: 8px;
+}
+
+/* Machine summary information blocks */
+.machine-summary
+{
+  margin: 15px 0 0 0;
+}
+
+.machine-name
+{
+  font-size: 16px;
+  padding: 5px 15px;
+  text-align: center;
+}
+
+.machine-table
+{
+  font-size: 16px;
+  padding: 5px 10px;
+  width: 100%;
+}
+
+.machine-table-td
+{
+  padding: 5px;
+}
