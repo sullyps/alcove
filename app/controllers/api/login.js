@@ -1,14 +1,12 @@
 const express = require('express'),
   router = express.Router(),
-  bodyParser = require('body-parser');
-
-const bcrypt = require('bcrypt');
+  bcrypt = require('bcrypt');
 const db = require('../../models').getDatabase();
 
-router.use(bodyParser.json());
-router.use(bodyParser.urlencoded({ extended : true }));
-
-// User requests to login with a username and password
+/**
+ * Service login requests by matching a username and password to the Database.
+ */
+// TODO - why bcrypt??
 router.post('/login', (req, res) => {
   db.User.findOne({
     where: {
@@ -34,5 +32,5 @@ router.post('/login', (req, res) => {
 });
 
 module.exports = (app => {
-  app.use('/api',router);
+  app.use('/api', router);
 });
