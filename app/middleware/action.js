@@ -39,7 +39,7 @@ module.exports = (req, res, next) => {
     }
     else if (authFailed)
     {
-      return res.redirect('/?dest=' + encodeURIComponent(req.baseUrl + '/' + req.path));
+      return res.redirect('/?dest=' + encodeURIComponent(req.originalUrl));
     }
   }
 
