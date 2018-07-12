@@ -8,25 +8,25 @@
 </head>
 <body>
 <div id="backup-summary-container" class="bg-color-dark">
-    <h2 id="backup-summary-title" class="bg-color-medium color-normal bold">Backup Summary: {{fromDate}} - {{toDate}}</h2>
+    <h2 id="backup-summary-title" class="bg-color-medium color-normal bold">Backup Summary from {{fromDate}} to {{toDate}}</h2>
 
     <div id="backup-summary-block-container">
         <div class="backup-summary-block">
             <div class="backup-summary-block-content bg-color-light">
-                <p class="color-normal">All Backups: {{totalSize}}</p>
-                <p class="color-normal">Space Remaining: {{freeSpace}}</p>
+                <p class="color-normal">Total Disk Space Used: {{totalSize}}</p>
+                <p class="color-normal">Disk Space Remaining: {{freeSpace}}</p>
             </div>
         </div><
         <div class="backup-summary-block">
             <div class="backup-summary-block-content bg-color-light">
-                <p class="color-normal">Last Start Date:</p>
+                <p class="color-normal">Last Backup System Startup:</p>
                 <p><span class="color-most-important">{{lastStartDate}}</span> <span class="color-normal bold">{{lastStartTime}}</span></p>
             </div>
         </div><
         <div class="backup-summary-block">
             <div class="backup-summary-block-content bg-color-light">
-                <p class="color-normal">Number of "Starts": {{startEvents}}</p>
-                <p class="color-normal">Number of "Stops": <span class="color-error">{{stopEvents}}</span></p>
+                <p class="color-normal">Backup System Startups: {{startEvents}}</p>
+                <p class="color-normal">Backup System Shutdowns: <span class="color-error">{{stopEvents}}</span></p>
             </div>
         </div>
     </div>
