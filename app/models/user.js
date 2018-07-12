@@ -3,8 +3,7 @@
 module.exports = (sequelize, DataTypes) => {
   let User = sequelize.define('User', {
     'username' : DataTypes.STRING,
-    'password' : DataTypes.STRING,
-    'salt' : DataTypes.STRING,
+    'password' : DataTypes.STRING
     // TODO: Determine how we would like to define access levels
     //'access' : DataTypes.STRING // DataTypes.INTEGER
   }, {
@@ -13,6 +12,8 @@ module.exports = (sequelize, DataTypes) => {
         // associations can be defined here
       }
     },
+    'updatedAt' : 'lastLogin'
   });
+
   return User;
 }
