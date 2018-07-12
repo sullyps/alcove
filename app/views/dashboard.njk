@@ -2,15 +2,69 @@
 
 {% block content %}
 
-<div class="ui vertical menu">
-  <a class="active teal item">
-    Menu
+<div class="ui large menu">
+  <a class=" active item">
+    Overview
   </a>
+
+  {% for machine in data.machines %}
+
+  {% if machine.status == true %}
+
   <a class="item">
-    Beginning
+    <span class="dashboard-success-color"> {{machine.name}} </span>
   </a>
+
+  {% else %}
+
   <a class="item">
-    End
+    <span class="dashboard-error-color"> {{machine.name}} </span>
   </a>
+
+  {% endif %}
+
+  {% endfor %}
+
+</div>
+
+<h1 class="ui header" id="dashboard-overview-header"> Backup System </h1>
+<div class="ui piled segments" id="dashboard-overview-list">
+
+  {% for machine in data.machines %}
+
+  <div class="ui segment">
+    <div class="ui four column grid">
+      <div class="ui row">
+        <div class="ui column">
+          {{machine.name}}
+        </div>
+
+        {% if machine.status == true %}
+
+        <div class="ui column">
+          <span class="dashboard-success-color">Successful</span>
+        </div>
+
+        {% else %}
+
+        <div class="ui column">
+          <span class="dashboard-error-color">Unsuccessful</span>
+        </div>
+
+        {% endif %}
+
+        <div class="ui column">
+          <span class="dashboard-date-color">{{machine.lastBackup}}</span>
+        </div>
+        <div class="ui column">
+          {{machine.schedule}}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% endfor %}
+
+</div>
 
 {% endblock %}
