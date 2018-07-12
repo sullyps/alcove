@@ -34,6 +34,8 @@
     {% for machine in machines %}
         <div class="machine-summary">
             <h3 class="machine-name bg-color-medium color-normal bold">{{machine.name}}</h3>
+            <h2 class="machine-info bg-color-medium color-normal no-bold">Total Number of Backups: {{machine.numberBackups}}</h2>
+            <h2 class="machine-info bg-color-medium color-normal no-bold">Total Disk Space Used: {{machine.diskSpace}}</h2>
             <table class="machine-table bg-color-light color-least-important">
                 {% for event in machine.events %}
                     <tr>
