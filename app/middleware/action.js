@@ -23,7 +23,6 @@ module.exports = (req, res, next) => {
     else if (!req.session.authorized)
     {
       logger.info('Session is active, but not authorized for current request');
-      authFailed = false;
     }
     else if (req.session.authorized)
     {
