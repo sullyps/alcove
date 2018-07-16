@@ -9,6 +9,12 @@ const logger = require('../../../lib/config/log4js').getLogger();
  * Service login requests by matching a username and password to the Database.
  */
 router.post('/login', (req, res, next) => {
+  if (!req.body.password || !req.body.username)
+  {
+    logger.debug('Request did not include a username or password')
+    return res.status(401).send({ error : "Please enter username and password" });
+  }
+
   db.User.findOne({
     where: {
       username : req.body.username
@@ -31,6 +37,18 @@ router.post('/login', (req, res, next) => {
       {
         // In the future we might want to set distinguished roles in this value:
         req.session.authorized = 'user';
+
+        // Set the lastLogin for the user to now
+        // TODO: Discuss whether this Promise should chain the res.status(200)
+        // send call or leave it unattached.
+        db.User.update({
+          lastLogin : new Date()
+        }, {
+          where : {
+            username : req.body.username
+          }
+        }).then( () => { logger.debug('Updating lastLogin for user...'); } );
+
         res.status(200).send({});
       }
     }).catch (err => {
