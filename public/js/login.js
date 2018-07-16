@@ -11,7 +11,8 @@ $("#login-form").on("submit", event => {
     window.location.href = url.searchParams.has("dest") ? url.searchParams.get("dest") : "/dashboard";
   })
   .fail(xhr => {
-    $("#login-error p").text("Error " + xhr.status + ": " + xhr.responseJSON.error);
+    $("#login-error p").text(xhr.responseJSON.error);
+    console.log("Error " + xhr.status + ": " + xhr.responseJSON.error);
     $("#login-error").removeAttr("hidden");
   });
 });
