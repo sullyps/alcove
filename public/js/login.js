@@ -15,3 +15,7 @@ $("#login-frame").on("submit", event => {
     $("#login-error").removeAttr("hidden");
   });
 });
+
+$("input").on("keypress", () => {
+  $("#login-error").attr("hidden", true);
+});
