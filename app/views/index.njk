@@ -4,19 +4,19 @@
 
 <img id="login-image" src="/logo.png" width="300">
 
-<form id="login-frame">
+<form id="login-form">
 
-  <div id="login-header">
+  <div class="login-form-item">
     <h1 class="ui header"> Log In </h1>
   </div>
 
-  <div class="ui icon input" id="login-username">
-    <input type=text placeholder="Username">
+  <div class="ui icon input login-form-item">
+    <input type=text name="username" placeholder="Username">
     <i class="user icon"></i>
   </div>
 
-  <div class="ui icon input" id="login-password">
-    <input type="password" placeholder="Password">
+  <div class="ui icon input login-form-item">
+    <input type="password" name="password" placeholder="Password">
     <i class="shield alternate icon"></i>
   </div>
 
@@ -24,8 +24,19 @@
     <button class="ui primary button"> Log In </button>
   </div>
 
-  <div hidden id="login-invalid">{{message}}</div>
+  <div hidden class="ui error message" id="login-error">
+    <div class="header">
+      Login failed
+    </div>
+    <p></p>
+  </div>
 
 </form>
+
+{% endblock %}
+
+{% block js %}
+
+<script src="/js/login.js"></script>
 
 {% endblock %}
