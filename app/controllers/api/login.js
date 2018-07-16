@@ -31,6 +31,16 @@ router.post('/login', (req, res, next) => {
       {
         // In the future we might want to set distinguished roles in this value:
         req.session.authorized = 'user';
+
+        // Set the lastLogin for the user to now
+        db.User.update({
+          lastLogin : new Date()
+        }, {
+          where : {
+            username : req.body.username
+          }
+        }).then( () => { logger.debug('Updating lastLogin for user...'); } );
+
         res.status(200).send({});
       }
     }).catch (err => {
