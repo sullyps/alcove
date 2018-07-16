@@ -5,9 +5,10 @@ $("#login-frame").on("submit", event => {
     url: "/api/login",
     data: $("#login-frame").serialize()
   })
-  .done((data, statusText, xhr) => {
-    console.log(xhr.status);
+  .done(() => {
     $("#login-error").attr("hidden", true);
+    const url = new URL(window.location);
+    window.location.href = url.searchParams.has("dest") ? url.searchParams.get("dest") : "/dashboard";
   })
   .fail(xhr => {
     $("#login-error p").text("Error " + xhr.status + ": " + xhr.responseJSON.error);
