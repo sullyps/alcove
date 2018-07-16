@@ -1,38 +1,36 @@
 #login-image
 {
-  margin-left: calc(50% - 180px);
-  margin-top: 20px;
+  display: block;
+  margin: 20px auto 0 auto;
 }
 
-#login-frame
+#login-form
 {
-  height: 200px;
-  margin-left: calc(50% - 150px);
-  padding-top: 13%;
+  margin: calc(50vh - 199px) auto 0 auto;
   width: 300px;
 }
 
-#login-header
+@media (max-height: 440px)
 {
-  margin-bottom: 15px;
-  width: 100%;
+  #login-form
+  {
+    margin: 20px auto 0 auto;
+  }
 }
 
-#login-username
+.login-form-item
 {
   margin-bottom: 8px;
   width: 100%;
 }
 
-#login-password
-{
-  margin-bottom: 15px;
-  width: 100%;
-}
-
 #login-button
 {
-  margin-bottom: -27px;
+  margin-bottom: 8px;
   text-align: right;
-  width: 100%;
+}
+
+#login-error
+{
+  margin: 0 !important;
 }

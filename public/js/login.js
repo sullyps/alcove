@@ -1,9 +1,9 @@
-$("#login-frame").on("submit", event => {
+$("#login-form").on("submit", event => {
   event.preventDefault();
   $.ajax({
     method: "POST",
     url: "/api/login",
-    data: $("#login-frame").serialize()
+    data: $("#login-form").serialize()
   })
   .done(() => {
     $("#login-error").attr("hidden", true);
