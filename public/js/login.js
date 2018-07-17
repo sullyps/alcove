@@ -1,6 +1,7 @@
 $("#login-form").on("submit", event => {
   event.preventDefault();
   $("#login-button button").attr("disabled", true);
+  $("#login-loader").addClass("active");
   $.ajax({
     method: "POST",
     url: "/api/login",
@@ -18,6 +19,7 @@ $("#login-form").on("submit", event => {
   })
   .always(() => {
     $("#login-button button").removeAttr("disabled");
+    $("#login-loader").removeClass("active");
   });
 });
 
