@@ -1,36 +1,22 @@
-#login-image
-{
+#login-image {
   display: block;
-  margin: 20px auto 0 auto;
-}
+  margin: 20px auto 0 auto; }
 
-#login-form
-{
+#login-form {
   margin: calc(50vh - 199px) auto 0 auto;
-  width: 300px;
-}
+  width: 300px; }
 
-@media (max-height: 440px)
-{
-  #login-form
-  {
-    margin: 20px auto 0 auto;
-  }
-}
+@media (max-height: 440px) {
+  #login-form {
+    margin: 20px auto 0 auto; } }
 
-.login-form-item
-{
+.login-form-item {
   margin-bottom: 8px;
-  width: 100%;
-}
+  width: 100%; }
 
-#login-button
-{
+#login-button {
   margin-bottom: 8px;
-  text-align: right;
-}
+  text-align: right; }
 
-#login-error
-{
-  margin: 0 !important;
-}
+#login-error {
+  margin: 0 !important; }
