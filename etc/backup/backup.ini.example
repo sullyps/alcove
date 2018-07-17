@@ -104,6 +104,8 @@
 ; If SMS is configured, expect to get around 4-5 messages per month given the
 ; backup system is working. The free tier for AWS is 100 messages per month.
 ; If sending more messages, consider paying for SNS services.
+[notifications.sms]
+
 ; Provide a phone number in E.164 format - a maximum of 15 digits prefixed with
 ;   a country code. Do not prefix with a '+'.
 ;   For example, a US phone number may look like "+13195550000".
@@ -116,12 +118,12 @@
 ;sms_to="arn:aws:sns:region:subscriber:topicname"
 
 ; The AWS access key for your account
-;sms_accessKey=012345678999
+;access_key=012345678999
 
 ; The AWS secret key for your account
-;sms_secretKey=123456EXAMPLE
+;secret_key=123456EXAMPLE
 
 ; The region that supports SMS from AWS
-;sms_region='us-east-1'
+;aws_region='us-east-1'
 
 

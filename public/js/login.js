@@ -14,24 +14,20 @@ $("#login-form").on("submit", event => {
   })
   .fail((xhr, statusText) => {
     let errorMessage;
-    switch (statusText)
+    if (xhr.responseJSON && xhr.responseJSON.error)
     {
-      case "abort":
-        errorMessage = "The request was aborted";
-        break;
-      case "error":
-        errorMessage = xhr.responseJSON.error;
-        break;
-      case "parsererror":
-        errorMessage = "An error was encountered parsing the response";
-        break;
-      case "timeout":
-        errorMessage = "The request timed out";
-        break;
-      default:
-        errorMessage = "An unexpected error was encountered";
-        break;
+      errorMessage = xhr.responseJSON.error;
     }
+    else if (statusText === "timeout")
+    {
+      errorMessage = "The login request timed out. Please try again later...";
+    }
+    else
+    {
+      console.log("Internal error on login request: " + statusText);
+      errorMessage = "An internal error has occurred. Please contact your system administrator for help...";
+    }
+    
     $("#login-error p").text(errorMessage);
     if ($('#login-error').hasClass('hidden'))
     {
