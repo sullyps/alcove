@@ -50,13 +50,13 @@ If you only want to send to a single phone number, skip this step and simply
 enter the number in the `sms_to` field of the config using the E.164 format.
 
 ## Step 4: Configure the config files
-- In `backup.ini`, the `notifications` section should contain an `sms_to` field
+- In `backup.ini`, the `notifications.sms` section should contain an `sms_to` field
   with the topic ARN OR a single phone number if you only want to send messages
   to one number
  
   **The phone number or ARN need to be surrounded by "" (double quotes)**
 
-- The config file also should include the `sms_region`, `access_key`, and 
+- The config file also should include the `aws_region`, `access_key`, and 
   `secret_key`
  
   **SMS notifications will not be enabled unless all 4 values are specified**
