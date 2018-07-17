@@ -6,5 +6,5 @@ module.exports = app => {
 };
 
 router.get('/', (req, res, next) => {
-  res.render('index', {title: 'Login :: Alcove Backup System'});
+  res.render('login', {title: 'Login :: Alcove Backup System'});
 });
