@@ -1,4 +1,4 @@
-![alt text](https://github.com/bioneos/backup-system/blob/devel/public/img/mark.png "Alcove")
+![logo](https://github.com/bioneos/backup-system/blob/devel/public/img/mark.png)
 
 # Alcove Backup System 
 
