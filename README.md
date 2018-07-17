@@ -1,6 +1,8 @@
-# Backup System
+![logo](https://github.com/bioneos/backup-system/blob/devel/public/img/mark.png)
 
-Yes... we need a new name.
+# Alcove Backup System 
+
+Yes... we now have a name!
 
 The Bio::Neos backup system has a long history, starting as a BASH script
 written by @rossj when he was a high school intern for us, then later converted
