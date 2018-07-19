@@ -9,31 +9,37 @@ const readline = require('readline'),
 const configInit = require('../lib/config/init'),
       models = require('../app/models');
 
-// Parse configuration file
-let config;
-try
-{
-  config = configInit.getConfig(CONFIG);
-}
-catch (error)
-{
-  // NOTE: See app.js for notes about config file parsing
-  let msg = '[Config ERROR] ' + error.message;
-  console.error(wrap.wrap(msg, {width: 80, noTrim: true}));
-  process.exit(-3);
-}
-
 // Initialize database
 let db;
 try
 {
-  db = models.init(config);
+  db = models.getDatabase();
 }
 catch (error)
 {
-  console.error('Error loading the Events DB. Check your configuration and data files: ' + error.message);
-  console.debug(error.stack);
-  process.exit(-2);
+  // Parse config file
+  let config;
+  try
+  {
+    config = configInit.getConfig(CONFIG);
+    try
+    {
+      db = models.init(config);
+    }
+    catch (error)
+    {
+      console.error('Error loading the Events DB. Check your configuration and data files: ' + error.message);
+      console.debug(error.stack);
+      process.exit(-2);
+    }
+  }
+  catch (error)
+  {
+    // NOTE: See app.js for notes about config file parsing
+    let msg = '[Config ERROR] ' + error.message;
+    console.error(wrap.wrap(msg, {width: 80, noTrim: true}));
+    process.exit(-3);
+  }
 }
 
 // Listen to user input and create User in events database
