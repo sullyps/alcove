@@ -9,6 +9,8 @@ const readline = require('readline'),
 const configInit = require('../lib/config/init'),
       models = require('../app/models');
 
+let resultMessage;
+
 // Initialize database
 let db;
 try
@@ -28,7 +30,8 @@ catch (error)
     }
     catch (error)
     {
-      console.error('Error loading the Events DB. Check your configuration and data files: ' + error.message);
+      resultMessage = 'Error loading the Events DB. Check your configuration and data files: ' + error.message;
+      console.error(wrap.wrap(resultMessage, {width: 80, noTrim: true}));
       console.debug(error.stack);
       process.exit(-2);
     }
@@ -36,8 +39,8 @@ catch (error)
   catch (error)
   {
     // NOTE: See app.js for notes about config file parsing
-    let msg = '[Config ERROR] ' + error.message;
-    console.error(wrap.wrap(msg, {width: 80, noTrim: true}));
+    resultMessage = '[Config ERROR] ' + error.message;
+    console.error(wrap.wrap(resultMessage, {width: 80, noTrim: true}));
     process.exit(-3);
   }
 }
@@ -54,7 +57,8 @@ rl.question('Username: ', usernameInput => {
   .then(existingUser => {
     if (existingUser)
     {
-      console.error('That user already exists. Please try again with a different username.');
+      resultMessage = 'That user already exists. Please try again with a different username.';
+      console.error(wrap.wrap(resultMessage, {width: 80, noTrim: true}));
       process.exit(-1);
     }
     user.username = usernameInput;
@@ -64,7 +68,8 @@ rl.question('Username: ', usernameInput => {
         user.password = hashedPassword;
         db.User.create(user)
         .then(() => {
-          console.log('User added to the database successfully.');
+          resultMessage = 'User added to the database successfully.';
+          console.log(wrap.wrap(resultMessage, {width: 80, noTrim: true}));
           process.exit(0);
         });
       });
