@@ -7,7 +7,9 @@ const path = require('path');
 const dir = path.join(__dirname,'tmp', 'backup-dirs');
 const validDirectoryNames = ['2018-06-15T18:49:00.010Z','2018-06-15T18:49:00.000Z',
     '2018-06-14T18:49:00.010Z','2018-06-13T18:49:00.010Z'];
-const invalidNames = ['incorrect-dir-name','2018-06-15','2018-06-15T18:49:00:000'];
+const invalidNames = ['incorrect-dir-name','2018-06-15','2018-06-15T18:49:00:000',
+  '2018-13-15T18:49:00:000Z','2018-12-60T18:49:00:000Z','201-12-15T18:49:00:000Z',
+  '2018-12-15T60:49:00:000Z','2018-12-15T18:60:00:000Z'];
 
 // Before each test, remove old test file directory if it exists
 // and create a new directory.
