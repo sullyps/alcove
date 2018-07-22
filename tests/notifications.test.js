@@ -28,9 +28,17 @@ describe('Parsing config object for notification settings', () => {
     'us-east-10','us-west-0'];
 
   describe('Testing email addresses', () => {
+    const notifications = {
+      sms : {
+        sms_to : '+12345678900',
+        access_key : 'AWS-KEY',
+        secret_key : 'AWS-SECRET-KEY',
+        aws_region : 'us-east-1'
+      }
+    };
     validEmails.forEach( email => {
-      let notifications = { email_to : [] };
       test('Valid emails', () => {
+        notifications.email_to = [ email ];
         expect(init.__validateNotifications(notifications)).toEqual([]);
       });
     });
@@ -42,51 +50,67 @@ describe('Parsing config object for notification settings', () => {
     // numbers.
     
     invalidEmails.forEach( email => {
-      let notifications = {  email_to : [ email ] };
       test('Individual invalid emails', () => {
+        notifications.email_to = [ email ];
         expect(init.__validateNotifications(notifications)).not.toBe([]);
       });
     });
 
     test('All invalid emails', () => {
-      let notifications = { email_to : invalidEmails };
+      notifications.email_to = invalidEmails;
       expect(init.__validateNotifications(notifications)).toHaveLength(invalidEmails.length);
     });
 
     test('Both valid and invalid emails', () => {
-      let notifications = { email_to : validEmails.concat(invalidEmails) };
+      notifications.email_to = validEmails.concat(invalidEmails);
       expect(init.__validateNotifications(notifications)).toHaveLength(invalidEmails.length);
     });
   });
 
   describe('Testing sms phone numbers', () => {
+    const notifications = {
+      sms : {
+        sms_to : '+12345678900',
+        access_key : 'AWS-KEY',
+        secret_key : 'AWS-SECRET-KEY',
+        aws_region : 'us-east-1'
+      }
+    };
     // With valid phone numbers, there should be no errors returned
     validSMSPhones.forEach( phoneNum => {
-      let notifications = { sms_to : phoneNum };
       test('Individual SMS phone numbers', () => {
+        notifications.sms.sms_to = phoneNum;
         expect(init.__validateNotifications(notifications)).toEqual([]);
       });
     });
 
     invalidSMSPhones.forEach( phoneNum => {
-      let notifications = { sms_to : phoneNum };
       test('Individual invalid SMS phone numbers', () => {
+        notifications.sms.sms_to = phoneNum;
         expect(init.__validateNotifications(notifications)).not.toBe([]);
       });
     });
   });
 
   describe('Testing AWS regions', () => {
+    const notifications = {
+      sms : {
+        sms_to : '+12345678900',
+        access_key : 'AWS-KEY',
+        secret_key : 'AWS-SECRET-KEY',
+        aws_region : 'us-east-1'
+      }
+    };
     validAWSRegions.forEach( region => {
-      let notifications = { sms_region : region };
       test('Individual valid AWS regions', () => {
+        notifications.sms.sms_region = region;
         expect(init.__validateNotifications(notifications)).toEqual([]);
       });
     });
 
     invalidAWSRegions.forEach( region => {
-      let notifications = { sms_region : region };
       test('Individual invalid AWS regions', () => {
+        notifications.sms.sms_region = region;
         expect(init.__validateNotifications(notifications)).not.toBe([]);
       });
     });
