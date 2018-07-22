@@ -1,7 +1,7 @@
 # Table of Exit Codes
-The first thing to check if you receive an exit code termination is to check
-the logs. Likely there will be some error message describing the cause of
-the termination and an error stack trace to point you to the place in the code
+The first thing to check if you receive an exit code termination is the logs.
+Likely there will be some error message describing the cause of the
+termination and an error stack trace to point you to the place in the code
 where the program cannot continue.
 
 Use this table as a quick reference for any exit code that you may receive.
