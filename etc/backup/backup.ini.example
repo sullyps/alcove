@@ -64,6 +64,13 @@
 ;   unsucessfully for a particular machine. Can be fractional (eg. 3.75).
 ;time = 3
 
+; Multiplier on time to increase duration between backup attempts if failures
+; occur. Can be fractional and should be greater than one. The time in
+; between backup attempts can be calculated as
+; (rsync.retry.time * multiplier ^ (attempt number)). The maximum wait
+; period will be (rsync.time * multiplier ^(max_attmpts)).
+;multiplier = 2.718
+
 ; NOTIFICATIONS VARIABLES
 [notifications]
 ; Schedule for summary report emails to be sent out. Defaults to 8:00am on 
