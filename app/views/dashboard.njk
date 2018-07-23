@@ -11,7 +11,14 @@
     </div>
     <div class="four wide column">
       <div class="ui segment" id="dashboard-header-size">
-        Total Size: <span class="dashboard-bold">9GB</span> out of <span class="dashboard-bold">1024GB</span>
+        <div class="ui grid">
+          <div class="row" id="dashboard-header-size-top">
+            Total Size: <span class="dashboard-bold">9GB</span> out of <span class="dashboard-bold">1024GB</span>
+          </div>
+          <div class="row" id="dashboard-header-size-top">
+            Last Summary Email: <span class="dashboard-bold"> {{dashboard.lastSummaryEmailDate}} </span>
+          </div>
+        </div>
       </div>
     </div>
     <div class="eight wide column">
