@@ -18,7 +18,7 @@
       <div class="ui statistics">
         <div class="green statistic">
           <div class="value">
-            3
+            {{dashboard.successfulMachines}}
           </div>
           <div class="label">
             Successful
@@ -26,7 +26,7 @@
         </div>
         <div class="yellow statistic">
           <div class="value">
-            2
+            {{dashboard.unsuccessfulMachines}}
           </div>
           <div class="label">
             Partially Successful
@@ -34,7 +34,7 @@
         </div>
         <div class="red statistic">
           <div class="value">
-            1
+            {{dashboard.partialSuccessMachines}}
           </div>
           <div class="label">
             Unsuccessful
@@ -42,7 +42,7 @@
         </div>
         <div class="grey statistic">
           <div class="value">
-            1
+            {{dashboard.idleMachines}}
           </div>
           <div class="label">
             Idle
