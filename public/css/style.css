@@ -1,3 +1,19 @@
+.dashboard-success-color {
+  color: green; }
+
+.dashboard-error-color {
+  color: red; }
+
+.dashboard-date-color {
+  font-weight: bold; }
+
+#dashboard-overview-header {
+  text-align: center; }
+
+#dashboard-overview-list {
+  margin-left: 5%;
+  width: 90%; }
+
 #login-image {
   display: block;
   margin: 20px auto 0 auto; }
