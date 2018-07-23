@@ -1,18 +1,27 @@
 .dashboard-success-color {
-  color: green; }
+  color:green; }
 
 .dashboard-error-color {
-  color: red; }
+  color:red; }
 
 .dashboard-date-color {
-  font-weight: bold; }
+  font-weight:bold; }
 
-#dashboard-overview-header {
-  text-align: center; }
+#dashboard-top-grid {
+  margin-top:5px; }
 
-#dashboard-overview-list {
-  margin-left: 5%;
-  width: 90%; }
+#dashboard-header-title {
+  margin-left:5%;
+  width:90%;
+  font-size:20px;
+  text-align:center; }
+
+#dashboard-header-size {
+  margin-left:5%;
+  padding:26px;
+  width:90%;
+  font-size:16px;
+}
 
 #login-image {
   display: block;
