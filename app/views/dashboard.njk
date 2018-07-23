@@ -64,6 +64,24 @@
       <th>Time Running</th>
     </tr>
   </thead>
+
+  <tbody>
+
+    {% for machines in dashboard.machine %}
+
+      <tr>
+        <td> {{machines.name}} </td>
+        <td> {{machines.successfulBackups}} of {{machines.totalBackups}} </td>
+        <td> {{machines.totalSize}} </td>
+        <td> {{machines.totalRestarts}} </td>
+        <td> {{machines.lastRestartDate}} </td>
+        <td> {{machines.timeSinceRestart}} </td>
+      </tr>
+
+      {% endfor %}
+
+  </tbody>
+
 </table>
 
 {% endblock %}
