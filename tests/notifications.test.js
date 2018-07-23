@@ -103,14 +103,14 @@ describe('Parsing config object for notification settings', () => {
     };
     validAWSRegions.forEach( region => {
       test('Individual valid AWS regions', () => {
-        notifications.sms.sms_region = region;
+        notifications.sms.aws_region = region;
         expect(init.__validateNotifications(notifications)).toEqual([]);
       });
     });
 
     invalidAWSRegions.forEach( region => {
       test('Individual invalid AWS regions', () => {
-        notifications.sms.sms_region = region;
+        notifications.sms.aws_region = region;
         expect(init.__validateNotifications(notifications)).not.toBe([]);
       });
     });
