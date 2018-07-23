@@ -13,10 +13,11 @@
 #dashboard-header-title {
   margin-left:5%;
   width:90%;
-  font-size:20px;
+  font-size:10px;
   text-align:center; }
 
 #dashboard-header-size {
+  margin-top:6px;
   margin-left:5%;
   padding:26px;
   width:90%;
