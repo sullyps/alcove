@@ -7,7 +7,7 @@
   <div class="row">
     <div class="four wide column">
       <div class="ui segment" id="dashboard-header-title">
-        <h1 class="ui header"> Backup System <br /> {{dashboard.oldestBackupDate}} - {{dashboard.newestBackupDate}}</h1>
+        <h1 class="ui header"> Backup System </h1>
       </div>
     </div>
     <div class="two wide column">
@@ -26,10 +26,10 @@
       <div class="ui segment" id="dashboard-header-info">
         <div class="ui grid">
           <div class="row" id="dashboard-header-info-top">
-            Last Summary Email: <span class="dashboard-bold"> {{dashboard.lastSummaryEmailDate}} </span>
+            Oldest Backup:<span class="dashboard-bold"> {{dashboard.oldestBackupDate}}</span>
           </div>
           <div class="row" id="dashboard-header-info-bottom">
-            Total Restarts: <span class="dashboard-bold"> {{dashboard.restarts}} </span>
+            Last Summary Email: <span class="dashboard-bold"> {{dashboard.lastSummaryEmailDate}} </span>
           </div>
         </div>
       </div>
@@ -76,42 +76,41 @@
 <table class="ui celled table" id="dashboard-table">
   <thead>
     <tr>
-      <th class="dashboard-table-name">Name</th>
+      <th class="dashboard-table-name">Machine Name</th>
       <th class="dashboard-table-status">Status</th>
-      <th class="dashboard-table-size">Size</th>
-      <th class="dashboard-table-restarts">Restarts</th>
-      <th class="dashboard-table-lastrestart">Last Restart</th>
-      <th>Time Running</th>
+      <th class="dashboard-table-size">Total Size</th>
+      <th>Last Backup</th>
     </tr>
   </thead>
   <tbody>
 
+    <tr>
+
+
     {% for machines in dashboard.machine %}
 
+      <td> {{machines.name}} </td>
+
     {% if machines.totalBackups == 0 %}
-      <tr class="disabled">
+    <td class="disabled">
     {% elif machines.totalBackups == machines.successfulBackups %}
-      <tr>
+    <td>
     {% elif machines.successfulBackups == 0 %}
-      <tr class="error">
+    <td class="error">
     {% else %}
-      <tr class="warning">
+    <td class="warning">
     {% endif %}
 
-        <td>
-         {% if machines.totalBackups > 0 and machines.successfulBackups == 0 %}<i class="attention icon"></i> {% endif %} {{machines.name}} 
-        </td>
-        <td> {{machines.successfulBackups}} of {{machines.totalBackups}} backups successful </td>
-        <td> {{machines.totalSize}} </td>
-        <td> {{machines.totalRestarts}} </td>
-        <td> {{machines.lastRestartDate}} </td>
-        <td> {{machines.timeSinceRestart}} </td>
-      </tr>
+       {% if machines.totalBackups > 0 and machines.successfulBackups == 0 %}<i class="attention icon"></i> {% endif %}  {{machines.successfulBackups}} of {{machines.totalBackups}} backups successful </td>
+      <td> {{machines.totalSize}} </td>
+      <td> <span class="dashboard-bold"> {{machines.lastRestartDate}} </span>
+        {{machines.timeSinceRestart}} ago </td>
+    </tr>
 
-      {% endfor %}
+    {% endfor %}
 
-  </tbody>
-</table>
+    </tbody>
+  </table>
 </div>
 
 {% endblock %}
