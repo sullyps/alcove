@@ -11,18 +11,12 @@
   min-width:1200px;
 }
 .dashboard-table-name{
-  width:16%;
+  width:20%;
 }
 .dashboard-table-status{
-  width:30%;
+  width:35%;
 }
 .dashboard-table-size{
-  width:12%;
-}
-.dashboard-table-restarts{
-  width:10%;
-}
-.dashboard-table-lastrestart{
   width:15%;
 }
 #dashboard-top-grid {
@@ -30,6 +24,8 @@
 }
 #dashboard-header-title{
   margin-left:5%;
+  padding-top:26px;
+  padding-bottom:26px;
   width:90%;
   min-width:250px;
   font-size:10px;
@@ -68,7 +64,7 @@
   width:90px;
 }
 #dashboard-table{
-  margin-left:18%;
+  margin-left:10%;
   width:80%;
 }
 #login-image {
