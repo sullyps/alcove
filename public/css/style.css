@@ -7,6 +7,9 @@
 .dashboard-bold {
   font-weight:bold; }
 
+.dashboard-body{
+  min-width:1050px;
+}
 .dashboard-table-name{
   width:16%;
 }
@@ -28,12 +31,14 @@
 #dashboard-header-title{
   margin-left:5%;
   width:90%;
+  min-width:250px;
   font-size:10px;
   text-align:center;
 }
 #dashboard-header-size {
   margin-left:5%;
   width:90%;
+  min-width:240px;
   font-size:18px;
 }
 #dashboard-header-size-top {
@@ -42,6 +47,13 @@
 }
 #dashboard-header-size-top {
   margin-bottom:-4px;
+}
+#dashbaord-header-stats{
+  margin-left:calc(25% - 140px);
+  min-width:558px;
+}
+#dashboard-header-stats-labels{
+  width:90px;
 }
 #dashboard-table{
   margin-left:calc(100% - 85%);
