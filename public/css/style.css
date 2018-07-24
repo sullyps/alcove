@@ -8,7 +8,7 @@
   font-weight:bold; }
 
 .dashboard-body{
-  min-width:1050px;
+  min-width:1200px;
 }
 .dashboard-table-name{
   width:16%;
@@ -36,27 +36,39 @@
   text-align:center;
 }
 #dashboard-header-size {
-  margin-left:5%;
+  margin-left:calc(25% - 60px);
   width:90%;
-  min-width:240px;
+  min-width:175px;
   font-size:18px;
 }
 #dashboard-header-size-top {
   margin-top:-4px;
   margin-bottom:-10px;
 }
-#dashboard-header-size-top {
+#dashboard-header-size-bottom {
+  margin-bottom:-4px;
+}
+#dashboard-header-info {
+  width:90%;
+  min-width:240px;
+  font-size:18px;
+}
+#dashboard-header-info-top {
+  margin-top:-4px;
+  margin-bottom:-10px;
+}
+#dashboard-header-info-bottom {
   margin-bottom:-4px;
 }
 #dashbaord-header-stats{
-  margin-left:calc(25% - 140px);
+  margin-left:calc(25% - 130px);
   min-width:558px;
 }
 #dashboard-header-stats-labels{
   width:90px;
 }
 #dashboard-table{
-  margin-left:calc(100% - 85%);
+  margin-left:18%;
   width:80%;
 }
 #login-image {
