@@ -10,19 +10,31 @@
         <h1 class="ui header"> Backup System <br /> {{dashboard.oldestBackupDate}} - {{dashboard.newestBackupDate}}</h1>
       </div>
     </div>
-    <div class="four wide column">
+    <div class="two wide column">
       <div class="ui segment" id="dashboard-header-size">
         <div class="ui grid">
           <div class="row" id="dashboard-header-size-top">
-            Total Size: <span class="dashboard-bold">9GB</span> out of <span class="dashboard-bold">1024GB</span>
+            Total Size: <span class="dashboard-bold"> {{dashboard.totalBackupSize}} </span>
           </div>
-          <div class="row" id="dashboard-header-size-top">
-            Last Summary Email: <span class="dashboard-bold"> {{dashboard.lastSummaryEmailDate}} </span>
+          <div class="row" id="dashboard-header-size-bottom">
+            Capacity: <span class="dashboard-bold"> {{dashboard.maxStorage}} </span>
           </div>
         </div>
       </div>
     </div>
-    <div class="eight wide column">
+    <div class="three wide column">
+      <div class="ui segment" id="dashboard-header-info">
+        <div class="ui grid">
+          <div class="row" id="dashboard-header-info-top">
+            Last Summary Email: <span class="dashboard-bold"> {{dashboard.lastSummaryEmailDate}} </span>
+          </div>
+          <div class="row" id="dashboard-header-info-bottom">
+            Total Restarts: <span class="dashboard-bold"> {{dashboard.restarts}} </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="seven wide column">
       <div class="ui statistics" id="dashbaord-header-stats">
         <div class="green statistic">
           <div class="value">
