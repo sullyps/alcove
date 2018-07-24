@@ -2,6 +2,7 @@
 
 {% block content %}
 
+<div class="dashboard-body">
 <div class="ui grid" id="dashboard-top-grid">
   <div class="row">
     <div class="four wide column">
@@ -22,12 +23,12 @@
       </div>
     </div>
     <div class="eight wide column">
-      <div class="ui statistics">
+      <div class="ui statistics" id="dashbaord-header-stats">
         <div class="green statistic">
           <div class="value">
             {{dashboard.successfulMachines}}
           </div>
-          <div class="label">
+          <div class="label" id="dashboard-header-stats-labels">
             Successful
           </div>
         </div>
@@ -35,7 +36,7 @@
           <div class="value">
             {{dashboard.unsuccessfulMachines}}
           </div>
-          <div class="label">
+          <div class="label" id="dashboard-header-stats-labels">
             Partially Successful
           </div>
         </div>
@@ -43,7 +44,7 @@
           <div class="value">
             {{dashboard.partialSuccessMachines}}
           </div>
-          <div class="label">
+          <div class="label" id="dashboard-header-stats-labels">
             Unsuccessful
           </div>
         </div>
@@ -51,7 +52,7 @@
           <div class="value">
             {{dashboard.idleMachines}}
           </div>
-          <div class="label">
+          <div class="label" id="dashboard-header-stats-labels">
             Idle
           </div>
         </div>
@@ -99,5 +100,6 @@
 
   </tbody>
 </table>
+</div>
 
 {% endblock %}
