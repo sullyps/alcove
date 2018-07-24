@@ -7,15 +7,30 @@
 .dashboard-bold {
   font-weight:bold; }
 
+.dashboard-table-name{
+  width:16%;
+}
+.dashboard-table-status{
+  width:30%;
+}
+.dashboard-table-size{
+  width:12%;
+}
+.dashboard-table-restarts{
+  width:10%;
+}
+.dashboard-table-lastrestart{
+  width:15%;
+}
 #dashboard-top-grid {
-  margin-top:0px; }
-
-#dashboard-header-title {
+  margin-top:0px;
+}
+#dashboard-header-title{
   margin-left:5%;
   width:90%;
   font-size:10px;
-  text-align:center; }
-
+  text-align:center;
+}
 #dashboard-header-size {
   margin-left:5%;
   width:90%;
@@ -28,7 +43,10 @@
 #dashboard-header-size-top {
   margin-bottom:-4px;
 }
-
+#dashboard-table{
+  margin-left:calc(100% - 85%);
+  width:80%;
+}
 #login-image {
   display: block;
   margin: 20px auto 0 auto; }
