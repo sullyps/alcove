@@ -1,4 +1,5 @@
 const system = require('../lib/system.js');
+const util = require('../lib/util.js');
 const config = require('../lib/config/init.js');
 
 describe('Schedule Manipulation', () => {
@@ -7,8 +8,8 @@ describe('Schedule Manipulation', () => {
 
   describe('Parse schedule into object', () => {
     test('Schedule parsing', () => {
-      let scheduleObj = system.parseSchedule(schedule);
-      let scheduleObj2 = system.parseSchedule(schedule2);
+      let scheduleObj = util.parseSchedule(schedule);
+      let scheduleObj2 = util.parseSchedule(schedule2);
 
       expect(scheduleObj).toEqual({
         time : { minutes : 15, hours : 9 },
@@ -63,13 +64,13 @@ test('Getting next summary time', () => {
   const schedule = '1;[8:00]';
   const schedule2 = '1,3;[14:00]';
 
-  let lastSummaryDate = system.__getLastSummaryEmailTime(schedule, new Date('Mon May 28 2018 07:59:59 GMT-0500 (CDT)'));
+  let lastSummaryDate = util.getLastSummaryEmailTime(schedule, new Date('Mon May 28 2018 07:59:59 GMT-0500 (CDT)'));
   expect(lastSummaryDate).toEqual(new Date('Mon May 21 2018 08:00:00 GMT-0500 (CDT)'));
   
-  let lastSummaryDate2 = system.__getLastSummaryEmailTime(schedule2, new Date('Mon May 28 2018 07:59:59 GMT-0500 (CDT)'));
+  let lastSummaryDate2 = util.getLastSummaryEmailTime(schedule2, new Date('Mon May 28 2018 07:59:59 GMT-0500 (CDT)'));
   expect(lastSummaryDate2).toEqual(new Date('Wed May 23 2018 14:00:00 GMT-0500 (CDT)'));
 
-  let lastSummaryDate3 = system.__getLastSummaryEmailTime(schedule2, new Date('Tue May 29 2018 12:00:00 GMT-0500 (CDT)'));
+  let lastSummaryDate3 = util.getLastSummaryEmailTime(schedule2, new Date('Tue May 29 2018 12:00:00 GMT-0500 (CDT)'));
   expect(lastSummaryDate3).toEqual(new Date('Mon May 28 2018 14:00:00 GMT-0500 (CDT)'));
 });
 
