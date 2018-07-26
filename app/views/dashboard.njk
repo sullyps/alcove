@@ -82,10 +82,10 @@
   <table class="ui celled table" id="dashboard-table">
     <thead>
       <tr>
-        <th class="dashboard-table-name">Machine Name</th>
-        <th class="dashboard-table-status">Status</th>
-        <th class="dashboard-table-size">Total Size</th>
-        <th>Last Backup</th>
+        <th class="dashboard-table-name"> Machine Name </th>
+        <th class="dashboard-table-status"> Status </th>
+        <th class="dashboard-table-size"> Total Size </th>
+        <th> Last Backup </th>
       </tr>
     </thead>
     <tbody>
@@ -95,19 +95,20 @@
 
       {% for machines in dashboard.machine %}
 
-        <td> {{machines.name}} </td>
+        <td> <span class="dashboard-bold"> {{machines.name}} </span> </td>
 
-      {% if machines.totalBackups == 0 %}
-      <td class="disabled">
-      {% elif machines.totalBackups == machines.successfulBackups %}
-      <td>
-      {% elif machines.successfulBackups == 0 %}
-      <td class="error">
-      {% else %}
-      <td class="warning">
-      {% endif %}
+        {% if machines.totalBackups == 0 %}
+        <td class="disabled">
+        {% elif machines.totalBackups == machines.successfulBackups %}
+        <td>
+        {% elif machines.successfulBackups == 0 %}
+        <td class="error">
+        {% else %}
+        <td class="warning">
+        {% endif %}
 
-         {% if machines.totalBackups > 0 and machines.successfulBackups == 0 %}<i class="attention icon"></i> {% endif %}  {{machines.successfulBackups}} of {{machines.totalBackups}} backups successful </td>
+          {% if machines.totalBackups > 0 and machines.successfulBackups == 0 %}<i class="attention icon"></i> {% endif %}  {{machines.successfulBackups}} of {{machines.totalBackups}} backups successful 
+        </td>
         <td> xxxx </td>
         <td> {{machines.timeSinceRestart}} ago </td>
       </tr>
