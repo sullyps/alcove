@@ -1,4 +1,5 @@
 const system = require('../lib/system.js');
+const util = require('../lib/util.js');
 const config = require('../lib/config/init.js');
 
 describe('Schedule Manipulation', () => {
@@ -7,8 +8,8 @@ describe('Schedule Manipulation', () => {
 
   describe('Parse schedule into object', () => {
     test('Schedule parsing', () => {
-      let scheduleObj = system.parseSchedule(schedule);
-      let scheduleObj2 = system.parseSchedule(schedule2);
+      let scheduleObj = util.parseSchedule(schedule);
+      let scheduleObj2 = util.parseSchedule(schedule2);
 
       expect(scheduleObj).toEqual({
         time : { minutes : 15, hours : 9 },
