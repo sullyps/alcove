@@ -98,16 +98,20 @@
         <td> <span class="dashboard-bold"> {{machines.name}} </span> </td>
 
         {% if machines.totalBackups == 0 %}
-        <td class="disabled">
-        {% elif machines.totalBackups == machines.successfulBackups %}
         <td>
+        {% elif machines.totalBackups == machines.successfulBackups %}
+        <td> <span class="dashboard-green"><i class="check icon"></i></span>
         {% elif machines.successfulBackups == 0 %}
-        <td class="error">
+        <td class="error"><i class="attention icon"></i>
         {% else %}
         <td class="warning">
         {% endif %}
 
-          {% if machines.totalBackups > 0 and machines.successfulBackups == 0 %}<i class="attention icon"></i> {% endif %}  {{machines.successfulBackups}} of {{machines.totalBackups}} backups successful 
+        {% if machines.totalBackups == 0 %}
+          <span class="dashboard-grey">{{machines.successfulBackups}} of {{machines.totalBackups}} backups successful </span>
+        {% else %}
+        {{machines.successfulBackups}} of {{machines.totalBackups}} backups successful
+        {% endif %}
         </td>
         <td> xxxx </td>
         <td> {{machines.timeSinceRestart}} ago </td>
