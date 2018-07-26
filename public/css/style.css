@@ -9,6 +9,8 @@
 
 .dashboard-body{
   min-width:1200px;
+  min-height:3000px;
+  background-color:#D0D0D0;
 }
 .dashboard-table-name{
   width:20%;
@@ -45,21 +47,10 @@
 #dashboard-header-stats-labels{
   width:110px;
 }
-#dashboard-header-size {
+#dashboard-header-segment {
   text-align:center;
   font-size:18px;
-}
-#dashboard-header-size-max {
-  text-align:center;
-  font-size:18px;
-}
-#dashboard-header-date-old {
-  text-align:center;
-  font-size:18px;
-}
-#dashboard-header-date-new {
-  text-align:center;
-  font-size:18px;
+  background-color:#EEEEEE;
 }
 #dashboard-table{
   margin-left:4%;
