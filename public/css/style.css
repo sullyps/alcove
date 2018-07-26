@@ -19,53 +19,46 @@
 .dashboard-table-size{
   width:15%;
 }
-#dashboard-top-grid {
+#dashboard-header-grid {
   margin-top:0px;
+  padding-left:4%;
+  padding-right:4%;
+}
+#dashboard-header-row-top{
+  margin-bottom:-40px;
 }
 #dashboard-header-title{
-  margin-left:5%;
   padding-top:10px;
-  padding-bottom:26px;
-  width:90%;
   min-width:250px;
   font-size:10px;
   text-align:center;
 }
-#dashboard-header-size {
-  margin-left:calc(25% - 60px);
-  width:90%;
-  min-width:175px;
-  font-size:18px;
-}
-#dashboard-header-size-top {
-  margin-top:-4px;
-  margin-bottom:-10px;
-}
-#dashboard-header-size-bottom {
-  margin-bottom:-4px;
-}
-#dashboard-header-info {
-  width:90%;
-  min-width:240px;
-  font-size:18px;
-}
-#dashboard-header-info-top {
-  margin-top:-4px;
-  margin-bottom:-10px;
-}
-#dashboard-header-info-bottom {
-  margin-bottom:-4px;
-}
 #dashbaord-header-stats{
-  margin-left:calc(25% - 130px);
-  min-width:558px;
+  margin-left:calc(50% - 304px);
+  min-width:608px;
 }
 #dashboard-header-stats-labels{
-  width:90px;
+  width:110px;
+}
+#dashboard-header-size {
+  text-align:center;
+  font-size:18px;
+}
+#dashboard-header-size-max {
+  text-align:center;
+  font-size:18px;
+}
+#dashboard-header-date-old {
+  text-align:center;
+  font-size:18px;
+}
+#dashboard-header-date-new {
+  text-align:center;
+  font-size:18px;
 }
 #dashboard-table{
-  margin-left:10%;
-  width:80%;
+  margin-left:4%;
+  width:92%;
 }
 #login-image {
   display: block;
