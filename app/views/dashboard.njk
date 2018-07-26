@@ -5,13 +5,8 @@
 <div class="dashboard-body">
   <div class="ui grid" id="dashboard-header-grid">
     <div class="row" id="dashboard-header-row-top">
-      <div class="four wide column">
+      <div class="eight wide column">
         <img id="dashboard-logo" src="../../public/logo.png">
-      </div>
-      <div class="four wide column">
-        <div id="dashboard-header-title">
-          <h1 class="ui header"> Backup System <br /> Overview </h1>
-        </div>
       </div>
       <div class="eight wide column">
         <div class="ui statistics" id="dashbaord-header-stats">
@@ -52,27 +47,27 @@
     </div>
     <div class="five column row">
       <div class="column">
-        <div class="ui segment" id="dashboard-header-size">
+        <div class="ui segment" id="dashboard-header-segment">
           Total Size: <br /> <span class="dashboard-bold"> xxxx </span>
         </div>
       </div>
       <div class="column">
-        <div class="ui segment" id="dashboard-header-size-max">
+        <div class="ui segment" id="dashboard-header-segment">
           Capacity: <br /> <span class="dashboard-bold"> xxxx </span>
         </div>
       </div>
       <div class="column">
-        <div class="ui segment" id="dashboard-header-date-old">
+        <div class="ui segment" id="dashboard-header-segment">
           Oldest Backup: <br /> <span class="dashboard-bold"> {{dashboard.oldestBackupDate}} </span>
         </div>
       </div>
       <div class="column">
-        <div class="ui segment" id="dashboard-header-date-new">
+        <div class="ui segment" id="dashboard-header-segment">
           Newest Backup: <br /> <span class="dashboard-bold"> {{dashboard.newestBackupDate}} </span>
         </div>
       </div>
       <div class="column">
-        <div class="ui segment" id="dashboard-header-date-new">
+        <div class="ui segment" id="dashboard-header-segment">
           Last Summary Email: <br /> <span class="dashboard-bold"> {{dashboard.lastSummaryEmailDate}} </span>
         </div>
       </div>
@@ -82,16 +77,15 @@
   <table class="ui striped selectable sortable celled table" id="dashboard-table">
     <thead>
       <tr>
-        <th class="dashboard-table-name"> Machine Name </th>
-        <th class="dashboard-table-status"> Status </th>
-        <th class="dashboard-table-size"> Total Size </th>
-        <th> Last Backup </th>
+        <th class="dashboard-table-name" id="dasgboard-table-header"> Machine Name </th>
+        <th class="dashboard-table-status" id="dasgboard-table-header"> Status </th>
+        <th class="dashboard-table-size" id="dasgboard-table-header"> Total Size </th>
+        <th id="dasgboard-table-header"> Last Backup </th>
       </tr>
     </thead>
     <tbody>
 
       <tr>
-
 
       {% for machines in dashboard.machine %}
 
