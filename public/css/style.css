@@ -27,8 +27,13 @@
 #dashboard-header-row-top{
   margin-bottom:-40px;
 }
+#dashboard-logo{
+  margin-top:8px;
+  width:200px;
+}
 #dashboard-header-title{
   padding-top:10px;
+  margin-left:-50px;
   min-width:250px;
   font-size:10px;
   text-align:center;
