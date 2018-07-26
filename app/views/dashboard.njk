@@ -103,8 +103,7 @@
 
        {% if machines.totalBackups > 0 and machines.successfulBackups == 0 %}<i class="attention icon"></i> {% endif %}  {{machines.successfulBackups}} of {{machines.totalBackups}} backups successful </td>
       <td> {{machines.totalSize}} </td>
-      <td> <span class="dashboard-bold"> {{machines.lastRestartDate}} </span>
-        {{machines.timeSinceRestart}} ago </td>
+      <td> {{machines.timeSinceRestart}} ago </td>
     </tr>
 
     {% endfor %}
