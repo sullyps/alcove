@@ -2,111 +2,111 @@
 
 {% block content %}
 
-<div class="dashboard-body">
-<div class="ui grid" id="dashboard-top-grid">
-  <div class="row">
-    <div class="four wide column">
-      <div id="dashboard-header-title">
-        <h1 class="ui header"> Alcove Backup <br /> System </h1>
-      </div>
-    </div>
-    <div class="two wide column">
-      <div class="ui segment" id="dashboard-header-size">
-        <div class="ui grid">
-          <div class="row" id="dashboard-header-size-top">
-            Total Size: <span class="dashboard-bold"> {{dashboard.totalBackupSize}} </span>
-          </div>
-          <div class="row" id="dashboard-header-size-bottom">
-            Capacity: <span class="dashboard-bold"> {{dashboard.maxStorage}} </span>
-          </div>
+  <div class="dashboard-body">
+  <div class="ui grid" id="dashboard-top-grid">
+    <div class="row">
+      <div class="four wide column">
+        <div id="dashboard-header-title">
+          <h1 class="ui header"> Alcove Backup <br /> System </h1>
         </div>
       </div>
-    </div>
-    <div class="three wide column">
-      <div class="ui segment" id="dashboard-header-info">
-        <div class="ui grid">
-          <div class="row" id="dashboard-header-info-top">
-            Oldest Backup:<span class="dashboard-bold"> {{dashboard.oldestBackupDate}}</span>
-          </div>
-          <div class="row" id="dashboard-header-info-bottom">
-            Last Summary Email: <span class="dashboard-bold"> {{dashboard.lastSummaryEmailDate}} </span>
+      <div class="two wide column">
+        <div class="ui segment" id="dashboard-header-size">
+          <div class="ui grid">
+            <div class="row" id="dashboard-header-size-top">
+              Total Size: <span class="dashboard-bold"> {{dashboard.totalBackupSize}} </span>
+            </div>
+            <div class="row" id="dashboard-header-size-bottom">
+              Capacity: <span class="dashboard-bold"> {{dashboard.maxStorage}} </span>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="seven wide column">
-      <div class="ui statistics" id="dashbaord-header-stats">
-        <div class="green statistic">
-          <div class="value">
-            {{dashboard.successfulMachines}}
-          </div>
-          <div class="label" id="dashboard-header-stats-labels">
-            Successful
-          </div>
-        </div>
-        <div class="yellow statistic">
-          <div class="value">
-            {{dashboard.unsuccessfulMachines}}
-          </div>
-          <div class="label" id="dashboard-header-stats-labels">
-            Partially Successful
+      <div class="three wide column">
+        <div class="ui segment" id="dashboard-header-info">
+          <div class="ui grid">
+            <div class="row" id="dashboard-header-info-top">
+              Oldest Backup:<span class="dashboard-bold"> {{dashboard.oldestBackupDate}}</span>
+            </div>
+            <div class="row" id="dashboard-header-info-bottom">
+              Last Summary Email: <span class="dashboard-bold"> {{dashboard.lastSummaryEmailDate}} </span>
+            </div>
           </div>
         </div>
-        <div class="red statistic">
-          <div class="value">
-            {{dashboard.partialSuccessMachines}}
+      </div>
+      <div class="seven wide column">
+        <div class="ui statistics" id="dashbaord-header-stats">
+          <div class="green statistic">
+            <div class="value">
+              {{dashboard.successfulMachines}}
+            </div>
+            <div class="label" id="dashboard-header-stats-labels">
+              Successful
+            </div>
           </div>
-          <div class="label" id="dashboard-header-stats-labels">
-            Unsuccessful
+          <div class="yellow statistic">
+            <div class="value">
+              {{dashboard.unsuccessfulMachines}}
+            </div>
+            <div class="label" id="dashboard-header-stats-labels">
+              Partially Successful
+            </div>
           </div>
-        </div>
-        <div class="grey statistic">
-          <div class="value">
-            {{dashboard.idleMachines}}
+          <div class="red statistic">
+            <div class="value">
+              {{dashboard.partialSuccessMachines}}
+            </div>
+            <div class="label" id="dashboard-header-stats-labels">
+              Unsuccessful
+            </div>
           </div>
-          <div class="label" id="dashboard-header-stats-labels">
-            Idle
+          <div class="grey statistic">
+            <div class="value">
+              {{dashboard.idleMachines}}
+            </div>
+            <div class="label" id="dashboard-header-stats-labels">
+              Idle
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 
-<table class="ui celled table" id="dashboard-table">
-  <thead>
-    <tr>
-      <th class="dashboard-table-name">Machine Name</th>
-      <th class="dashboard-table-status">Status</th>
-      <th class="dashboard-table-size">Total Size</th>
-      <th>Last Backup</th>
-    </tr>
-  </thead>
-  <tbody>
+  <table class="ui celled table" id="dashboard-table">
+    <thead>
+      <tr>
+        <th class="dashboard-table-name">Machine Name</th>
+        <th class="dashboard-table-status">Status</th>
+        <th class="dashboard-table-size">Total Size</th>
+        <th>Last Backup</th>
+      </tr>
+    </thead>
+    <tbody>
 
-    <tr>
+      <tr>
 
 
-    {% for machines in dashboard.machine %}
+      {% for machines in dashboard.machine %}
 
-      <td> {{machines.name}} </td>
+        <td> {{machines.name}} </td>
 
-    {% if machines.totalBackups == 0 %}
-    <td class="disabled">
-    {% elif machines.totalBackups == machines.successfulBackups %}
-    <td>
-    {% elif machines.successfulBackups == 0 %}
-    <td class="error">
-    {% else %}
-    <td class="warning">
-    {% endif %}
+      {% if machines.totalBackups == 0 %}
+      <td class="disabled">
+      {% elif machines.totalBackups == machines.successfulBackups %}
+      <td>
+      {% elif machines.successfulBackups == 0 %}
+      <td class="error">
+      {% else %}
+      <td class="warning">
+      {% endif %}
 
-       {% if machines.totalBackups > 0 and machines.successfulBackups == 0 %}<i class="attention icon"></i> {% endif %}  {{machines.successfulBackups}} of {{machines.totalBackups}} backups successful </td>
-      <td> {{machines.totalSize}} </td>
-      <td> {{machines.timeSinceRestart}} ago </td>
-    </tr>
+         {% if machines.totalBackups > 0 and machines.successfulBackups == 0 %}<i class="attention icon"></i> {% endif %}  {{machines.successfulBackups}} of {{machines.totalBackups}} backups successful </td>
+        <td> {{machines.totalSize}} </td>
+        <td> {{machines.timeSinceRestart}} ago </td>
+      </tr>
 
-    {% endfor %}
+      {% endfor %}
 
     </tbody>
   </table>
