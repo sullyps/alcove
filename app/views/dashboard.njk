@@ -2,39 +2,15 @@
 
 {% block content %}
 
-  <div class="dashboard-body">
-  <div class="ui grid" id="dashboard-top-grid">
-    <div class="row">
-      <div class="four wide column">
+<div class="dashboard-body">
+  <div class="ui grid" id="dashboard-header-grid">
+    <div class="row" id="dashboard-header-row-top">
+      <div class="eight wide column">
         <div id="dashboard-header-title">
-          <h1 class="ui header"> Alcove Backup <br /> System </h1>
+          <h1 class="ui header"> Alcove Backup System: <br /> Machine Overview </h1>
         </div>
       </div>
-      <div class="two wide column">
-        <div class="ui segment" id="dashboard-header-size">
-          <div class="ui grid">
-            <div class="row" id="dashboard-header-size-top">
-              Total Size: <span class="dashboard-bold"> xxxx </span>
-            </div>
-            <div class="row" id="dashboard-header-size-bottom">
-              Capacity: <span class="dashboard-bold"> xxxx </span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="three wide column">
-        <div class="ui segment" id="dashboard-header-info">
-          <div class="ui grid">
-            <div class="row" id="dashboard-header-info-top">
-              Oldest Backup: <span class="dashboard-bold"> {{dashboard.oldestBackupDate}} </span>
-            </div>
-            <div class="row" id="dashboard-header-info-bottom">
-              Newest Backup: <span class="dashboard-bold"> {{dashboard.newestBackupDate}} </span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="seven wide column">
+      <div class="eight wide column">
         <div class="ui statistics" id="dashbaord-header-stats">
           <div class="green statistic">
             <div class="value">
@@ -68,6 +44,33 @@
               Idle
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+    <div class="five column row">
+      <div class="column">
+        <div class="ui segment" id="dashboard-header-size">
+          Total Size: <br /> <span class="dashboard-bold"> xxxx </span>
+        </div>
+      </div>
+      <div class="column">
+        <div class="ui segment" id="dashboard-header-size-max">
+          Capacity: <br /> <span class="dashboard-bold"> xxxx </span>
+        </div>
+      </div>
+      <div class="column">
+        <div class="ui segment" id="dashboard-header-date-old">
+          Oldest Backup: <br /> <span class="dashboard-bold"> {{dashboard.oldestBackupDate}} </span>
+        </div>
+      </div>
+      <div class="column">
+        <div class="ui segment" id="dashboard-header-date-new">
+          Newest Backup: <br /> <span class="dashboard-bold"> {{dashboard.newestBackupDate}} </span>
+        </div>
+      </div>
+      <div class="column">
+        <div class="ui segment" id="dashboard-header-date-new">
+          Last Summary Email: <br /> <span class="dashboard-bold"> {{dashboard.lastSummaryEmailDate}} </span>
         </div>
       </div>
     </div>
