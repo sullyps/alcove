@@ -1,0 +1,131 @@
+{% extends 'layout.njk' %}
+
+{% block content %}
+
+<div class="dashboard-body">
+  <div class="ui fluid stackable grid" id="dashboard-header-grid">
+    <div class="row" id="dashboard-header-row-top">
+      <div class="eight wide column">
+        <img id="dashboard-logo" src="/logo.png">
+      </div>
+      <div class="eight wide column">
+        <div class="ui statistics" id="dashbaord-header-stats">
+          <div class="green statistic">
+            <div class="value">
+              {{dashboard.successfulMachines}}
+            </div>
+            <div class="label" id="dashboard-header-stats-labels">
+              Successful
+            </div>
+          </div>
+          <div class="yellow statistic">
+            <div class="value">
+              {{dashboard.unsuccessfulMachines}}
+            </div>
+            <div class="label" id="dashboard-header-stats-labels">
+              Partially Successful
+            </div>
+          </div>
+          <div class="red statistic">
+            <div class="value">
+              {{dashboard.partialSuccessMachines}}
+            </div>
+            <div class="label" id="dashboard-header-stats-labels">
+              Unsuccessful
+            </div>
+          </div>
+          <div class="grey statistic">
+            <div class="value">
+              {{dashboard.idleMachines}}
+            </div>
+            <div class="label" id="dashboard-header-stats-labels">
+              Idle
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="five column row">
+      <div class="column">
+        <div class="ui segment" id="dashboard-header-segment">
+          Total Size: <br /> <span class="dashboard-bold"> xxxx </span>
+        </div>
+      </div>
+      <div class="column">
+        <div class="ui segment" id="dashboard-header-segment">
+          Capacity: <br /> <span class="dashboard-bold"> xxxx </span>
+        </div>
+      </div>
+      <div class="column">
+        <div class="ui segment" id="dashboard-header-segment">
+          Oldest Backup: <br /> <span class="dashboard-bold"> {{dashboard.oldestBackupDate}} </span>
+        </div>
+      </div>
+      <div class="column">
+        <div class="ui segment" id="dashboard-header-segment">
+          Newest Backup: <br /> <span class="dashboard-bold"> {{dashboard.newestBackupDate}} </span>
+        </div>
+      </div>
+      <div class="column">
+        <div class="ui segment" id="dashboard-header-segment">
+          Last Summary Email: <br /> <span class="dashboard-bold"> {{dashboard.lastSummaryEmailDate}} </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <table class="ui striped selectable sortable celled table" id="dashboard-table">
+    <thead>
+      <tr>
+        <th class="dashboard-table-name" id="dasgboard-table-header"> Machine Name </th>
+        <th class="dashboard-table-status" id="dasgboard-table-header"> Status </th>
+        <th class="dashboard-table-size" id="dasgboard-table-header"> Total Size </th>
+        <th id="dasgboard-table-header"> Last Backup </th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <tr>
+
+      {% for machines in dashboard.machine %}
+
+        <td> <span class="dashboard-bold"> {{machines.name}} </span> </td>
+
+        <!--Spacing is very important; please do not change it.-->
+        {% if machines.totalBackups == 0 %}
+        <td><span class="dashboard-grey">   <i class="minus icon"></i>
+        {{machines.successfulBackups}} of {{machines.totalBackups}} backups successful</span>
+
+        {% elif machines.totalBackups == machines.successfulBackups %}
+        <td><span class="dashboard-green"><i class="thumbs up icon"></i></span>
+        {{machines.successfulBackups}} of {{machines.totalBackups}} backups successful
+
+        {% elif machines.successfulBackups == 0 %}
+        <td class="error">  <i class="attention icon"></i>
+        {{machines.successfulBackups}} of {{machines.totalBackups}} backups successful
+
+        {% else %}
+        <td class="warning"> <span class=dashboard-yellow><i class="question icon"></i></span>
+        {{machines.successfulBackups}} of {{machines.totalBackups}} backups successful
+
+        {% endif %}
+
+        </td>
+        <td> xxxx </td>
+        <td> {{machines.timeSinceRestart}} ago </td>
+      </tr>
+
+      {% endfor %}
+
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}
+
+{% block js %}
+
+<script src="https://semantic-ui.com/javascript/library/tablesort.js"></script>
+<script class="text/javascript"> $('table').tablesort(); </script>
+
+{% endblock %}
