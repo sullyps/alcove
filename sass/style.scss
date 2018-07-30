@@ -1,23 +1,73 @@
-.dashboard-success-color
+.dashboard-green
 {
   color:green;
 }
-.dashboard-error-color
+.dashboard-yellow
 {
-  color:red;
+  color:#A0B000;
 }
-.dashboard-date-color
+.dashboard-grey
+{
+  color:grey;
+}
+.dashboard-bold
 {
   font-weight:bold;
 }
-#dashboard-overview-header
+.dashboard-body
 {
+  min-height:100vh;
+  background-color:#D0D0D0;
+}
+.dashboard-table-name
+{
+  width:20%;
+}
+.dashboard-table-status
+{
+  width:30%;
+}
+.dashboard-table-size
+{
+  width:15%;
+}
+#dashboard-header-grid
+{
+  margin-top:0px;
+  padding-left:4%;
+  padding-right:4%;
+}
+#dashboard-header-row-top
+{
+  margin-bottom:-40px;
+}
+#dashboard-logo
+{
+  margin-top:8px;
+  width:200px;
+}
+#dashboard-header-title
+{
+  padding-top:10px;
+  margin-left:-50px;
+  min-width:250px;
+  font-size:10px;
   text-align:center;
 }
-#dashboard-overview-list
+#dashboard-header-stats-labels
 {
-  margin-left:5%;
-  width:90%;
+  width:110px;
+}
+#dashboard-header-segment
+{
+  text-align:center;
+  font-size:18px;
+  background-color:#EEEEEE;
+}
+#dashboard-table
+{
+  margin-left:4%;
+  width:92%;
 }
 #login-image
 {
