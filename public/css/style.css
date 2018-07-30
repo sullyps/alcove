@@ -1,6 +1,10 @@
 .dashboard-green {
   color:green; }
 
+.dashboard-yellow {
+  color:#A0B000;
+}
+
 .dashboard-grey {
   color:grey; }
 
@@ -8,8 +12,7 @@
   font-weight:bold; }
 
 .dashboard-body{
-  min-width:1200px;
-  min-height:3000px;
+  min-height:100vh;
   background-color:#D0D0D0;
 }
 .dashboard-table-name{
@@ -39,10 +42,6 @@
   min-width:250px;
   font-size:10px;
   text-align:center;
-}
-#dashbaord-header-stats{
-  margin-left:calc(50% - 304px);
-  min-width:608px;
 }
 #dashboard-header-stats-labels{
   width:110px;
