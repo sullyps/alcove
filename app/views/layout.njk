@@ -2,16 +2,14 @@
 <html>
   <head>
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.4/semantic.min.css">
-    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <link rel="stylesheet" type="text/css" href="../../public/css/style.css">
     <title>{{ title }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
   <body>
-    <div class="ui container">
-      {% block content %}{% endblock %}
-    </div>
+    {% block content %}{% endblock %}
     <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.4/semantic.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.3/semantic.min.js"></script>
     {% block js %}{% endblock %}
   </body>
 </html>
