@@ -3,7 +3,7 @@
 {% block content %}
 
 <div class="dashboard-body">
-  <div class="ui grid" id="dashboard-header-grid">
+  <div class="ui fluid stackable grid" id="dashboard-header-grid">
     <div class="row" id="dashboard-header-row-top">
       <div class="eight wide column">
         <img id="dashboard-logo" src="../../public/logo.png">
@@ -91,21 +91,25 @@
 
         <td> <span class="dashboard-bold"> {{machines.name}} </span> </td>
 
+        <!--Spacing is very important; please do not change it.-->
         {% if machines.totalBackups == 0 %}
-        <td>
+        <td><span class="dashboard-grey">   <i class="minus icon"></i>
+        {{machines.successfulBackups}} of {{machines.totalBackups}} backups successful</span>
+
         {% elif machines.totalBackups == machines.successfulBackups %}
-        <td> <span class="dashboard-green"><i class="thumbs up icon"></i></span>
+        <td><span class="dashboard-green"><i class="thumbs up icon"></i></span>
+        {{machines.successfulBackups}} of {{machines.totalBackups}} backups successful
+
         {% elif machines.successfulBackups == 0 %}
-        <td class="error"><i class="attention icon"></i>
+        <td class="error">  <i class="attention icon"></i>
+        {{machines.successfulBackups}} of {{machines.totalBackups}} backups successful
+
         {% else %}
-        <td class="warning">
+        <td class="warning"> <span class=dashboard-yellow><i class="question icon"></i></span>
+        {{machines.successfulBackups}} of {{machines.totalBackups}} backups successful
+
         {% endif %}
 
-        {% if machines.totalBackups == 0 %}
-          <span class="dashboard-grey">{{machines.successfulBackups}} of {{machines.totalBackups}} backups successful </span>
-        {% else %}
-        {{machines.successfulBackups}} of {{machines.totalBackups}} backups successful
-        {% endif %}
         </td>
         <td> xxxx </td>
         <td> {{machines.timeSinceRestart}} ago </td>
@@ -116,5 +120,12 @@
     </tbody>
   </table>
 </div>
+
+{% endblock %}
+
+{% block js %}
+
+<script src="https://semantic-ui.com/javascript/library/tablesort.js"></script>
+<script class="text/javascript"> $('table').tablesort(); </script>
 
 {% endblock %}
