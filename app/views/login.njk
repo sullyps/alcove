@@ -2,38 +2,42 @@
 
 {% block content %}
 
-<img id="login-image" src="/logo.png" width="300">
+<div class="ui container">
 
-<form id="login-form">
+  <img id="login-image" src="/logo.png" width="300">
 
-  <div class="login-form-item">
-    <h1 class="ui header"> Log In </h1>
-  </div>
+  <form id="login-form">
 
-  <div class="ui icon input login-form-item">
-    <input type=text name="username" placeholder="Username">
-    <i class="user icon"></i>
-  </div>
-
-  <div class="ui icon input login-form-item">
-    <input type="password" name="password" placeholder="Password">
-    <i class="shield alternate icon"></i>
-  </div>
-
-  <div id="login-button">
-    <button class="ui primary button"> Log In </button>
-  </div>
-
-  <div class="ui error message hidden" id="login-error">
-    <div class="header">
-      Login failed
+    <div class="login-form-item">
+      <h1 class="ui header"> Log In </h1>
     </div>
-    <p></p>
-  </div>
 
-  <div class="ui centered inline loader" id="login-loader"></div>
+    <div class="ui icon input login-form-item">
+      <input type=text name="username" placeholder="Username">
+      <i class="user icon"></i>
+    </div>
 
-</form>
+    <div class="ui icon input login-form-item">
+      <input type="password" name="password" placeholder="Password">
+      <i class="shield alternate icon"></i>
+    </div>
+
+    <div id="login-button">
+      <button class="ui primary button"> Log In </button>
+    </div>
+
+    <div class="ui error message hidden" id="login-error">
+      <div class="header">
+        Login failed
+      </div>
+      <p></p>
+    </div>
+
+    <div class="ui centered inline loader" id="login-loader"></div>
+
+  </form>
+
+</div>
 
 {% endblock %}
 
