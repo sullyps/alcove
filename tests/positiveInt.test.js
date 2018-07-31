@@ -6,6 +6,15 @@ describe('Verifying isPositiveInteger function', () => {
   test('Strings with numbers are positive integers', () => {
     expect(init.__isPositiveInteger('5')).toBe(true);
   });
+  test('Strings with floating numbers are not integers', () => {
+    expect(init.__isPositiveInteger('0.5')).toBe(false);
+  });
+  test('Strings with negative integers are not positive integers', () => {
+    expect(init.__isPositiveInteger('-2')).toBe(false);
+  });
+  test('Large string integers are positive integers', () => {
+    expect(init.__isPositiveInteger('999999999999')).toBe(true);
+  });
   test('Strings with alpha chars are not positive integers', () => {
     expect(init.__isPositiveInteger('a')).toBe(false);
   });
