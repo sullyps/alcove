@@ -15,6 +15,14 @@ router.get('/', (req, res, next) => {
   db = models.getDatabase();
   machines = system.getMachines();
   res.render('dashboard', {
-    title: 'Dashboard :: Alcove Backup System'
+    title: 'Dashboard :: Alcove Backup System',
+    dashboard: {
+      lastSummaryEmailDate: getLastSummaryEmailDate()
+    }
   });
 });
+
+function getLastSummaryEmailDate() {
+  const date = util.getLastSummaryEmailTime(config.notifications.summary_schedule, new Date());
+  return util.getFormattedDate(date).substring(0, 10);
+}
