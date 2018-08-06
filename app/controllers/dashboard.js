@@ -4,6 +4,7 @@ const express = require('express'),
       path = require('path'),
       system = require('../../lib/system'),
       models = require('../models'),
+      rsync = require('../../lib/rsync'),
       util = require('../../lib/util');
 
 let config, db, machines;
@@ -45,7 +46,8 @@ function getSortedBackupDates()
   {
     let machinePath = path.join(config.data_dir, machineName);
     let machineBackups = fs.readdirSync(machinePath).filter(child => {
-      return fs.statSync(path.join(machinePath, child)).isDirectory();
+      return fs.statSync(path.join(machinePath, child)).isDirectory() &&
+          child !== rsync.getInProgressName();
     });
     for (let backup of machineBackups)
     {
@@ -138,5 +140,5 @@ function getScheduledBackups(machineName)
  */
 function getSuccessfulBackups(machineName)
 {
-  return util.countSubdirectories(path.join(config.data_dir, machineName));
+  return util.countSubdirectoriesExclude(path.join(config.data_dir, machineName), [rsync.getInProgressName()]);
 }
