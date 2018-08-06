@@ -27,6 +27,11 @@ router.get('/', (req, res, next) => {
   });
 });
 
+/**
+ * Gets a list of date objects of all the backups on
+ * disk in order from oldest to newest.
+ * @returns {Array}
+ */
 function getSortedBackupDates() {
   let backups = [];
   for (let machineName in machines) {
@@ -44,6 +49,12 @@ function getSortedBackupDates() {
   return backups;
 }
 
+/**
+ * Gets the last time a summary email was scheduled to
+ * go out as a string.
+ * @returns
+ *   The last summary email date as a string.
+ */
 function getLastSummaryEmailDate() {
   const date = util.getLastSummaryEmailTime(config.notifications.summary_schedule, new Date());
   return util.getFormattedDate(date).substring(0, 10);
