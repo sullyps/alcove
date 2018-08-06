@@ -20,9 +20,9 @@ router.get('/', (req, res, next) => {
   res.render('dashboard', {
     title: 'Dashboard :: Alcove Backup System',
     dashboard: {
-      oldestBackupDate: sortedBackupDates[0],
-      newestBackupDate: sortedBackupDates[sortedBackupDates.length - 1],
-      lastSummaryEmailDate: getLastSummaryEmailDate()
+      oldestBackupDate: util.getFormattedDate(sortedBackupDates[0]).substring(0, 10),
+      newestBackupDate: util.getFormattedDate(sortedBackupDates[sortedBackupDates.length - 1]).substring(0, 10),
+      lastSummaryEmailDate: util.getFormattedDate(getLastSummaryEmailDate()).substring(0, 10)
     }
   });
 });
@@ -30,16 +30,20 @@ router.get('/', (req, res, next) => {
 /**
  * Gets a list of date objects of all the backups on
  * disk in order from oldest to newest.
- * @returns {Array}
+ * @returns
+ *   An array of backup dates as strings
  */
-function getSortedBackupDates() {
+function getSortedBackupDates()
+{
   let backups = [];
-  for (let machineName in machines) {
+  for (let machineName in machines)
+  {
     let machinePath = path.join(config.data_dir, machineName);
     let machineBackups = fs.readdirSync(machinePath).filter(child => {
       return fs.statSync(path.join(machinePath, child)).isDirectory();
     });
-    for (let backup of machineBackups) {
+    for (let backup of machineBackups)
+    {
       backups.push(util.parseISODateString(backup));
     }
   }
@@ -50,12 +54,12 @@ function getSortedBackupDates() {
 }
 
 /**
- * Gets the last time a summary email was scheduled to
- * go out as a string.
+ * Gets the last time a summary email
+ * was scheduled to go out.
  * @returns
- *   The last summary email date as a string.
+ *   The last summary email date as a date object.
  */
-function getLastSummaryEmailDate() {
-  const date = util.getLastSummaryEmailTime(config.notifications.summary_schedule, new Date());
-  return util.getFormattedDate(date).substring(0, 10);
+function getLastSummaryEmailDate()
+{
+  return util.getLastSummaryEmailTime(config.notifications.summary_schedule, new Date());
 }
