@@ -35,7 +35,7 @@ function getSortedBackupDates() {
       return fs.statSync(path.join(machinePath, child)).isDirectory();
     });
     for (let backup of machineBackups) {
-      backups.push(parseISODateString(backup));
+      backups.push(util.parseISODateString(backup));
     }
   }
   backups.sort((a, b) => {
@@ -47,9 +47,4 @@ function getSortedBackupDates() {
 function getLastSummaryEmailDate() {
   const date = util.getLastSummaryEmailTime(config.notifications.summary_schedule, new Date());
   return util.getFormattedDate(date).substring(0, 10);
-}
-
-function parseISODateString(dateString) {
-  const dateParts = dateString.replace(/\D+/g, ' ').split(' ');
-  return new Date(Date.UTC(dateParts[0], dateParts[1] - 1, dateParts[2], dateParts[3], dateParts[4], dateParts[5], dateParts[6]));
 }
