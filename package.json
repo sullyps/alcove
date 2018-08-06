@@ -4,9 +4,10 @@
   "description": "Our internal backup system",
   "main": "app.js",
   "jest": {
-    "testPathIgnorePatterns": [
-      "/node_modules/",
-      "data"
+    "runner": "jest-runner",
+    "testURL": "http://localhost/",
+    "roots": [
+      "<rootDir>/tests/"
     ]
   },
   "scripts": {
@@ -49,7 +50,7 @@
     "gulp-plumber": "^1.2",
     "gulp-sass": "^4.0",
     "gulp-util": "^3.0",
-    "jest": "^23.2",
+    "jest": "^23.4",
     "jshint": "^2.9"
   }
 }
