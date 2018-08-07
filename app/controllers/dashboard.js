@@ -25,10 +25,13 @@ router.get('/', (req, res, next) => {
   for (let machineName in machines)
   {
     // Loop through backup events much like when generating notification email in system.js
+    let machineBackups = getSortedBackupDatesForMachine(machineName);
+
     machineList.push({
       name: machineName,
       successfulBackups: getSuccessfulBackups(machineName),
-      totalBackups: getScheduledBackups(machineName)
+      totalBackups: getScheduledBackups(machineName),
+      lastBackupDate: util.getFormattedDate(machineBackups[machineBackups.length - 1]).substring(0, 10)
     });
   }
 
@@ -58,20 +61,34 @@ function getSortedBackupDates()
   let backups = [];
   for (let machineName in machines)
   {
-    let machinePath = path.join(config.data_dir, machineName);
-    let machineBackups = fs.readdirSync(machinePath).filter(child => {
-      return fs.statSync(path.join(machinePath, child)).isDirectory() &&
-          child !== rsync.getInProgressName();
-    });
+    let machineBackups = getSortedBackupDatesForMachine(machineName);
     for (let backup of machineBackups)
     {
-      backups.push(util.parseISODateString(backup));
+      backups.push(backup);
     }
   }
   backups.sort((a, b) => {
     return a.getTime() - b.getTime();
   });
   return backups;
+}
+
+function getSortedBackupDatesForMachine(machineName)
+{
+  const machinePath = path.join(config.data_dir, machineName);
+  let backups = fs.readdirSync(machinePath).filter(backup => {
+    return fs.statSync(path.join(machinePath, backup)).isDirectory() &&
+        backup !== rsync.getInProgressName();
+  });
+  let backupDates = [];
+  for (let backup of backups)
+  {
+    backupDates.push(util.parseISODateString(backup));
+  }
+  backupDates.sort((a, b) => {
+    return a.getTime() - b.getTime();
+  });
+  return backupDates;
 }
 
 /**
