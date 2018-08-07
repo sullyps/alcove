@@ -154,12 +154,7 @@ function getMachineStatus(machineName)
  */
 function getScheduledBackups(machineName)
 {
-  const machine = machines[machineName];
-  let count = 0;
-  util.parseSchedule(machine.schedule).daysSets.forEach(daysSet => {
-    count += daysSet.number;
-  });
-  return count;
+  return system.getBuckets(machines[machineName].schedule, new Date()).length;
 }
 
 /**
