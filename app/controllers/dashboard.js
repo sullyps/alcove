@@ -18,33 +18,36 @@ router.get('/', (req, res, next) => {
   db = models.getDatabase();
   machines = system.getMachines();
 
+  let processEventsPromise = getProcessEvents();
+
   let machineStatuses = getMachineStatuses();
   let sortedBackupDates = getSortedBackupDates();
 
-  let machineList = [];
+  let dashboard = {
+    oldestBackupDate: util.getFormattedDate(sortedBackupDates[0]).substring(0, 10),
+    newestBackupDate: util.getFormattedDate(sortedBackupDates[sortedBackupDates.length - 1]).substring(0, 10),
+    lastSummaryEmailDate: util.getFormattedDate(getLastSummaryEmailDate()).substring(0, 10),
+    successfulMachines: machineStatuses.successful,
+    partialSuccessMachines: machineStatuses.partiallySuccessful,
+    unsuccessfulMachines: machineStatuses.unsuccessful,
+    idleMachines: machineStatuses.idle,
+    machines: []
+  };
+
   for (let machineName in machines)
   {
-    machineList.push({
+    dashboard.machines.push({
       name: machineName,
       successfulBackups: getSuccessfulBackups(machineName),
       totalBackups: getScheduledBackups(machineName)
     });
   }
 
-  getProcessEvents().then(processEvents => {
+  processEventsPromise.then(processEvents => {
+    dashboard.lastRestart = util.getFormattedDate(processEvents[0].eventTime).substring(0, 10);
     res.render('dashboard', {
       title: 'Dashboard :: Alcove Backup System',
-      dashboard: {
-        oldestBackupDate: util.getFormattedDate(sortedBackupDates[0]).substring(0, 10),
-        newestBackupDate: util.getFormattedDate(sortedBackupDates[sortedBackupDates.length - 1]).substring(0, 10),
-        lastSummaryEmailDate: util.getFormattedDate(getLastSummaryEmailDate()).substring(0, 10),
-        lastStartup: util.getFormattedDate(processEvents[0].eventTime).substring(0, 10),
-        successfulMachines: machineStatuses.successful,
-        partialSuccessMachines: machineStatuses.partiallySuccessful,
-        unsuccessfulMachines: machineStatuses.unsuccessful,
-        idleMachines: machineStatuses.idle,
-        machines: machineList
-      },
+      dashboard: dashboard
     });
   });
 });
@@ -112,7 +115,7 @@ function getLastSummaryEmailDate()
 /**
  * Gets an array of ProcessEvents (in a promise) in
  * order from the most recent to the least recent.
- * (Typically used to find the most recent startup.)
+ * (Typically used to find the most recent restart.)
  * @returns
  *   A promise containing an array of ProcessEvents
  *   in order from most recent to least recent.
