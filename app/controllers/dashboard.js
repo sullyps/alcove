@@ -73,6 +73,14 @@ function getSortedBackupDates()
   return backups;
 }
 
+/**
+ * Gets a list of date objects of all the backups for
+ * the machine machineName in order from oldest to newest.
+ * @param machineName
+ *   The name of the machine to inspect for backups
+ * @returns
+ *   An array of backup dates as strings
+ */
 function getSortedBackupDatesForMachine(machineName)
 {
   const machinePath = path.join(config.data_dir, machineName);
