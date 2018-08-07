@@ -1,9 +1,15 @@
 const express = require('express'),
-      router = express.Router();
-
-const system = require('../../lib/system');
+    router = express.Router(),
+    fs = require('fs'),
+    path = require('path'),
+    system = require('../../lib/system'),
+    models = require('../models'),
+    rsync = require('../../lib/rsync'),
+    util = require('../../lib/util');
 
 const logger = require('../../lib/config/log4js').getLogger();
+
+let config, db;
 
 router.get('/:name',(req, res, next) => {
   // Attempt to grab the machine that is requested
@@ -19,8 +25,15 @@ router.get('/:name',(req, res, next) => {
     });
   }
 
+  config = system.getConfig();
+  db = models.getDatabase();
+
   logger.trace(machineObj);
-  res.render('machine', { machine: machineObj });
+  res.render('machine', {
+    name: machineObj.name,
+    successfulBackups: util.countSubdirectoriesExclude(path.join(config.data_dir, machineObj.name), [rsync.getInProgressName()]),
+    totalBackups: system.getBuckets(machineObj.schedule, new Date()).length
+  });
 });
 
 module.exports = app => {
