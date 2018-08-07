@@ -3,11 +3,10 @@ const express = require('express'),
       fs = require('fs'),
       path = require('path'),
       system = require('../../lib/system'),
-      models = require('../models'),
       rsync = require('../../lib/rsync'),
       util = require('../../lib/util');
 
-let config, db, machines;
+let config, machines;
 
 module.exports = app => {
   app.use('/dashboard', router);
@@ -15,23 +14,18 @@ module.exports = app => {
 
 router.get('/', (req, res, next) => {
   config = system.getConfig();
-  db = models.getDatabase();
   machines = system.getMachines();
 
-  let sortedBackupDates = getSortedBackupDates();
   let machineStatuses = getMachineStatuses();
+  let sortedBackupDates = getSortedBackupDates();
 
   let machineList = [];
   for (let machineName in machines)
   {
-    // Loop through backup events much like when generating notification email in system.js
-    let machineBackups = getSortedBackupDatesForMachine(machineName);
-
     machineList.push({
       name: machineName,
       successfulBackups: getSuccessfulBackups(machineName),
-      totalBackups: getScheduledBackups(machineName),
-      lastBackupDate: util.getFormattedDate(machineBackups[machineBackups.length - 1]).substring(0, 10)
+      totalBackups: getScheduledBackups(machineName)
     });
   }
 
