@@ -41,10 +41,10 @@ router.get('/', (req, res, next) => {
       oldestBackupDate: util.getFormattedDate(sortedBackupDates[0]).substring(0, 10),
       newestBackupDate: util.getFormattedDate(sortedBackupDates[sortedBackupDates.length - 1]).substring(0, 10),
       lastSummaryEmailDate: util.getFormattedDate(getLastSummaryEmailDate()).substring(0, 10),
-      successfulMachines: machineStatuses[0],
-      partialSuccessMachines: machineStatuses[1],
-      unsuccessfulMachines: machineStatuses[2],
-      idleMachines: machineStatuses[3],
+      successfulMachines: machineStatuses.successful,
+      partialSuccessMachines: machineStatuses.partiallySuccessful,
+      unsuccessfulMachines: machineStatuses.unsuccessful,
+      idleMachines: machineStatuses.idle,
       machines: machineList
     },
   });
@@ -115,17 +115,22 @@ function getLastSummaryEmailDate()
  * the number of scheduled and successful backups.
  * @returns
  *   The number of machines of each status
- *   machineStatuses[0] = Successful machines (all backups succeeded)
- *   machineStatuses[1] = Partially successful machines (some backups succeeded)
- *   machineStatuses[2] = Unsuccessful machines (all backups failed)
- *   machineStatuses[3] = Idle machines (no backups were attempted)
  */
 function getMachineStatuses()
 {
-  let machineStatuses = [0, 0, 0, 0];
+  let machineStatuses = {
+    successful: 0,
+    partiallySuccessful: 0,
+    unsuccessful: 0,
+    idle: 0
+  };
   for (let machineName in machines)
   {
-    machineStatuses[getMachineStatus(machineName)]++;
+    let machineStatus = getMachineStatus(machineName);
+    if (machineStatus === 0) machineStatuses.successful++;
+    else if (machineStatus === 1) machineStatuses.partiallySuccessful++;
+    else if (machineStatus === 2) machineStatuses.unsuccessful++;
+    else machineStatuses.idle++;
   }
   return machineStatuses;
 }
