@@ -3,10 +3,11 @@ const express = require('express'),
       fs = require('fs'),
       path = require('path'),
       system = require('../../lib/system'),
+      models = require('../models'),
       rsync = require('../../lib/rsync'),
       util = require('../../lib/util');
 
-let config, machines;
+let config, db, machines;
 
 module.exports = app => {
   app.use('/dashboard', router);
@@ -14,6 +15,7 @@ module.exports = app => {
 
 router.get('/', (req, res, next) => {
   config = system.getConfig();
+  db = models.getDatabase();
   machines = system.getMachines();
 
   let machineStatuses = getMachineStatuses();
@@ -29,18 +31,21 @@ router.get('/', (req, res, next) => {
     });
   }
 
-  res.render('dashboard', {
-    title: 'Dashboard :: Alcove Backup System',
-    dashboard: {
-      oldestBackupDate: util.getFormattedDate(sortedBackupDates[0]).substring(0, 10),
-      newestBackupDate: util.getFormattedDate(sortedBackupDates[sortedBackupDates.length - 1]).substring(0, 10),
-      lastSummaryEmailDate: util.getFormattedDate(getLastSummaryEmailDate()).substring(0, 10),
-      successfulMachines: machineStatuses.successful,
-      partialSuccessMachines: machineStatuses.partiallySuccessful,
-      unsuccessfulMachines: machineStatuses.unsuccessful,
-      idleMachines: machineStatuses.idle,
-      machines: machineList
-    },
+  getProcessEvents().then(processEvents => {
+    res.render('dashboard', {
+      title: 'Dashboard :: Alcove Backup System',
+      dashboard: {
+        oldestBackupDate: util.getFormattedDate(sortedBackupDates[0]).substring(0, 10),
+        newestBackupDate: util.getFormattedDate(sortedBackupDates[sortedBackupDates.length - 1]).substring(0, 10),
+        lastSummaryEmailDate: util.getFormattedDate(getLastSummaryEmailDate()).substring(0, 10),
+        lastStartup: util.getFormattedDate(processEvents[0].eventTime).substring(0, 10),
+        successfulMachines: machineStatuses.successful,
+        partialSuccessMachines: machineStatuses.partiallySuccessful,
+        unsuccessfulMachines: machineStatuses.unsuccessful,
+        idleMachines: machineStatuses.idle,
+        machines: machineList
+      },
+    });
   });
 });
 
@@ -102,6 +107,24 @@ function getSortedBackupDatesForMachine(machineName)
 function getLastSummaryEmailDate()
 {
   return util.getLastSummaryEmailTime(config.notifications.summary_schedule, new Date());
+}
+
+/**
+ * Gets an array of ProcessEvents (in a promise) in
+ * order from the most recent to the least recent.
+ * (Typically used to find the most recent startup.)
+ * @returns
+ *   A promise containing an array of ProcessEvents
+ *   in order from most recent to least recent.
+ */
+function getProcessEvents()
+{
+  return db.ProcessEvent.findAll({
+    where: {
+      event : 'start'
+    },
+    order: [['eventTime', 'DESC']]
+  });
 }
 
 /**
