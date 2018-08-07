@@ -17,8 +17,21 @@ router.get('/', (req, res, next) => {
   config = system.getConfig();
   db = models.getDatabase();
   machines = system.getMachines();
+
   let sortedBackupDates = getSortedBackupDates();
   let machineStatuses = getMachineStatuses();
+
+  let machineList = [];
+  for (let machineName in machines)
+  {
+    // Loop through backup events much like when generating notification email in system.js
+    machineList.push({
+      name: machineName,
+      successfulBackups: getSuccessfulBackups(machineName),
+      totalBackups: getScheduledBackups(machineName)
+    });
+  }
+
   res.render('dashboard', {
     title: 'Dashboard :: Alcove Backup System',
     dashboard: {
@@ -28,8 +41,9 @@ router.get('/', (req, res, next) => {
       successfulMachines: machineStatuses[0],
       partialSuccessMachines: machineStatuses[1],
       unsuccessfulMachines: machineStatuses[2],
-      idleMachines: machineStatuses[3]
-    }
+      idleMachines: machineStatuses[3],
+      machines: machineList
+    },
   });
 });
 

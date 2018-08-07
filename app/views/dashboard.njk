@@ -87,32 +87,32 @@
 
       <tr>
 
-      {% for machines in dashboard.machine %}
+      {% for machine in dashboard.machines %}
 
-        <td> <span class="dashboard-bold"> {{machines.name}} </span> </td>
+        <td> <span class="dashboard-bold"> {{machine.name}} </span> </td>
 
         <!--Spacing is very important; please do not change it.-->
-        {% if machines.totalBackups == 0 %}
+        {% if machine.totalBackups == 0 %}
         <td><span class="dashboard-grey">   <i class="minus icon"></i>
-        {{machines.successfulBackups}} of {{machines.totalBackups}} backups successful</span>
+        {{machine.successfulBackups}} of {{machine.totalBackups}} backups successful</span>
 
-        {% elif machines.totalBackups == machines.successfulBackups %}
+        {% elif machine.totalBackups == machine.successfulBackups %}
         <td><span class="dashboard-green"><i class="thumbs up icon"></i></span>
-        {{machines.successfulBackups}} of {{machines.totalBackups}} backups successful
+        {{machine.successfulBackups}} of {{machine.totalBackups}} backups successful
 
-        {% elif machines.successfulBackups == 0 %}
+        {% elif machine.successfulBackups == 0 %}
         <td class="error">  <i class="attention icon"></i>
-        {{machines.successfulBackups}} of {{machines.totalBackups}} backups successful
+        {{machine.successfulBackups}} of {{machine.totalBackups}} backups successful
 
         {% else %}
         <td class="warning"> <span class=dashboard-yellow><i class="question icon"></i></span>
-        {{machines.successfulBackups}} of {{machines.totalBackups}} backups successful
+        {{machine.successfulBackups}} of {{machine.totalBackups}} backups successful
 
         {% endif %}
 
         </td>
         <td> xxxx </td>
-        <td> {{machines.timeSinceRestart}} ago </td>
+        <td> {{machine.timeSinceRestart}} ago </td>
       </tr>
 
       {% endfor %}
