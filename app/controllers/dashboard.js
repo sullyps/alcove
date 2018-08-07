@@ -142,6 +142,7 @@ function getScheduledBackups(machineName)
   util.parseSchedule(machine.schedule).daysSets.forEach(daysSet => {
     count += daysSet.number;
   });
+  return count;
 }
 
 /**
