@@ -39,7 +39,14 @@ router.get('/:name',(req, res, next) => {
 
   getBackupEvents(machine.name)
   .then(backupEvents => {
-    machineInfo.lastBackupDate = util.getFormattedDate(backupEvents[0].backupTime);
+    let lastBackup, i = 0;
+    do
+    {
+      lastBackup = backupEvents[i];
+      i++;
+    }
+    while (lastBackup.rsyncExitCode !== 0);
+    machineInfo.lastBackupDate = util.getFormattedDate(lastBackup.backupTime);
     machineInfo.events = [];
     for (let event of backupEvents)
     {
