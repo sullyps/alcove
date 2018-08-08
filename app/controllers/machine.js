@@ -60,6 +60,15 @@ module.exports = app => {
   app.use('/machine', router);
 };
 
+/**
+ * Gets a list of all the backup events (successful and
+ * unsuccessful) since the last backup on disk for machine
+ * machineName.
+ * @param machineName
+ *   The name of the machine to inspect for backup events.
+ * @returns
+ *   A promise containing an array of backup events
+ */
 function getBackupEvents(machineName)
 {
   return db.BackupEvent.findAll({
@@ -73,6 +82,14 @@ function getBackupEvents(machineName)
   });
 }
 
+/**
+ * Gets the date of the oldest backup on disk
+ * for machine machineName
+ * @param machineName
+ *   The name of the machine to inspect for the oldest backup
+ * @returns
+ *   A date object representing the oldest backup on disk
+ */
 function getOldestBackupDate(machineName)
 {
   const machinePath = path.join(config.data_dir, machineName);
