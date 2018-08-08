@@ -57,3 +57,21 @@ function getLastBackupDate(machineName)
     order: [['backupTime', 'DESC']]
   });
 }
+
+function getOldestBackupDate(machineName)
+{
+  const machinePath = path.join(config.data_dir, machineName);
+  let backups = fs.readdirSync(machinePath).filter(backup => {
+    return fs.statSync(path.join(machinePath, backup)).isDirectory() &&
+        backup !== rsync.getInProgressName();
+  });
+  let backupDates = [];
+  for (let backup of backups)
+  {
+    backupDates.push(util.parseISODateString(backup));
+  }
+  backupDates.sort((a, b) => {
+    return a.getTime() - b.getTime();
+  });
+  return backupDates[0];
+}
