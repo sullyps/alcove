@@ -47,8 +47,7 @@ router.get('/:name',(req, res, next) => {
         date: util.getFormattedDate(event.backupTime).substring(0, 10),
         time: util.getFormattedDate(event.backupTime).substring(11),
         size: util.getFormattedSize(event.transferSize),
-        // TODO Make transfer time units dynamic
-        transferTime: (event.transferTimeSec/60).toFixed(2) + ' min',
+        transferTime: util.getFormattedTimespan(1000 * event.transferTimeSec),
         exitCode: event.rsyncExitCode,
         errReason: event.rsyncExitCode ? event.rsyncExitReason : null
       });
