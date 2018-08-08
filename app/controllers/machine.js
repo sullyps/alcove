@@ -1,5 +1,6 @@
 const express = require('express'),
     router = express.Router(),
+    Op = require('sequelize').Op;
     fs = require('fs'),
     path = require('path'),
     system = require('../../lib/system'),
@@ -36,9 +37,22 @@ router.get('/:name',(req, res, next) => {
     totalBackups: system.getBuckets(machine.schedule, new Date()).length
   };
 
-  getLastBackupDate(machine.name)
+  getBackupEvents(machine.name)
   .then(backupEvents => {
     machineInfo.lastBackupDate = util.getFormattedDate(backupEvents[0].backupTime);
+    machineInfo.events = [];
+    for (let event of backupEvents)
+    {
+      machineInfo.events.push({
+        date: util.getFormattedDate(event.backupTime).substring(0, 10),
+        time: util.getFormattedDate(event.backupTime).substring(11),
+        size: util.getFormattedSize(event.transferSize),
+        // TODO Make transfer time units dynamic
+        transferTime: (event.transferTimeSec/60).toFixed(2) + ' min',
+        exitCode: event.rsyncExitCode,
+        errReason: event.rsyncExitCode ? event.rsyncExitReason : null
+      });
+    }
     res.render('machine', machineInfo);
   });
 });
@@ -47,12 +61,14 @@ module.exports = app => {
   app.use('/machine', router);
 };
 
-function getLastBackupDate(machineName)
+function getBackupEvents(machineName)
 {
   return db.BackupEvent.findAll({
     where: {
       machine: machineName,
-      rsyncExitCode: 0
+      backupTime: {
+        [Op.gte]: getOldestBackupDate(machineName)
+      }
     },
     order: [['backupTime', 'DESC']]
   });
