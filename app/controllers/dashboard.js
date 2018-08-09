@@ -76,6 +76,25 @@ function getOldestBackupDate()
 }
 
 /**
+ * Gets a list of all the successful backups that are
+ * still kept on disk.
+ * @returns
+ *   A promise containing an array of successful
+ *   backups that are still on disk.
+ */
+function getSuccessfulBackupEvents()
+{
+  return db.BackupEvent.findAll({
+    where: {
+      rsyncExitCode: 0,
+      backupTime: {
+        [Op.gte]: getOldestBackupDate()
+      }
+    }
+  });
+}
+
+/**
  * Gets a list of date objects of all the backups on
  * disk in order from oldest to newest.
  * @returns
