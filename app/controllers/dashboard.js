@@ -32,10 +32,20 @@ router.get('/', (req, res, next) => {
     dashboard.machines = [];
     for (let machineName in machines)
     {
+      let timeSinceLastBackup = 'No backups were found for this machine';
+      for (let backupEvent of successfulBackupEvents)
+      {
+        if (backupEvent.machine === machineName)
+        {
+          timeSinceLastBackup = util.getFormattedTimespan(new Date().getTime() - backupEvent.backupTime) + ' ago';
+          break;
+        }
+      }
       dashboard.machines.push({
         name: machineName,
         successfulBackups: getSuccessfulBackups(machineName),
-        scheduledBackups: getScheduledBackups(machineName)
+        scheduledBackups: getScheduledBackups(machineName),
+        timeSinceLastBackup: timeSinceLastBackup
       });
     }
 
