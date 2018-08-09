@@ -25,6 +25,7 @@ router.get('/:name/backup/:backup_id/size',(req, res, next) => {
   config = system.getConfig();
   db = models.getDatabase();
 
+  // Attempt to find the request backup event
   const id = parseInt(req.params.backup_id, 10);
   db.BackupEvent.findOne({
     where: {
@@ -33,6 +34,7 @@ router.get('/:name/backup/:backup_id/size',(req, res, next) => {
     }
   })
   .then(backupEvent => {
+    // Error handling
     if (!backupEvent)
     {
       return res.status(404).json({ error: 'No backup with id "' + id + '" for machine "' + machine.name + '"'});
@@ -42,11 +44,13 @@ router.get('/:name/backup/:backup_id/size',(req, res, next) => {
     {
       return res.json({ size: util.getFormattedSize(0) });
     }
+    // List the subdirectories for the requested machine
     const machinePath = path.join(config.data_dir, machine.name);
     let backups = fs.readdirSync(machinePath).filter(backup => {
       return fs.statSync(path.join(machinePath, backup)).isDirectory() &&
           backup !== rsync.getInProgressName();
     });
+    // Checks the subdirectories for backups within the time specified in the database
     const tolerance = 300000;
     const backupTime = backupEvent.backupTime.getTime() - (1000 * backupEvent.transferTimeSec);
     for (let backup of backups)
