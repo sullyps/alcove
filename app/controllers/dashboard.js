@@ -22,33 +22,41 @@ router.get('/', (req, res, next) => {
   let processEventsPromise = getProcessEvents();
 
   let machineStatuses = getMachineStatuses();
-  let sortedBackupDates = getSortedBackupDates();
+  getSuccessfulBackupEvents()
+  .then(successfulBackupEvents => {
+    const oldestBackupDate = util.getFormattedDate(successfulBackupEvents.reduce((min, value) => {
+      return value.backupTime < min.backupTime ? value : min;
+    }).backupTime).substring(0, 10);
+    const newestBackupDate = util.getFormattedDate(successfulBackupEvents.reduce((max, value) => {
+      return value.backupTime > max.backupTime ? value : max;
+    }).backupTime).substring(0, 10);
 
-  let dashboard = {
-    oldestBackupDate: util.getFormattedDate(sortedBackupDates[0]).substring(0, 10),
-    newestBackupDate: util.getFormattedDate(sortedBackupDates[sortedBackupDates.length - 1]).substring(0, 10),
-    lastSummaryEmailDate: util.getFormattedDate(getLastSummaryEmailDate()).substring(0, 10),
-    successfulMachines: machineStatuses.successful,
-    partialSuccessMachines: machineStatuses.partiallySuccessful,
-    unsuccessfulMachines: machineStatuses.unsuccessful,
-    idleMachines: machineStatuses.idle,
-    machines: []
-  };
+    let dashboard = {
+      oldestBackupDate: oldestBackupDate,
+      newestBackupDate: newestBackupDate,
+      lastSummaryEmailDate: util.getFormattedDate(getLastSummaryEmailDate()).substring(0, 10),
+      successfulMachines: machineStatuses.successful,
+      partialSuccessMachines: machineStatuses.partiallySuccessful,
+      unsuccessfulMachines: machineStatuses.unsuccessful,
+      idleMachines: machineStatuses.idle,
+      machines: []
+    };
 
-  for (let machineName in machines)
-  {
-    dashboard.machines.push({
-      name: machineName,
-      successfulBackups: getSuccessfulBackups(machineName),
-      totalBackups: getScheduledBackups(machineName)
-    });
-  }
+    for (let machineName in machines)
+    {
+      dashboard.machines.push({
+        name: machineName,
+        successfulBackups: getSuccessfulBackups(machineName),
+        totalBackups: getScheduledBackups(machineName)
+      });
+    }
 
-  processEventsPromise.then(processEvents => {
-    dashboard.lastRestart = util.getFormattedDate(processEvents[0].eventTime).substring(0, 10);
-    res.render('dashboard', {
-      title: 'Dashboard :: Alcove Backup System',
-      dashboard: dashboard
+    processEventsPromise.then(processEvents => {
+      dashboard.lastRestart = util.getFormattedDate(processEvents[0].eventTime).substring(0, 10);
+      res.render('dashboard', {
+        title: 'Dashboard :: Alcove Backup System',
+        dashboard: dashboard
+      });
     });
   });
 });
@@ -62,8 +70,9 @@ router.get('/', (req, res, next) => {
 function getOldestBackupDate()
 {
   let backups = [];
-  for (let machine of machines)
+  for (let machineName in machines)
   {
+    let machine = machines[machineName];
     let machinePath = path.join(config.data_dir, machine.name);
     backups.push(...fs.readdirSync(machinePath).filter(backup => {
       return fs.statSync(path.join(machinePath, backup)).isDirectory() &&
@@ -92,55 +101,6 @@ function getSuccessfulBackupEvents()
       }
     }
   });
-}
-
-/**
- * Gets a list of date objects of all the backups on
- * disk in order from oldest to newest.
- * @returns
- *   An array of backup dates as strings
- */
-function getSortedBackupDates()
-{
-  let backups = [];
-  for (let machineName in machines)
-  {
-    let machineBackups = getSortedBackupDatesForMachine(machineName);
-    for (let backup of machineBackups)
-    {
-      backups.push(backup);
-    }
-  }
-  backups.sort((a, b) => {
-    return a.getTime() - b.getTime();
-  });
-  return backups;
-}
-
-/**
- * Gets a list of date objects of all the backups for
- * the machine machineName in order from oldest to newest.
- * @param machineName
- *   The name of the machine to inspect for backups
- * @returns
- *   An array of backup dates as strings
- */
-function getSortedBackupDatesForMachine(machineName)
-{
-  const machinePath = path.join(config.data_dir, machineName);
-  let backups = fs.readdirSync(machinePath).filter(backup => {
-    return fs.statSync(path.join(machinePath, backup)).isDirectory() &&
-        backup !== rsync.getInProgressName();
-  });
-  let backupDates = [];
-  for (let backup of backups)
-  {
-    backupDates.push(util.parseISODateString(backup));
-  }
-  backupDates.sort((a, b) => {
-    return a.getTime() - b.getTime();
-  });
-  return backupDates;
 }
 
 /**
