@@ -25,7 +25,7 @@ router.get('/', (req, res, next) => {
 
     let machineStatuses = getMachineStatuses();
     dashboard.successfulMachines = machineStatuses.successful;
-    dashboard.partialSuccessMachines = machineStatuses.partiallySuccessful;
+    dashboard.partiallySuccessfulMachines = machineStatuses.partiallySuccessful;
     dashboard.unsuccessfulMachines = machineStatuses.unsuccessful;
     dashboard.idleMachines = machineStatuses.idle;
 
@@ -35,18 +35,17 @@ router.get('/', (req, res, next) => {
       dashboard.machines.push({
         name: machineName,
         successfulBackups: getSuccessfulBackups(machineName),
-        totalBackups: getScheduledBackups(machineName)
+        scheduledBackups: getScheduledBackups(machineName)
       });
     }
 
     return getProcessEvents();
   })
   .then(processEvents => {
-    dashboard.lastRestart = util.getFormattedDate(processEvents[0].eventTime).substring(0, 10);
-    res.render('dashboard', {
-      title: 'Dashboard :: Alcove Backup System',
-      dashboard: dashboard
-    });
+    dashboard.lastBackupSystemRestart = util.getFormattedDate(processEvents[0].eventTime).substring(0, 10);
+
+    dashboard.title = 'Dashboard :: Alcove Backup System';
+    res.render('dashboard', dashboard);
   });
 });
 

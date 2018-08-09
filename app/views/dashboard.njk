@@ -11,7 +11,7 @@
         <div class="ui statistics" id="dashbaord-header-stats">
           <div class="green statistic">
             <div class="value">
-              {{dashboard.successfulMachines}}
+              {{ successfulMachines }}
             </div>
             <div class="label" id="dashboard-header-stats-labels">
               Successful
@@ -19,7 +19,7 @@
           </div>
           <div class="yellow statistic">
             <div class="value">
-              {{dashboard.partialSuccessMachines}}
+              {{ partiallySuccessfulMachines }}
             </div>
             <div class="label" id="dashboard-header-stats-labels">
               Partially Successful
@@ -27,7 +27,7 @@
           </div>
           <div class="red statistic">
             <div class="value">
-              {{dashboard.unsuccessfulMachines}}
+              {{ unsuccessfulMachines }}
             </div>
             <div class="label" id="dashboard-header-stats-labels">
               Unsuccessful
@@ -35,7 +35,7 @@
           </div>
           <div class="grey statistic">
             <div class="value">
-              {{dashboard.idleMachines}}
+              {{ idleMachines }}
             </div>
             <div class="label" id="dashboard-header-stats-labels">
               Idle
@@ -57,22 +57,22 @@
       </div>
       <div class="column">
         <div class="ui segment" id="dashboard-header-segment">
-          Oldest Backup: <br /> <span class="dashboard-bold"> {{dashboard.oldestBackupDate}} </span>
+          Oldest Backup: <br /> <span class="dashboard-bold"> {{ oldestBackupDate }} </span>
         </div>
       </div>
       <div class="column">
         <div class="ui segment" id="dashboard-header-segment">
-          Newest Backup: <br /> <span class="dashboard-bold"> {{dashboard.newestBackupDate}} </span>
+          Newest Backup: <br /> <span class="dashboard-bold"> {{ newestBackupDate }} </span>
         </div>
       </div>
       <div class="column">
         <div class="ui segment" id="dashboard-header-segment">
-          Last Summary Email: <br /> <span class="dashboard-bold"> {{dashboard.lastSummaryEmailDate}} </span>
+          Last Summary Email: <br /> <span class="dashboard-bold"> {{ lastSummaryEmailDate }} </span>
         </div>
       </div>
       <div class="column">
         <div class="ui segment" id="dashboard-header-segment">
-          Last Restart: <br /> <span class="dashboard-bold"> {{dashboard.lastRestart}} </span>
+          Last Restart: <br /> <span class="dashboard-bold"> {{ lastBackupSystemRestart }} </span>
         </div>
       </div>
     </div>
@@ -91,32 +91,32 @@
 
       <tr>
 
-      {% for machine in dashboard.machines %}
+      {% for machine in machines %}
 
-        <td> <span class="dashboard-bold"> {{machine.name}} </span> </td>
+        <td> <span class="dashboard-bold"> {{ machine.name }} </span> </td>
 
         <!--Spacing is very important; please do not change it.-->
-        {% if machine.totalBackups == 0 %}
+        {% if machine.scheduledBackups == 0 %}
         <td><span class="dashboard-grey">   <i class="minus icon"></i>
-        {{machine.successfulBackups}} of {{machine.totalBackups}} backups successful</span>
+        {{ machine.successfulBackups }} of {{ machine.scheduledBackups }} backups successful</span>
 
-        {% elif machine.totalBackups == machine.successfulBackups %}
+        {% elif machine.scheduledBackups == machine.successfulBackups %}
         <td><span class="dashboard-green"><i class="thumbs up icon"></i></span>
-        {{machine.successfulBackups}} of {{machine.totalBackups}} backups successful
+        {{ machine.successfulBackups }} of {{ machine.scheduledBackups }} backups successful
 
         {% elif machine.successfulBackups == 0 %}
         <td class="error">  <i class="attention icon"></i>
-        {{machine.successfulBackups}} of {{machine.totalBackups}} backups successful
+        {{ machine.successfulBackups }} of {{ machine.scheduledBackups }} backups successful
 
         {% else %}
         <td class="warning"> <span class=dashboard-yellow><i class="question icon"></i></span>
-        {{machine.successfulBackups}} of {{machine.totalBackups}} backups successful
+        {{ machine.successfulBackups }} of {{ machine.scheduledBackups }} backups successful
 
         {% endif %}
 
         </td>
         <td> xxxx </td>
-        <td> {{machine.timeSinceRestart}} ago </td>
+        <td> {{ machine.timeSinceRestart }} ago </td>
       </tr>
 
       {% endfor %}
