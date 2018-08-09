@@ -22,12 +22,8 @@ router.get('/', (req, res, next) => {
   let dashboard = {};
   getSuccessfulBackupEvents()
   .then(successfulBackupEvents => {
-    dashboard.oldestBackupDate = util.getFormattedDate(successfulBackupEvents.reduce((min, value) => {
-      return value.backupTime < min.backupTime ? value : min;
-    }).backupTime).substring(0, 10);
-    dashboard.newestBackupDate = util.getFormattedDate(successfulBackupEvents.reduce((max, value) => {
-      return value.backupTime > max.backupTime ? value : max;
-    }).backupTime).substring(0, 10);
+    dashboard.oldestBackupDate = util.getFormattedDate(successfulBackupEvents[successfulBackupEvents.length - 1].backupTime).substring(0, 10);
+    dashboard.newestBackupDate = util.getFormattedDate(successfulBackupEvents[0].backupTime).substring(0, 10);
 
     dashboard.lastSummaryEmailDate = util.getFormattedDate(getLastSummaryEmailDate()).substring(0, 10);
 
@@ -96,7 +92,8 @@ function getSuccessfulBackupEvents()
       backupTime: {
         [Op.gte]: getOldestBackupDate()
       }
-    }
+    },
+    order: [['backupTime', 'DESC']]
   });
 }
 
