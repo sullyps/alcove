@@ -61,6 +61,9 @@ router.get('/:name/backup/:backup_id/size',(req, res, next) => {
       }
     }
     return res.status(404).json({ error: 'Backup directory not found.' });
+  })
+  .catch(() => {
+    return res.status(500).json({ error: 'There was an internal problem, please contact support...' });
   });
 });
 
