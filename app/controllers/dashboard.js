@@ -19,29 +19,25 @@ router.get('/', (req, res, next) => {
   db = models.getDatabase();
   machines = system.getMachines();
 
-  let processEventsPromise = getProcessEvents();
-
-  let machineStatuses = getMachineStatuses();
+  let dashboard = {};
   getSuccessfulBackupEvents()
   .then(successfulBackupEvents => {
-    const oldestBackupDate = util.getFormattedDate(successfulBackupEvents.reduce((min, value) => {
+    dashboard.oldestBackupDate = util.getFormattedDate(successfulBackupEvents.reduce((min, value) => {
       return value.backupTime < min.backupTime ? value : min;
     }).backupTime).substring(0, 10);
-    const newestBackupDate = util.getFormattedDate(successfulBackupEvents.reduce((max, value) => {
+    dashboard.newestBackupDate = util.getFormattedDate(successfulBackupEvents.reduce((max, value) => {
       return value.backupTime > max.backupTime ? value : max;
     }).backupTime).substring(0, 10);
 
-    let dashboard = {
-      oldestBackupDate: oldestBackupDate,
-      newestBackupDate: newestBackupDate,
-      lastSummaryEmailDate: util.getFormattedDate(getLastSummaryEmailDate()).substring(0, 10),
-      successfulMachines: machineStatuses.successful,
-      partialSuccessMachines: machineStatuses.partiallySuccessful,
-      unsuccessfulMachines: machineStatuses.unsuccessful,
-      idleMachines: machineStatuses.idle,
-      machines: []
-    };
+    dashboard.lastSummaryEmailDate = util.getFormattedDate(getLastSummaryEmailDate()).substring(0, 10);
 
+    let machineStatuses = getMachineStatuses();
+    dashboard.successfulMachines = machineStatuses.successful;
+    dashboard.partialSuccessMachines = machineStatuses.partiallySuccessful;
+    dashboard.unsuccessfulMachines = machineStatuses.unsuccessful;
+    dashboard.idleMachines = machineStatuses.idle;
+
+    dashboard.machines = [];
     for (let machineName in machines)
     {
       dashboard.machines.push({
@@ -51,12 +47,13 @@ router.get('/', (req, res, next) => {
       });
     }
 
-    processEventsPromise.then(processEvents => {
-      dashboard.lastRestart = util.getFormattedDate(processEvents[0].eventTime).substring(0, 10);
-      res.render('dashboard', {
-        title: 'Dashboard :: Alcove Backup System',
-        dashboard: dashboard
-      });
+    return getProcessEvents();
+  })
+  .then(processEvents => {
+    dashboard.lastRestart = util.getFormattedDate(processEvents[0].eventTime).substring(0, 10);
+    res.render('dashboard', {
+      title: 'Dashboard :: Alcove Backup System',
+      dashboard: dashboard
     });
   });
 });
