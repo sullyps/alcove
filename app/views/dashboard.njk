@@ -47,12 +47,12 @@
     <div class="six column row">
       <div class="column">
         <div class="ui segment" id="dashboard-header-segment">
-          Total Size: <br /> <span class="dashboard-bold"> xxxx </span>
+          Total Backup Size: <br /> <span class="dashboard-bold" id="totalSize"> xxxx </span>
         </div>
       </div>
       <div class="column">
         <div class="ui segment" id="dashboard-header-segment">
-          Capacity: <br /> <span class="dashboard-bold"> xxxx </span>
+          Free Space: <br /> <span class="dashboard-bold" id="freeSpace"> xxxx </span>
         </div>
       </div>
       <div class="column">
@@ -128,4 +128,5 @@
 
 {% block js %}
 <script class="text/javascript"> $('table').tablesort(); </script>
+<script src="/js/dashboard.js"></script>
 {% endblock %}
