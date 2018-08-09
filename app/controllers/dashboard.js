@@ -10,10 +10,6 @@ const express = require('express'),
 
 let config, db, machines;
 
-module.exports = app => {
-  app.use('/dashboard', router);
-};
-
 router.get('/', (req, res, next) => {
   config = system.getConfig();
   db = models.getDatabase();
@@ -54,6 +50,30 @@ router.get('/', (req, res, next) => {
   });
 });
 
+module.exports = app => {
+  app.use('/dashboard', router);
+};
+
+/**
+ * Gets a list of all the successful backups that are
+ * still kept on disk.
+ * @returns
+ *   A promise containing an array of successful
+ *   backups that are still on disk.
+ */
+function getSuccessfulBackupEvents()
+{
+  return db.BackupEvent.findAll({
+    where: {
+      rsyncExitCode: 0,
+      backupTime: {
+        [Op.gte]: getOldestBackupDate()
+      }
+    },
+    order: [['backupTime', 'DESC']]
+  });
+}
+
 /**
  * Gets the date (as a date object) of the oldest backup
  * on disk for any machine.
@@ -78,26 +98,6 @@ function getOldestBackupDate()
 }
 
 /**
- * Gets a list of all the successful backups that are
- * still kept on disk.
- * @returns
- *   A promise containing an array of successful
- *   backups that are still on disk.
- */
-function getSuccessfulBackupEvents()
-{
-  return db.BackupEvent.findAll({
-    where: {
-      rsyncExitCode: 0,
-      backupTime: {
-        [Op.gte]: getOldestBackupDate()
-      }
-    },
-    order: [['backupTime', 'DESC']]
-  });
-}
-
-/**
  * Gets the last time a summary email
  * was scheduled to go out.
  * @returns
@@ -106,24 +106,6 @@ function getSuccessfulBackupEvents()
 function getLastSummaryEmailDate()
 {
   return util.getLastSummaryEmailTime(config.notifications.summary_schedule, new Date());
-}
-
-/**
- * Gets an array of ProcessEvents (in a promise) in
- * order from the most recent to the least recent.
- * (Typically used to find the most recent restart.)
- * @returns
- *   A promise containing an array of ProcessEvents
- *   in order from most recent to least recent.
- */
-function getProcessEvents()
-{
-  return db.ProcessEvent.findAll({
-    where: {
-      event : 'start'
-    },
-    order: [['eventTime', 'DESC']]
-  });
 }
 
 /**
@@ -174,6 +156,19 @@ function getMachineStatus(machineName)
 }
 
 /**
+ * Gets the number of successful backups by
+ * the machine machineName.
+ * @param machineName
+ *   The name of the machine to inspect for scheduled backups
+ * @returns
+ *   The number of successful backups
+ */
+function getSuccessfulBackups(machineName)
+{
+  return util.countSubdirectoriesExclude(path.join(config.data_dir, machineName), [rsync.getInProgressName()]);
+}
+
+/**
  * Gets the number of scheduled backups by
  * the machine machineName.
  * @param machineName
@@ -187,14 +182,19 @@ function getScheduledBackups(machineName)
 }
 
 /**
- * Gets the number of successful backups by
- * the machine machineName.
- * @param machineName
- *   The name of the machine to inspect for scheduled backups
+ * Gets an array of ProcessEvents (in a promise) in
+ * order from the most recent to the least recent.
+ * (Typically used to find the most recent restart.)
  * @returns
- *   The number of successful backups
+ *   A promise containing an array of ProcessEvents
+ *   in order from most recent to least recent.
  */
-function getSuccessfulBackups(machineName)
+function getProcessEvents()
 {
-  return util.countSubdirectoriesExclude(path.join(config.data_dir, machineName), [rsync.getInProgressName()]);
+  return db.ProcessEvent.findAll({
+    where: {
+      event : 'start'
+    },
+    order: [['eventTime', 'DESC']]
+  });
 }
