@@ -38,8 +38,25 @@ router.get('/:name/backup/:backup_id/size',(req, res, next) => {
       return res.status(404).json({ error: 'No backup with id "' + id + '" for machine "' + machine.name + '"'});
     }
     logger.trace(backupEvent);
-    // TODO: Find backup and return size
-    return res.status(200).json({ size: 'TODO' });
+    if (backupEvent.rsyncExitCode)
+    {
+      return res.json({ size: util.getFormattedSize(0) });
+    }
+    const machinePath = path.join(config.data_dir, machine.name);
+    let backups = fs.readdirSync(machinePath).filter(backup => {
+      return fs.statSync(path.join(machinePath, backup)).isDirectory() &&
+          backup !== rsync.getInProgressName();
+    });
+    const tolerance = 300000;
+    const backupTime = backupEvent.backupTime.getTime() - (1000 * backupEvent.transferTimeSec);
+    for (let backup of backups)
+    {
+      if (Math.abs(util.parseISODateString(backup).getTime() - backupTime) <= tolerance)
+      {
+        return res.json({ size: util.getFormattedSize(util.findDirSize(path.join(machinePath, backup))) });
+      }
+    }
+    return res.status(404).json({ error: 'Backup directory not found.' });
   });
 });
 
