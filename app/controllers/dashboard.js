@@ -1,5 +1,6 @@
 const express = require('express'),
       router = express.Router(),
+      Op = require('sequelize').Op,
       fs = require('fs'),
       path = require('path'),
       system = require('../../lib/system'),
@@ -51,6 +52,28 @@ router.get('/', (req, res, next) => {
     });
   });
 });
+
+/**
+ * Gets the date (as a date object) of the oldest backup
+ * on disk for any machine.
+ * @returns
+ *   A date object representing the oldest backup on disk
+ */
+function getOldestBackupDate()
+{
+  let backups = [];
+  for (let machine of machines)
+  {
+    let machinePath = path.join(config.data_dir, machine.name);
+    backups.push(...fs.readdirSync(machinePath).filter(backup => {
+      return fs.statSync(path.join(machinePath, backup)).isDirectory() &&
+          backup !== rsync.getInProgressName();
+    }));
+  }
+  return util.parseISODateString(backups.reduce((min, value) => {
+    return value < min ? value : min;
+  }));
+}
 
 /**
  * Gets a list of date objects of all the backups on
