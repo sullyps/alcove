@@ -1,14 +1,13 @@
 const express = require('express'),
     router = express.Router(),
-    Op = require('sequelize').Op;
+    Op = require('sequelize').Op,
     fs = require('fs'),
     path = require('path'),
     system = require('../../lib/system'),
     models = require('../models'),
     rsync = require('../../lib/rsync'),
-    util = require('../../lib/util');
-
-const logger = require('../../lib/config/log4js').getLogger();
+    util = require('../../lib/util'),
+    logger = require('../../lib/config/log4js').getLogger();
 
 let config, db;
 
