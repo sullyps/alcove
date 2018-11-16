@@ -6,8 +6,8 @@ const readline = require('readline'),
       argon = require('argon2'),
       wrap = require('wordwrapjs');
 
-const configInit = require('./config/init'),
-      models = require('../app/models');
+const configInit = require('./lib/config/init'),
+      models = require('./app/models');
 
 /**
  * Private helper function that exits the script with message and code.
