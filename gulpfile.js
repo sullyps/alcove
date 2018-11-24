@@ -8,7 +8,7 @@ const gulp = require('gulp'),
   fs = require('fs-extra');
 const exec = require('child_process').exec;
 
-const jsSrc = ['app.js', 'lib/**/*.js', 'app/**.*.js', './public/js/**/*.js'];
+const jsSrc = ['app.js', 'lib/**/*.js', 'app/**/*.js', './public/js/**/*.js'];
 
 // Initialize required directories
 gulp.task('init', () => {
