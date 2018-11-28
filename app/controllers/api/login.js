@@ -11,7 +11,7 @@ const logger = require('../../../lib/config/log4js').getLogger();
 router.post('/login', (req, res, next) => {
   if (!req.body.password || !req.body.username)
   {
-    logger.debug('Request did not include a username or password')
+    logger.debug('Request did not include a username or password');
     return res.status(401).send({ error : "Please enter username and password" });
   }
 
