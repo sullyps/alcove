@@ -12,5 +12,5 @@ router.get('/size',(req, res, next) => {
 });
 
 module.exports = app => {
-  app.use('/api/dashboard', router);
+  app.use('/api/system', router);
 };
