@@ -49,7 +49,7 @@ gulp.task('watch', () => {
   gulp.watch(jsSrc, ['lint']);
 });
 
-gulp.task('develop', ['init'], () => {
+gulp.task('develop', () => {
   livereload.listen();
   nodemon({
     script: 'app.js',
@@ -62,10 +62,10 @@ gulp.task('develop', ['init'], () => {
   });
 });
 
-gulp.task('default', [
+gulp.task('default', gulp.series(
   'init',
   'lint',
   'sass',
   'develop',
   'watch'
-]);
+));
