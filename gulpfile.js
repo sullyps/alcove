@@ -17,7 +17,8 @@ gulp.task('init', () => {
   fs.ensureDirSync('./data/');
   fs.ensureDirSync('./logs/');
   fs.ensureDirSync('./etc/');
-  fs.ensureDirSync('./etc/ssl/');
+  fs.ensureDirSync('./etc/backup/');
+  fs.ensureDirSync('./etc/backup/ssl/');
   fs.ensureDirSync('./resources/');
   // Add any other required directories here
 });
