@@ -1,6 +1,6 @@
 $.ajax({
   method: "GET",
-  url: "/api/dashboard/size",
+  url: "/api/system/size",
   timeout: 15000
 })
 .done((data, statusText, xhr) => {
@@ -15,11 +15,12 @@ $.ajax({
   }
   else if (statusText === "timeout")
   {
-    errorMessage = "The dashboard size request timed out.";
+    errorMessage = "The backup system size request timed out.";
   }
   else
   {
-    errorMessage = "Internal error on dashboard size request" + statusText;
+    errorMessage = "Internal error on backup system size request" + statusText;
   }
+  // TODO:  handle this in the UI
   console.error(errorMessage);
 });

@@ -8,7 +8,7 @@ const gulp = require('gulp'),
   fs = require('fs-extra');
 const exec = require('child_process').exec;
 
-const jsSrc = ['app.js', 'lib/**/*.js', 'app/**.*.js', './public/js/**/*.js'];
+const jsSrc = ['app.js', 'lib/**/*.js', 'app/**/*.js', './public/js/**/*.js'];
 
 // Initialize required directories
 gulp.task('init', () => {
@@ -17,7 +17,8 @@ gulp.task('init', () => {
   fs.ensureDirSync('./data/');
   fs.ensureDirSync('./logs/');
   fs.ensureDirSync('./etc/');
-  fs.ensureDirSync('./etc/ssl/');
+  fs.ensureDirSync('./etc/backup/');
+  fs.ensureDirSync('./etc/backup/ssl/');
   fs.ensureDirSync('./resources/');
   // Add any other required directories here
 });
@@ -48,7 +49,7 @@ gulp.task('watch', () => {
   gulp.watch(jsSrc, ['lint']);
 });
 
-gulp.task('develop', ['init'], () => {
+gulp.task('develop', () => {
   livereload.listen();
   nodemon({
     script: 'app.js',
@@ -61,10 +62,10 @@ gulp.task('develop', ['init'], () => {
   });
 });
 
-gulp.task('default', [
+gulp.task('default', gulp.series(
   'init',
   'lint',
   'sass',
   'develop',
   'watch'
-]);
+));

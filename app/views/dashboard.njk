@@ -47,12 +47,12 @@
     <div class="six column row">
       <div class="column">
         <div class="ui segment" id="dashboard-header-segment">
-          Total Backup Size: <br /> <span class="dashboard-bold" id="totalSize"> xxxx </span>
+          Total Backup Size: <br /> <span class="dashboard-bold" id="totalSize">...</span>
         </div>
       </div>
       <div class="column">
         <div class="ui segment" id="dashboard-header-segment">
-          Free Space: <br /> <span class="dashboard-bold" id="freeSpace"> xxxx </span>
+          Free Space: <br /> <span class="dashboard-bold" id="freeSpace">...</span>
         </div>
       </div>
       <div class="column">
@@ -92,31 +92,33 @@
       <tr>
 
       {% for machine in machines %}
-
-        <td> <span class="dashboard-bold"> {{ machine.name }} </span> </td>
-
+        <td>
+          <span class="dashboard-bold"> {{ machine.name }} </span>
+        </td>
         <!--Spacing is very important; please do not change it.-->
         {% if machine.scheduledBackups == 0 %}
-        <td><span class="dashboard-grey">   <i class="minus icon"></i>
-        {{ machine.successfulBackups }} of {{ machine.scheduledBackups }} backups successful</span>
-
+          <td>
+            <span class="dashboard-grey">   <i class="minus icon"></i>
+            {{ machine.successfulBackups }} of {{ machine.scheduledBackups }} backups successful</span>
+          </td>
         {% elif machine.scheduledBackups == machine.successfulBackups %}
-        <td><span class="dashboard-green"><i class="thumbs up icon"></i></span>
-        {{ machine.successfulBackups }} of {{ machine.scheduledBackups }} backups successful
-
+          <td>
+            <span class="dashboard-green"><i class="thumbs up icon"></i></span>
+            {{ machine.successfulBackups }} of {{ machine.scheduledBackups }} backups successful
+          </td>
         {% elif machine.successfulBackups == 0 %}
-        <td class="error">  <i class="attention icon"></i>
-        {{ machine.successfulBackups }} of {{ machine.scheduledBackups }} backups successful
-
+          <td class="error">
+            <i class="attention icon"></i>
+            {{ machine.successfulBackups }} of {{ machine.scheduledBackups }} backups successful
+          </td>
         {% else %}
-        <td class="warning"> <span class=dashboard-yellow><i class="question icon"></i></span>
-        {{ machine.successfulBackups }} of {{ machine.scheduledBackups }} backups successful
-
+          <td class="warning">
+            <span class=dashboard-yellow><i class="question icon"></i></span>
+            {{ machine.successfulBackups }} of {{ machine.scheduledBackups }} backups successful
+          </td>
         {% endif %}
-
-        </td>
-        <td> xxxx </td>
-        <td> {{ machine.timeSinceLastBackup }} </td>
+        <td>...</td>
+        <td>{{ machine.timeSinceLastBackup }}</td>
       </tr>
 
       {% endfor %}
@@ -127,6 +129,7 @@
 {% endblock %}
 
 {% block js %}
-<script class="text/javascript"> $('table').tablesort(); </script>
-<script src="/js/dashboard.js"></script>
+  <script src="/js/vendor/jquery.tablesort.min.js"></script>
+  <script src="/js/dashboard.js"></script>
+  <script class="text/javascript"> $('table').tablesort(); </script>
 {% endblock %}

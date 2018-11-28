@@ -36,6 +36,7 @@
     "nodemailer": "^4.6",
     "nunjucks": "^3.1",
     "path": "^0.12",
+    "prompt": "^1.0",
     "rsyncwrapper": "^3.0",
     "sequelize": "^4.41",
     "serve-favicon": "^2.5",
@@ -43,10 +44,10 @@
     "wordwrapjs": "^3.0"
   },
   "devDependencies": {
-    "gulp": "^3.9",
+    "gulp": "^4.0.0",
     "gulp-jshint": "^2.1",
-    "gulp-livereload": "^4.0",
-    "gulp-nodemon": "^2.2",
+    "gulp-livereload": "^4.0.1",
+    "gulp-nodemon": "^2.4.1",
     "gulp-plumber": "^1.2",
     "gulp-sass": "^4.0",
     "gulp-util": "^3.0",

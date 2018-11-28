@@ -91,6 +91,7 @@ function getSuccessfulBackupEvents()
  */
 function getOldestBackupDate()
 {
+  // TODO: let's see if we can clean up this confusing flow (see linter)
   let backups = [];
   for (let machineName in machines)
   {
