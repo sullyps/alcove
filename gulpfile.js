@@ -11,7 +11,7 @@ const exec = require('child_process').exec;
 const jsSrc = ['app.js', 'lib/**/*.js', 'app/**/*.js', './public/js/**/*.js'];
 
 // Initialize required directories
-gulp.task('init', () => {
+gulp.task('init', (done) => {
   gutil.log('Synchronously creating required directories');
   fs.ensureDirSync('./public/');
   fs.ensureDirSync('./data/');
@@ -20,11 +20,15 @@ gulp.task('init', () => {
   fs.ensureDirSync('./etc/backup/');
   fs.ensureDirSync('./etc/backup/ssl/');
   fs.ensureDirSync('./resources/');
+  
   // Add any other required directories here
+  
+  // Signal completion
+  done();
 });
 
 // Lint Task
-gulp.task('lint', () => {
+gulp.task('lint', (done) => {
   gulp.src(jsSrc)
     .pipe(jshint({ esversion: 6, node: true }))
     .pipe(jshint.reporter('default', {verbose: true}));
@@ -34,22 +38,31 @@ gulp.task('lint', () => {
     if (err) console.log("Couldn't run annotation counting script: ", err);
     console.log(stdout);
   });
+  
+  // Signal completion
+  done();
 });
 
-gulp.task('sass', () => {
+gulp.task('sass', (done) => {
   gulp.src('./sass/style.scss')
     .pipe(plumber())
     .pipe(sass().on('error', sass.logError))
     .pipe(gulp.dest('./public/css'))
     .pipe(livereload());
+  
+  // Signal completion
+  done();
 });
 
-gulp.task('watch', () => {
-  gulp.watch('./sass/**/*.scss', ['sass']);
-  gulp.watch(jsSrc, ['lint']);
+gulp.task('watch', (done) => {
+  gulp.watch('./sass/**/*.scss', gulp.series('sass'));
+  gulp.watch(jsSrc, gulp.series('lint'));
+  
+  // Signal completion
+  done();
 });
 
-gulp.task('develop', () => {
+gulp.task('develop', (done) => {
   livereload.listen();
   nodemon({
     script: 'app.js',
@@ -60,6 +73,9 @@ gulp.task('develop', () => {
       livereload.changed(__dirname);
     }, 500);
   });
+  
+  // Signal completion
+  done();
 });
 
 gulp.task('default', gulp.series(
