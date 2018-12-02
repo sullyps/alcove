@@ -18,11 +18,6 @@ router.get('/', (req, res, next) => {
   let dashboard = {};
   getSuccessfulBackupEvents()
   .then(successfulBackupEvents => {
-    dashboard.oldestBackupDate = util.getFormattedDate(successfulBackupEvents[successfulBackupEvents.length - 1].backupTime).substring(0, 10);
-    dashboard.newestBackupDate = util.getFormattedDate(successfulBackupEvents[0].backupTime).substring(0, 10);
-
-    dashboard.lastSummaryEmailDate = util.getFormattedDate(getLastSummaryEmailDate()).substring(0, 10);
-
     let machineStatuses = getMachineStatuses();
     dashboard.successfulMachines = machineStatuses.successful;
     dashboard.partiallySuccessfulMachines = machineStatuses.partiallySuccessful;
@@ -52,7 +47,7 @@ router.get('/', (req, res, next) => {
     return getProcessEvents();
   })
   .then(processEvents => {
-    dashboard.lastBackupSystemRestart = util.getFormattedDate(processEvents[0].eventTime).substring(0, 10);
+    dashboard.lastBackupSystemRestart = util.getFormattedDate(processEvents[0].eventTime);
 
     dashboard.title = 'Dashboard :: Alcove Backup System';
     res.render('dashboard', dashboard);
@@ -105,17 +100,6 @@ function getOldestBackupDate()
   return util.parseISODateString(backups.reduce((min, value) => {
     return value < min ? value : min;
   }));
-}
-
-/**
- * Gets the last time a summary email
- * was scheduled to go out.
- * @returns
- *   The last summary email date as a date object.
- */
-function getLastSummaryEmailDate()
-{
-  return util.getLastSummaryEmailTime(config.notifications.summary_schedule, new Date());
 }
 
 /**

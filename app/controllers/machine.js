@@ -58,6 +58,7 @@ router.get('/:name',(req, res, next) => {
         errReason: event.rsyncExitCode ? event.rsyncExitReason : null
       });
     }
+    console.log(machineInfo);
     res.render('machine', machineInfo);
   });
 });
