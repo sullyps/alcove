@@ -47,7 +47,7 @@ router.get('/', (req, res, next) => {
     return getProcessEvents();
   })
   .then(processEvents => {
-    dashboard.lastBackupSystemRestart = util.getFormattedDate(processEvents[0].eventTime).substring(0, 10);
+    dashboard.lastBackupSystemRestart = util.getFormattedDate(processEvents[0].eventTime);
 
     dashboard.title = 'Dashboard :: Alcove Backup System';
     res.render('dashboard', dashboard);
