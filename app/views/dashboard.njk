@@ -33,18 +33,10 @@
               Unsuccessful
             </div>
           </div>
-          <div class="grey statistic">
-            <div class="value">
-              {{ idleMachines }}
-            </div>
-            <div class="label" id="dashboard-header-stats-labels">
-              Idle
-            </div>
-          </div>
         </div>
       </div>
     </div>
-    <div class="six column row">
+    <div class="three column row">
       <div class="column">
         <div class="ui segment" id="dashboard-header-segment">
           Total Backup Size: <br /> <span class="dashboard-bold" id="totalSize">...</span>
@@ -57,22 +49,7 @@
       </div>
       <div class="column">
         <div class="ui segment" id="dashboard-header-segment">
-          Oldest Backup: <br /> <span class="dashboard-bold"> {{ oldestBackupDate }} </span>
-        </div>
-      </div>
-      <div class="column">
-        <div class="ui segment" id="dashboard-header-segment">
-          Newest Backup: <br /> <span class="dashboard-bold"> {{ newestBackupDate }} </span>
-        </div>
-      </div>
-      <div class="column">
-        <div class="ui segment" id="dashboard-header-segment">
-          Last Summary Email: <br /> <span class="dashboard-bold"> {{ lastSummaryEmailDate }} </span>
-        </div>
-      </div>
-      <div class="column">
-        <div class="ui segment" id="dashboard-header-segment">
-          Last Restart: <br /> <span class="dashboard-bold"> {{ lastBackupSystemRestart }} </span>
+          Running since: <br /> <span class="dashboard-bold"> {{ lastBackupSystemRestart }} </span>
         </div>
       </div>
     </div>
