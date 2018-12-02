@@ -12,6 +12,33 @@
       </div>
     </div>
   </div>
+
+  <table class="ui striped selectable sortable celled table" id="dashboard-table">
+    <thead>
+      <tr>
+        <th>Status</th>
+        <th>Performed</th>
+        <th>Duration</th>
+        <th>Transferred</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for event in events %}
+        <tr>
+          <td>
+            {% if event.exitCode == 0 %}
+              <span class="success">Success</span>
+            {% else %}
+              <span class="failed">Failed (code: {{ event.exitCode }})</span>
+            {% endif %}
+          </td>
+          <td><b>{{ event.date }}</b> @ <b>{{ event.time }}</b></td>
+          <td>{{ event.transferTime }}</td>
+          <td>{{ event.size }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 </div>
 {% endblock %}
 
