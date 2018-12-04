@@ -3,7 +3,6 @@ const gulp = require('gulp'),
   plumber = require('gulp-plumber'),
   livereload = require('gulp-livereload'),
   jshint = require('gulp-jshint'),
-  gutil = require('gulp-util'),
   sass = require('gulp-sass'),
   fs = require('fs-extra');
 const exec = require('child_process').exec;
@@ -12,7 +11,7 @@ const jsSrc = ['app.js', 'lib/**/*.js', 'app/**/*.js', './public/js/**/*.js'];
 
 // Initialize required directories
 gulp.task('init', (done) => {
-  gutil.log('Synchronously creating required directories');
+  console.log('Synchronously creating required directories');
   fs.ensureDirSync('./public/');
   fs.ensureDirSync('./data/');
   fs.ensureDirSync('./logs/');

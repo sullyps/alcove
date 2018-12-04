@@ -50,7 +50,6 @@
     "gulp-nodemon": "^2.4.1",
     "gulp-plumber": "^1.2",
     "gulp-sass": "^4.0",
-    "gulp-util": "^3.0",
     "jest": "^23.6",
     "jshint": "^2.9"
   }
