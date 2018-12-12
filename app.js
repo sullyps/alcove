@@ -98,6 +98,18 @@ new Promise( (resolve, reject) => {
   // Webapp
   let app = express();
   require('./lib/config/express')(app, config);
-  app.listen(config.port);
-  logger.info('Monitoring interface ready and listening on port ' + config.port + '...');
+
+  // Start either HTTP or HTTPS server, based on configuration file
+  if (config.secure)
+  {
+    let key = fs.readFileSync(config.secure.key, 'utf-8');
+    let cert = fs.readFileSync(config.secure.cert, 'utf-8');
+    require('https').createServer({'key': key, 'cert': cert}, app).listen(config.port);
+    logger.info('HTTPS Monitoring interface ready and listening on port ' + config.port + '...');
+  }
+  else
+  {
+    app.listen(config.port);
+    logger.info('HTTP Monitoring interface ready and listening on port ' + config.port + '...');
+  }
 });
