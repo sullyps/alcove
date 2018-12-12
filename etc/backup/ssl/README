@@ -7,7 +7,7 @@ requires HTTPS communication.
 Use the following two commands to create an ECDSA key and self-signed cert.
 
 ```
-openssl ecparam -out ssl.key -name secp521r1 -genkey
+openssl ecparam -out ssl.key -name prime256v1 -genkey
 openssl req -x509 -new -key ssl.key -out ssl.crt -days 365 -subj "/C=US/ST=Iowa/L=Coralville/O=Bio::Neos, Inc./CN=localhost"
 ```
 
