@@ -29,6 +29,17 @@
 ; Destination for the backup data.
 ;data_dir='data/'
 
+; Allow the web server to initiate sessions even if it is likely that the
+; session ID will be sent over plaintext (not configured with HTTPS enabled, 
+; and no forward proxy detected that is using HTTPS). It might be required
+; to enable this if you have a broken forward proxy that is unable to set
+; the "X-Forwarded-Proto" header. 
+; 
+; ** Use with caution **
+; This setting enables the system to operate in a manner that could allow
+; for trivial session hijacking to occur...
+;allow_insecure=false
+
 ; HTTPS CONFIG
 ; Location of the ssl key / cert. If specified, the webserver will only run in
 ; HTTPS mode.
