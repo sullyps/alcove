@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
+    'bucket' : DataTypes.STRING,
     'rsyncExitCode' : DataTypes.INTEGER,
     'rsyncExitReason' : DataTypes.STRING,
     'transferSize' : DataTypes.INTEGER,
