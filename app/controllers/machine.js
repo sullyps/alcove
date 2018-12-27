@@ -44,19 +44,23 @@ router.get('/:name',(req, res, next) => {
       lastBackup = backupEvents[i];
       i++;
     }
-    while (lastBackup.rsyncExitCode !== 0);
-    machineInfo.lastBackupDate = util.getFormattedDate(lastBackup.backupTime);
-    machineInfo.events = [];
-    for (let event of backupEvents)
+    while (lastBackup && lastBackup.rsyncExitCode !== 0);
+
+    if (lastBackup)
     {
-      machineInfo.events.push({
-        date: util.getFormattedDate(event.backupTime).substring(0, 10),
-        time: util.getFormattedDate(event.backupTime).substring(11),
-        size: util.getFormattedSize(event.transferSize),
-        transferTime: util.getFormattedTimespan(1000 * event.transferTimeSec),
-        exitCode: event.rsyncExitCode,
-        errReason: event.rsyncExitCode ? event.rsyncExitReason : null
-      });
+      machineInfo.lastBackupDate = util.getFormattedDate(lastBackup.backupTime);
+      machineInfo.events = [];
+      for (let event of backupEvents)
+      {
+        machineInfo.events.push({
+          date: util.getFormattedDate(event.backupTime).substring(0, 10),
+          time: util.getFormattedDate(event.backupTime).substring(11),
+          size: util.getFormattedSize(event.transferSize),
+          transferTime: util.getFormattedTimespan(1000 * event.transferTimeSec),
+          exitCode: event.rsyncExitCode,
+          errReason: event.rsyncExitCode ? event.rsyncExitReason : null
+        });
+      }
     }
     console.log(machineInfo);
     res.render('machine', machineInfo);
