@@ -57,7 +57,10 @@ router.get('/:name/backup/:backup_id/size',(req, res, next) => {
     {
       if (Math.abs(util.parseISODateString(backup).getTime() - backupTime) <= tolerance)
       {
-        return res.json({ size: util.getFormattedSize(util.findDirSize(path.join(machinePath, backup))) });
+        // TODO: use memory models
+        // Old call was:
+        //util.getFormattedSize(util.findDirSize(path.join(machinePath, backup))) });
+        return res.json({ size: 'TODO' });
       }
     }
     return res.status(404).json({ error: 'Backup directory not found.' });

@@ -159,7 +159,10 @@ function getMachineStatus(machineName)
  */
 function getSuccessfulBackups(machineName)
 {
-  return util.countSubdirectoriesExclude(path.join(config.data_dir, machineName), [rsync.getInProgressName()]);
+  // TODO: use memory models
+  // Old call was:
+  //return util.countSubdirectoriesExclude(path.join(config.data_dir, machineName), [rsync.getInProgressName()]);
+  return 0; // TODO
 }
 
 /**

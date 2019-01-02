@@ -30,9 +30,12 @@ router.get('/:name',(req, res, next) => {
   config = system.getConfig();
   db = models.getDatabase();
 
+  // TODO: use memory models
+  // Old call was:
+  //util.countSubdirectoriesExclude(path.join(config.data_dir, machine.name), [rsync.getInProgressName()]),
   let machineInfo = {
     name: machine.name,
-    successfulBackups: util.countSubdirectoriesExclude(path.join(config.data_dir, machine.name), [rsync.getInProgressName()]),
+    successfulBackups: 0, // TODO
     totalBackups: system.getBuckets(machine.schedule, new Date()).length
   };
 

@@ -5,10 +5,17 @@ const express = require('express'),
 
 router.get('/size',(req, res, next) => {
   let config = system.getConfig();
-  return res.json({
-    dirSize: util.getFormattedSize(util.findDirSize(config.data_dir)),
-    freeSpace: util.getFormattedSize(util.findFreeSpace(config.data_dir))
-  });
+  Promise.all([util.findDirSize(config.data_dir), util.findFreeSpace(config.data_dir)])
+    .then(results => {
+      res.json({
+        dirSize: util.getFormattedSize(results[0] * 1024), 
+        freeSpace: util.getFormattedSize(results[1] * 1024)
+      });
+    })
+    .catch(err => {
+      // TODO: log this
+      res.json({'error': 'An internal error occurred...'});
+    });
 });
 
 module.exports = app => {
