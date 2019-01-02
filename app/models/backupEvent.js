@@ -10,11 +10,14 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
+    'schedule' : DataTypes.STRING,
     'bucket' : DataTypes.STRING,
     'rsyncExitCode' : DataTypes.INTEGER,
     'rsyncExitReason' : DataTypes.STRING,
     'transferSize' : DataTypes.INTEGER,
-    'transferTimeSec' : DataTypes.INTEGER
+    'transferTimeSec' : DataTypes.INTEGER,
+    'dir' : DataTypes.STRING,
+    'size' : DataTypes.INTEGER
   }, {
     classMethods: {
       associate: (models) => {
