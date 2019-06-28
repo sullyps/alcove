@@ -7,6 +7,9 @@ WORKDIR /opt/backup/
 # Install the global gulp executable
 RUN npm install gulp -g
 
+# Prevent 404 error on apt-get commands as per https://superuser.com/a/1423685
+RUN printf "deb http://archive.debian.org/debian/ jessie main\ndeb-src http://archive.debian.org/debian/ jessie main\ndeb http://security.debian.org jessie/updates main\ndeb-src http://security.debian.org jessie/updates main" > /etc/apt/sources.list
+
 # Install sendmail compatible executable
 RUN apt-get update && apt-get install ssmtp && echo "FromLineOverride=YES" >> /etc/ssmtp/ssmtp.conf
 
