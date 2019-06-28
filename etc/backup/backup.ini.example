@@ -105,6 +105,8 @@
 ; SMTP CONFIG
 ; If this section is skipped, the emails will attempt to send directly using
 ; the local sendmail executable for the machine
+; Note that gmail accounts configured for sending emails must authorize less
+; secure apps as described at https://support.google.com/a/answer/6260879
 [notifications.smtp]
 ; Hostname for the smtp server through which the emails are sent.
 ;host='smtp.gmail.com'
