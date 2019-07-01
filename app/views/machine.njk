@@ -1,47 +1,80 @@
 {% extends 'layout.njk' %}
 
 {% block content %}
-<div class="machine">
-  <div class="ui fluid stackable grid" id="dashboard-header-grid">
-    <div class="row" id="dashboard-header-row-top">
-      <div class="eight wide column">
-        <img id="logo" src="/logo.png">
+  <div class="dashboard-body">
+    <div class="ui fluid stackable grid" id="dashboard-header-grid">
+      <div class="row" id="dashboard-header-row-top">
+        <div class="eight wide column">
+          <img id="logo" src="/logo.png">
+        </div>
       </div>
-      <div class="eight wide column">
-        <h1>{{ name }}</h1>
+      <div class="three column row">
+        <div class="column">
+          <div class="ui segment" id="dashboard-header-segment">
+            Total Backup Size: <br /> <span class="dashboard-bold" id="totalSize">...</span>
+          </div>
+        </div>
+        <div class="column">
+          <div class="ui segment" id="dashboard-header-segment">
+            Free Space: <br /> <span class="dashboard-bold" id="freeSpace">...</span>
+          </div>
+        </div>
+        <div class="column">
+          <div class="ui segment" id="dashboard-header-segment">
+            Running since: <br /> <span class="dashboard-bold"> {{ lastBackupSystemRestart }} </span>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
 
-  <table class="ui striped selectable sortable celled table" id="dashboard-table">
-    <thead>
+    <table class="ui striped selectable sortable celled table" id="dashboard-table">
+      <thead>
       <tr>
-        <th>Status</th>
-        <th>Performed</th>
-        <th>Duration</th>
-        <th>Transferred</th>
+        <th class="dashboard-table-name"> Machine Name </th>
+        <th class="dashboard-table-status"> Status </th>
+        <th class="dashboard-table-size"> Total Size </th>
+        <th> Last Backup </th>
       </tr>
-    </thead>
-    <tbody>
-      {% for event in events %}
+      </thead>
+      <tbody>
+      {% for machine in machines %}
         <tr>
           <td>
-            {% if event.exitCode == 0 %}
-              <span class="success">Success</span>
-            {% else %}
-              <span class="failed">Failed (code: {{ event.exitCode }})</span>
-            {% endif %}
+            <a href="/machine/{{ machine.name }}" class="dashboard-bold"> {{ machine.name }} </a>
           </td>
-          <td><b>{{ event.date }}</b> @ <b>{{ event.time }}</b></td>
-          <td>{{ event.transferTime }}</td>
-          <td>{{ event.size }}</td>
+          <!--Spacing is very important; please do not change it.-->
+          {% if machine.scheduledBackups == 0 %}
+            <td>
+              <span class="dashboard-grey">   <i class="minus icon"></i>
+              {{ machine.successfulBackups }} of {{ machine.scheduledBackups }} backups successful</span>
+            </td>
+            {% elif machine.scheduledBackups == machine.successfulBackups %}
+            <td>
+              <span class="dashboard-green"><i class="thumbs up icon"></i></span>
+              {{ machine.successfulBackups }} of {{ machine.scheduledBackups }} backups successful
+            </td>
+            {% elif machine.successfulBackups == 0 %}
+            <td class="error">
+              <i class="attention icon"></i>
+              {{ machine.successfulBackups }} of {{ machine.scheduledBackups }} backups successful
+            </td>
+          {% else %}
+            <td class="warning">
+              <span class=dashboard-yellow><i class="question icon"></i></span>
+              {{ machine.successfulBackups }} of {{ machine.scheduledBackups }} backups successful
+            </td>
+          {% endif %}
+          <td>...</td>
+          <td>{{ machine.timeSinceLastBackup }}</td>
         </tr>
       {% endfor %}
-    </tbody>
-  </table>
-</div>
+      </tbody>
+    </table>
+  </div>
 {% endblock %}
 
 {% block js %}
-<script class="text/javascript"> $('table').tablesort(); </script>
+  <script src="/js/vendor/jquery.tablesort.min.js"></script>
+  <script src="/js/dashboard.js"></script>
+  <script class="text/javascript"> $('table').tablesort(); </script>
 {% endblock %}

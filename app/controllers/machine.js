@@ -1,11 +1,8 @@
 const express = require('express'),
     router = express.Router(),
     Op = require('sequelize').Op,
-    fs = require('fs'),
-    path = require('path'),
     system = require('../../lib/system'),
     models = require('../models'),
-    rsync = require('../../lib/rsync'),
     util = require('../../lib/util'),
     logger = require('../../lib/config/log4js').getLogger();
 
@@ -18,8 +15,8 @@ router.get('/:name',(req, res, next) => {
   {
     logger.warn('Request for unknown machine with name: "' + req.params.name + '"');
     return res.status(404).render('error', {
-      message: 'Machine Not Configured', 
-      error: { 
+      message: 'Machine Not Configured',
+      error: {
         status: 'There is no machine with the name of "' + req.params.name + '" configured for this system...'
       }
     });
@@ -30,35 +27,13 @@ router.get('/:name',(req, res, next) => {
   config = system.getConfig();
   db = models.getDatabase();
 
-  let machineInfo = {
-    name: machine.name,
-    successfulBackups: util.countSubdirectoriesExclude(path.join(config.data_dir, machine.name), [rsync.getInProgressName()]),
-    totalBackups: system.getBuckets(machine.schedule, new Date()).length
-  };
-
-  getBackupEvents(machine.name)
-  .then(backupEvents => {
-    let lastBackup, i = 0;
-    do
-    {
-      lastBackup = backupEvents[i];
-      i++;
-    }
-    while (lastBackup.rsyncExitCode !== 0);
-    machineInfo.lastBackupDate = util.getFormattedDate(lastBackup.backupTime);
-    machineInfo.events = [];
-    for (let event of backupEvents)
-    {
-      machineInfo.events.push({
-        date: util.getFormattedDate(event.backupTime).substring(0, 10),
-        time: util.getFormattedDate(event.backupTime).substring(11),
-        size: util.getFormattedSize(event.transferSize),
-        transferTime: util.getFormattedTimespan(1000 * event.transferTimeSec),
-        exitCode: event.rsyncExitCode,
-        errReason: event.rsyncExitCode ? event.rsyncExitReason : null
-      });
-    }
-    console.log(machineInfo);
+  getBackupCalendar(machine, 5)
+  .then(backupCalendar => {
+    const machineInfo = {
+      name: machine.name,
+      backupCalendar: backupCalendar
+    };
+    console.log(JSON.stringify(machineInfo.backupCalendar));
     res.render('machine', machineInfo);
   });
 });
@@ -68,49 +43,99 @@ module.exports = app => {
 };
 
 /**
- * Gets a list of all the backup events (successful and
- * unsuccessful) since the last backup on disk for machine
- * machineName.
- * @param machineName
- *   The name of the machine to inspect for backup events.
+ * Gets a history of all the backups on the given machine
+ * in a calendar format i.e. each is given a day and the
+ * events are arranged in a matrix that shows the past
+ * five weeks
+ * @param machine
+ *   The machine to check for backup events
+ * @param CALENDAR_ROWS
+ *   The number of rows to include in the calendar (defaults to 5)
  * @returns
- *   A promise containing an array of backup events
+ *   The calendar object with the backup events
  */
-function getBackupEvents(machineName)
+function getBackupCalendar(machine, CALENDAR_ROWS = 5)
 {
+  let today = new Date();
+
+  // Initialize a flat (one-dimensional) calendar array for easier manipulation
+  let calendar = [];
+  for (let i = 0; i < CALENDAR_ROWS * 7; i++)
+  {
+    calendar.push({
+      date: undefined,
+      backupEvents: [],
+      successfulBackups: 0,
+      attemptedBackups: 0,
+      bucket: false
+    });
+  }
+
+  // Get dates for each day on the calendar
+  calendar[(CALENDAR_ROWS - 1) * 7 + today.getDay()].date = today;
+  for (let i = (CALENDAR_ROWS - 1) * 7 + today.getDay() - 1; i >= 0; i--)
+  {
+    calendar[i].date = util.addDays(calendar[i + 1].date, -1);
+  }
+  for (let i = (CALENDAR_ROWS - 1) * 7 + today.getDay() + 1; i < calendar.length; i++)
+  {
+    calendar[i].date = util.addDays(calendar[i - 1].date, 1);
+  }
+
+  // Query the DB for all backup events that belong on the calendar
   return db.BackupEvent.findAll({
     where: {
-      machine: machineName,
+      machine: machine.name,
       backupTime: {
-        [Op.gte]: getOldestBackupDate(machineName)
+        [Op.gte]: calendar[0].date.setHours(0, 0, 0, 0)
       }
     },
-    order: [['backupTime', 'DESC']]
-  });
-}
+    order: [['backupTime']]
+  })
+  .then(backupEvents => {
+    // Add backup events to each calendar date and update each day's
+    // count of successful and attempted backups
+    backupEvents.forEach(backupEvent => {
+      for (let i = 0; i < calendar.length; i++)
+      {
+        if (util.sameDay(calendar[i].date, backupEvent.backupTime))
+        {
+          calendar[i].backupEvents.push(backupEvent);
+          calendar[i].attemptedBackups++;
+          if (!backupEvent.rsyncExitCode)
+          {
+            calendar[i].successfulBackups++;
+          }
+          return;
+        }
+      }
+    });
 
-/**
- * Gets the date of the oldest backup on disk
- * for machine machineName
- * @param machineName
- *   The name of the machine to inspect for the oldest backup
- * @returns
- *   A date object representing the oldest backup on disk
- */
-function getOldestBackupDate(machineName)
-{
-  const machinePath = path.join(config.data_dir, machineName);
-  let backups = fs.readdirSync(machinePath).filter(backup => {
-    return fs.statSync(path.join(machinePath, backup)).isDirectory() &&
-        backup !== rsync.getInProgressName();
+    // Count which days should have attempted to back up
+    const buckets = system.getBuckets(machine.schedule, new Date());
+    buckets.forEach(bucket => {
+      for (let i = 0; i < calendar.length; i++)
+      {
+        if (util.sameDay(calendar[i].date, bucket.date))
+        {
+          calendar[i].bucket = true;
+          return;
+        }
+      }
+    });
+
+    // Convert the flat array to a 2D array like an actual calendar
+    let calendarMatrix = [];
+    for (let i = 0; i < CALENDAR_ROWS; i++)
+    {
+      let row = [];
+      for (let j = 0; j < 7; j++)
+      {
+        row.push(calendar[(7 * i) + j]);
+      }
+      calendarMatrix.push(row);
+    }
+
+    return calendarMatrix;
   });
-  let backupDates = [];
-  for (let backup of backups)
-  {
-    backupDates.push(util.parseISODateString(backup));
-  }
-  backupDates.sort((a, b) => {
-    return a.getTime() - b.getTime();
-  });
-  return backupDates[0];
 }
