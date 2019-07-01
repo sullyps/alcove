@@ -38,7 +38,7 @@
     "path": "^0.12",
     "prompt": "^1.0",
     "rsyncwrapper": "^3.0",
-    "sequelize": "^4.41",
+    "sequelize": "^5.9",
     "serve-favicon": "^2.5",
     "sqlite3": "^4.0",
     "wordwrapjs": "^3.0"
