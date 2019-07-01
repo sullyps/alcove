@@ -1,7 +1,6 @@
 const express = require('express'),
     router = express.Router(),
     Op = require('sequelize').Op,
-    fs = require('fs'),
     path = require('path'),
     system = require('../../lib/system'),
     models = require('../models'),
@@ -63,17 +62,27 @@ function addDays(date, days)
   return result;
 }
 
-function getBackupCalendarHistory(machine, schedule)
+function sameDay(date1, date2)
+{
+  return date1.getFullYear() === date2.getFullYear() &&
+      date1.getMonth() === date2.getMonth() &&
+      date1.getDate() === date2.getDate();
+}
+
+function getBackupCalendarHistory(machine)
 {
   let today = new Date();
-  today.setHours(schedule.time.hours, schedule.time.minutes, 0, 0);
 
   // Initialize flat (one-dimensional) calendar array for easier manipulation
   let calendar = [];
   for (let i = 0; i < 5 * 7; i++)
   {
     calendar.push({
-      date: null
+      date: undefined,
+      backupEvents: [],
+      successfulBackups: 0,
+      attemptedBackups: 0,
+      bucket: false
     });
   }
 
@@ -98,20 +107,47 @@ function getBackupCalendarHistory(machine, schedule)
     order: [['backupTime']]
   })
   .then(backupEvents => {
-    console.log(JSON.stringify(backupEvents));
-  });
+    // Add backup events to each calendar date
+    backupEvents.forEach(backupEvent => {
+      for (let i = 0; i < calendar.length; i++)
+      {
+        if (sameDay(calendar[i].date, backupEvent.backupTime))
+        {
+          calendar[i].backupEvents.push(backupEvent);
+          calendar[i].attemptedBackups++;
+          if (!backupEvent.rsyncExitCode)
+          {
+            calendar[i].successfulBackups++;
+          }
+          return;
+        }
+      }
+    });
 
-  // Convert to a 2D array like an actual calendar
-  let calendarMatrix = [];
-  for (let i = 0; i < 5; i++)
-  {
-    let row = [];
-    for (let j = 0; j < 7; j++)
+    // Count successful and unsuccessful backup days
+    const buckets = system.getBuckets(machine.schedule, new Date());
+    buckets.forEach(bucket => {
+      for (let i = 0; i < calendar.length; i++)
+      {
+        if (sameDay(calendar[i].date, bucket.date))
+        {
+          calendar[i].bucket = true;
+          return;
+        }
+      }
+    });
+
+    // Convert to a 2D array like an actual calendar
+    let calendarMatrix = [];
+    for (let i = 0; i < 5; i++)
     {
-      row.push(calendar[(7 * i) + j]);
+      let row = [];
+      for (let j = 0; j < 7; j++)
+      {
+        row.push(calendar[(7 * i) + j]);
+      }
+      calendarMatrix.push(row);
     }
-    calendarMatrix.push(row);
-  }
-  print2DArray(calendarMatrix);
-  // console.log(flatCalendar);
+    print2DArray(calendarMatrix);
+  });
 }
