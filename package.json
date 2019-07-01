@@ -38,7 +38,7 @@
     "path": "^0.12",
     "prompt": "^1.0",
     "rsyncwrapper": "^3.0",
-    "sequelize": "^4.41",
+    "sequelize": "^5.9",
     "serve-favicon": "^2.5",
     "sqlite3": "^4.0",
     "wordwrapjs": "^3.0"
@@ -50,7 +50,7 @@
     "gulp-nodemon": "^2.4.1",
     "gulp-plumber": "^1.2",
     "gulp-sass": "^4.0",
-    "jest": "^23.6",
+    "jest": "^24.8",
     "jshint": "^2.9"
   }
 }
