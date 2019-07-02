@@ -31,9 +31,19 @@ router.get('/:name',(req, res, next) => {
   .then(backupCalendar => {
     const machineInfo = {
       machine: machine,
-      backupCalendar: backupCalendar
+      backupCalendar: backupCalendar,
+      backupEvents: []
     };
-    console.log(JSON.stringify(machineInfo.backupCalendar));
+    backupCalendar.forEach(week => {
+      week.forEach(day => {
+        day.backupEvents.forEach(backupEvent => {
+          backupEvent.transferSizeStr = util.getFormattedSize(backupEvent.transferSize);
+          backupEvent.transferTimeStr = util.getFormattedTimespan(backupEvent.transferTimeSec);
+          machineInfo.backupEvents.push(backupEvent);
+        });
+      })
+    });
+    machineInfo.backupEvents.sort((a, b) => b.backupTime - a.backupTime);
     res.render('machine', machineInfo);
   });
 });
@@ -67,6 +77,7 @@ function getBackupCalendar(machine, CALENDAR_ROWS = 5)
       date: undefined,
       dateString: undefined,
       backupEvents: [],
+      id: undefined,
       successfulBackups: 0,
       attemptedBackups: 0,
       bucket: false
@@ -132,6 +143,22 @@ function getBackupCalendar(machine, CALENDAR_ROWS = 5)
           calendar[i].bucket = true;
           return;
         }
+      }
+    });
+
+    calendar.forEach((day, i) => {
+      let clickableBackupEvent = undefined; // This is the event that the calendar will link to on its day
+      day.backupEvents.forEach(backupEvent => {
+        if (!day.id || // Each day will link to an event if available
+            (backupEvent.rsyncExitCode === 0 && (backupEvent.date > clickableBackupEvent.date || clickableBackupEvent.rsyncExitCode !== 0)) ||
+            (backupEvent.rsyncExitCode !== 0 && clickableBackupEvent.rsyncExitCode !== 0 && backupEvent.date > clickableBackupEvent.date))
+        {
+          clickableBackupEvent = backupEvent;
+        }
+      });
+      if (clickableBackupEvent)
+      {
+        calendar[i].id = clickableBackupEvent.id;
       }
     });
 

@@ -5,8 +5,9 @@
     <div class="ui fluid stackable grid" id="dashboard-header-grid">
       <div class="row" id="dashboard-header-row-top">
         <div class="six wide column">
-          <img id="logo" src="/logo.png">
-          <h1>{{ machine.name }}</h1>
+          <a href="/dashboard"><img id="logo" src="/logo.png"></a>
+          <h1>Machine: {{ machine.name }}</h1>
+          <h1></h1>
         </div>
         <div class="ten wide column">
           <table class="ui celled unstackable table">
@@ -26,12 +27,19 @@
                 <tr>
                   {% for day in week %}
                     <td class="
-                      {{ 'disabled' if not day.bucket }}
+                      {{ 'disabled' if not day.bucket and not day.id}}
                       {{ 'today-td-border' if day.today }}
                       {{ 'positive' if day.bucket and day.successfulBackups > 0 }}
                       {{ 'negative' if day.bucket and day.successfulBackups === 0 }}
                       {{ 'warning' if not day.bucket and day.attemptedBackups > 0 }}
-                    ">{{ day.dateString }}</td>
+                      {{ 'selectable' if day.id }}
+                    ">
+                      {% if day.id %}
+                        <a href="#backupevent-{{ day.id }}">{{ day.dateString }}</a>
+                      {% else %}
+                        {{ day.dateString }}
+                      {% endif %}
+                    </td>
                   {% endfor %}
                 </tr>
               {% endfor %}
@@ -62,16 +70,27 @@
     <table class="ui striped selectable sortable celled table" id="dashboard-table">
       <thead>
       <tr>
-        <th class="dashboard-table-name"> Machine Name </th>
-        <th class="dashboard-table-status"> Status </th>
-        <th class="dashboard-table-size"> Total Size </th>
-        <th> Last Backup </th>
+        <th class="collapsing">Backup Time</th>
+        <th class="collapsing">Transfer Size</th>
+        <th class="collapsing">Transfer Time</th>
+        <th class="collapsing">Exit Code</th>
+        <th>Rsync Exit Reason</th>
       </tr>
       </thead>
       <tbody>
-      {% for machine in machines %}
-
-      {% endfor %}
+        {% for backupEvent in backupEvents %}
+          <tr id="backupevent-{{ backupEvent.id }}">
+            {% if backupEvent.rsyncExitCode %}
+              <td class="collapsing negative"><i class="exclamation triangle icon"></i>{{ backupEvent.backupTime }}</td>
+            {% else %}
+              <td class="collapsing positive"><i class="check circle icon"></i>{{ backupEvent.backupTime }}</td>
+            {% endif %}
+            <td class="collapsing">{{ backupEvent.transferSizeStr }}</td>
+            <td class="collapsing">{{ backupEvent.transferTimeStr }}</td>
+            <td class="collapsing">{{ backupEvent.rsyncExitCode }}</td>
+            <td>{{ backupEvent.rsyncExitReason }}</td>
+          </tr>
+        {% endfor %}
       </tbody>
     </table>
   </div>
