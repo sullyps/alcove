@@ -30,7 +30,7 @@ router.get('/:name',(req, res, next) => {
   getBackupCalendar(machine, 5)
   .then(backupCalendar => {
     const machineInfo = {
-      name: machine.name,
+      machine: machine,
       backupCalendar: backupCalendar
     };
     console.log(JSON.stringify(machineInfo.backupCalendar));
@@ -63,7 +63,9 @@ function getBackupCalendar(machine, CALENDAR_ROWS = 5)
   for (let i = 0; i < CALENDAR_ROWS * 7; i++)
   {
     calendar.push({
+      today: false,
       date: undefined,
+      dateString: undefined,
       backupEvents: [],
       successfulBackups: 0,
       attemptedBackups: 0,
@@ -73,6 +75,7 @@ function getBackupCalendar(machine, CALENDAR_ROWS = 5)
 
   // Get dates for each day on the calendar
   calendar[(CALENDAR_ROWS - 1) * 7 + today.getDay()].date = today;
+  calendar[(CALENDAR_ROWS - 1) * 7 + today.getDay()].today = true;
   for (let i = (CALENDAR_ROWS - 1) * 7 + today.getDay() - 1; i >= 0; i--)
   {
     calendar[i].date = util.addDays(calendar[i + 1].date, -1);
@@ -80,6 +83,12 @@ function getBackupCalendar(machine, CALENDAR_ROWS = 5)
   for (let i = (CALENDAR_ROWS - 1) * 7 + today.getDay() + 1; i < calendar.length; i++)
   {
     calendar[i].date = util.addDays(calendar[i - 1].date, 1);
+  }
+
+  // Build date strings for each day on the calendar
+  for (let i = 0; i < calendar.length; i++)
+  {
+    calendar[i].dateString = `${calendar[i].date.getMonth() + 1}/${calendar[i].date.getDate()}`;
   }
 
   // Query the DB for all backup events that belong on the calendar

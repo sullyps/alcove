@@ -4,10 +4,42 @@
   <div class="dashboard-body">
     <div class="ui fluid stackable grid" id="dashboard-header-grid">
       <div class="row" id="dashboard-header-row-top">
-        <div class="eight wide column">
+        <div class="six wide column">
           <img id="logo" src="/logo.png">
+          <h1>{{ machine.name }}</h1>
+        </div>
+        <div class="ten wide column">
+          <table class="ui celled unstackable table">
+            <thead>
+              <tr>
+                <th>Sa</th>
+                <th>M</th>
+                <th>Tu</th>
+                <th>W</th>
+                <th>Th</th>
+                <th>F</th>
+                <th>Su</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for week in backupCalendar %}
+                <tr>
+                  {% for day in week %}
+                    <td class="
+                      {{ 'dashboard-bold' if day.bucket else 'disabled' }}
+                      {{ 'today-td-border' if day.today }}
+                      {{ 'positive' if day.bucket and day.successfulBackups > 1 }}
+                      {{ 'negative' if day.bucket and day.successfulBackups === 0 }}
+                      {{ 'warning' if not day.bucket and day.attemptedBackups > 0 }}
+                    ">{{ day.dateString }}</td>
+                  {% endfor %}
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
         </div>
       </div>
+
       <div class="three column row">
         <div class="column">
           <div class="ui segment" id="dashboard-header-segment">
@@ -25,56 +57,28 @@
           </div>
         </div>
       </div>
-    </div>
 
-    <table class="ui striped selectable sortable celled table" id="dashboard-table">
-      <thead>
-      <tr>
-        <th class="dashboard-table-name"> Machine Name </th>
-        <th class="dashboard-table-status"> Status </th>
-        <th class="dashboard-table-size"> Total Size </th>
-        <th> Last Backup </th>
-      </tr>
-      </thead>
-      <tbody>
-      {% for machine in machines %}
+      <table class="ui striped selectable sortable celled table" id="dashboard-table">
+        <thead>
         <tr>
-          <td>
-            <a href="/machine/{{ machine.name }}" class="dashboard-bold"> {{ machine.name }} </a>
-          </td>
-          <!--Spacing is very important; please do not change it.-->
-          {% if machine.scheduledBackups == 0 %}
-            <td>
-              <span class="dashboard-grey">   <i class="minus icon"></i>
-              {{ machine.successfulBackups }} of {{ machine.scheduledBackups }} backups successful</span>
-            </td>
-            {% elif machine.scheduledBackups == machine.successfulBackups %}
-            <td>
-              <span class="dashboard-green"><i class="thumbs up icon"></i></span>
-              {{ machine.successfulBackups }} of {{ machine.scheduledBackups }} backups successful
-            </td>
-            {% elif machine.successfulBackups == 0 %}
-            <td class="error">
-              <i class="attention icon"></i>
-              {{ machine.successfulBackups }} of {{ machine.scheduledBackups }} backups successful
-            </td>
-          {% else %}
-            <td class="warning">
-              <span class=dashboard-yellow><i class="question icon"></i></span>
-              {{ machine.successfulBackups }} of {{ machine.scheduledBackups }} backups successful
-            </td>
-          {% endif %}
-          <td>...</td>
-          <td>{{ machine.timeSinceLastBackup }}</td>
+          <th class="dashboard-table-name"> Machine Name </th>
+          <th class="dashboard-table-status"> Status </th>
+          <th class="dashboard-table-size"> Total Size </th>
+          <th> Last Backup </th>
         </tr>
-      {% endfor %}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+        {% for machine in machines %}
+
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
   </div>
 {% endblock %}
 
 {% block js %}
   <script src="/js/vendor/jquery.tablesort.min.js"></script>
-  <script src="/js/dashboard.js"></script>
+  <script src="/js/machine.js"></script>
   <script class="text/javascript"> $('table').tablesort(); </script>
 {% endblock %}
