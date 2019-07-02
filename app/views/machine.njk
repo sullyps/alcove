@@ -26,9 +26,9 @@
                 <tr>
                   {% for day in week %}
                     <td class="
-                      {{ 'dashboard-bold' if day.bucket else 'disabled' }}
+                      {{ 'disabled' if not day.bucket }}
                       {{ 'today-td-border' if day.today }}
-                      {{ 'positive' if day.bucket and day.successfulBackups > 1 }}
+                      {{ 'positive' if day.bucket and day.successfulBackups > 0 }}
                       {{ 'negative' if day.bucket and day.successfulBackups === 0 }}
                       {{ 'warning' if not day.bucket and day.attemptedBackups > 0 }}
                     ">{{ day.dateString }}</td>
@@ -57,23 +57,23 @@
           </div>
         </div>
       </div>
-
-      <table class="ui striped selectable sortable celled table" id="dashboard-table">
-        <thead>
-        <tr>
-          <th class="dashboard-table-name"> Machine Name </th>
-          <th class="dashboard-table-status"> Status </th>
-          <th class="dashboard-table-size"> Total Size </th>
-          <th> Last Backup </th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for machine in machines %}
-
-        {% endfor %}
-        </tbody>
-      </table>
     </div>
+
+    <table class="ui striped selectable sortable celled table" id="dashboard-table">
+      <thead>
+      <tr>
+        <th class="dashboard-table-name"> Machine Name </th>
+        <th class="dashboard-table-status"> Status </th>
+        <th class="dashboard-table-size"> Total Size </th>
+        <th> Last Backup </th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for machine in machines %}
+
+      {% endfor %}
+      </tbody>
+    </table>
   </div>
 {% endblock %}
 

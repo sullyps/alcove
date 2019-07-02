@@ -73,9 +73,11 @@ function getBackupCalendar(machine, CALENDAR_ROWS = 5)
     });
   }
 
-  // Get dates for each day on the calendar
+  // Get information about today on the calendar
   calendar[(CALENDAR_ROWS - 1) * 7 + today.getDay()].date = today;
   calendar[(CALENDAR_ROWS - 1) * 7 + today.getDay()].today = true;
+
+  // Get dates for other days on the calendar
   for (let i = (CALENDAR_ROWS - 1) * 7 + today.getDay() - 1; i >= 0; i--)
   {
     calendar[i].date = util.addDays(calendar[i + 1].date, -1);
