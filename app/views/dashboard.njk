@@ -5,7 +5,7 @@
   <div class="ui fluid stackable grid" id="dashboard-header-grid">
     <div class="row" id="dashboard-header-row-top">
       <div class="six wide column">
-        <img id="logo" src="/logo.png">
+        <a href="/dashboard"><img id="logo" src="/logo.png"></a>
       </div>
       <div class="ten wide column">
         <div class="ui statistics" id="dashboard-header-stats">
@@ -67,7 +67,7 @@
     <tbody>
       {% for machine in machines %}
         <tr>
-          <td>
+          <td class="selectable">
             <a href="/machine/{{ machine.name }}" class="dashboard-bold"> {{ machine.name }} </a>
           </td>
           <!--Spacing is very important; please do not change it.-->
