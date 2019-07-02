@@ -1,47 +1,83 @@
 {% extends 'layout.njk' %}
 
 {% block content %}
-<div class="machine">
-  <div class="ui fluid stackable grid" id="dashboard-header-grid">
-    <div class="row" id="dashboard-header-row-top">
-      <div class="eight wide column">
-        <img id="logo" src="/logo.png">
+  <div class="dashboard-body">
+    <div class="ui fluid stackable grid" id="dashboard-header-grid">
+      <div class="row" id="dashboard-header-row-top">
+        <div class="six wide column">
+          <img id="logo" src="/logo.png">
+          <h1>{{ machine.name }}</h1>
+        </div>
+        <div class="ten wide column">
+          <table class="ui celled unstackable table">
+            <thead>
+              <tr>
+                <th>Sa</th>
+                <th>M</th>
+                <th>Tu</th>
+                <th>W</th>
+                <th>Th</th>
+                <th>F</th>
+                <th>Su</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for week in backupCalendar %}
+                <tr>
+                  {% for day in week %}
+                    <td class="
+                      {{ 'disabled' if not day.bucket }}
+                      {{ 'today-td-border' if day.today }}
+                      {{ 'positive' if day.bucket and day.successfulBackups > 0 }}
+                      {{ 'negative' if day.bucket and day.successfulBackups === 0 }}
+                      {{ 'warning' if not day.bucket and day.attemptedBackups > 0 }}
+                    ">{{ day.dateString }}</td>
+                  {% endfor %}
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
       </div>
-      <div class="eight wide column">
-        <h1>{{ name }}</h1>
-      </div>
-    </div>
-  </div>
 
-  <table class="ui striped selectable sortable celled table" id="dashboard-table">
-    <thead>
+{#      <div class="three column row">#}
+{#        <div class="column">#}
+{#          <div class="ui segment" id="dashboard-header-segment">#}
+{#            Total Backup Size: <br /> <span class="dashboard-bold" id="totalSize">...</span>#}
+{#          </div>#}
+{#        </div>#}
+{#        <div class="column">#}
+{#          <div class="ui segment" id="dashboard-header-segment">#}
+{#            Free Space: <br /> <span class="dashboard-bold" id="freeSpace">...</span>#}
+{#          </div>#}
+{#        </div>#}
+{#        <div class="column">#}
+{#          <div class="ui segment" id="dashboard-header-segment">#}
+{#            Running since: <br /> <span class="dashboard-bold"> {{ lastBackupSystemRestart }} </span>#}
+{#          </div>#}
+{#        </div>#}
+{#      </div>#}
+    </div>
+
+    <table class="ui striped selectable sortable celled table" id="dashboard-table">
+      <thead>
       <tr>
-        <th>Status</th>
-        <th>Performed</th>
-        <th>Duration</th>
-        <th>Transferred</th>
+        <th class="dashboard-table-name"> Machine Name </th>
+        <th class="dashboard-table-status"> Status </th>
+        <th class="dashboard-table-size"> Total Size </th>
+        <th> Last Backup </th>
       </tr>
-    </thead>
-    <tbody>
-      {% for event in events %}
-        <tr>
-          <td>
-            {% if event.exitCode == 0 %}
-              <span class="success">Success</span>
-            {% else %}
-              <span class="failed">Failed (code: {{ event.exitCode }})</span>
-            {% endif %}
-          </td>
-          <td><b>{{ event.date }}</b> @ <b>{{ event.time }}</b></td>
-          <td>{{ event.transferTime }}</td>
-          <td>{{ event.size }}</td>
-        </tr>
+      </thead>
+      <tbody>
+      {% for machine in machines %}
+
       {% endfor %}
-    </tbody>
-  </table>
-</div>
+      </tbody>
+    </table>
+  </div>
 {% endblock %}
 
 {% block js %}
-<script class="text/javascript"> $('table').tablesort(); </script>
+  <script src="/js/vendor/jquery.tablesort.min.js"></script>
+  <script src="/js/machine.js"></script>
 {% endblock %}

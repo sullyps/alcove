@@ -32,10 +32,6 @@
   padding-left: 4%;
   padding-right: 4%; }
 
-#dashboard-header-row-top {
-  margin-bottom: -40px;
-  min-height: 120px; }
-
 #dashboard-header-title {
   padding-top: 10px;
   margin-left: -50px;
@@ -80,3 +76,7 @@
 
 #login-error {
   margin: 0 0 8px 0 !important; }
+
+.today-td-border {
+  border: 1px solid black !important;
+  box-sizing: border-box; }
