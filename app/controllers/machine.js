@@ -31,9 +31,17 @@ router.get('/:name',(req, res, next) => {
   .then(backupCalendar => {
     const machineInfo = {
       machine: machine,
-      backupCalendar: backupCalendar
+      backupCalendar: backupCalendar,
+      backupEvents: []
     };
-    console.log(JSON.stringify(machineInfo.backupCalendar));
+    backupCalendar.forEach(week => {
+      week.forEach(day => {
+        day.backupEvents.forEach(backupEvent => {
+          machineInfo.backupEvents.push(backupEvent);
+        });
+      })
+    });
+    machineInfo.backupEvents.sort((a, b) => b.backupTime - a.backupTime);
     res.render('machine', machineInfo);
   });
 });

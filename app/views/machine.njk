@@ -62,16 +62,23 @@
     <table class="ui striped selectable sortable celled table" id="dashboard-table">
       <thead>
       <tr>
-        <th class="dashboard-table-name"> Machine Name </th>
-        <th class="dashboard-table-status"> Status </th>
-        <th class="dashboard-table-size"> Total Size </th>
-        <th> Last Backup </th>
+        <th class="collapsing">Backup Time</th>
+        <th class="collapsing">Transfer Size</th>
+        <th class="collapsing">Transfer Time</th>
+        <th class="collapsing">Exit Code</th>
+        <th>Rsync Exit Reason</th>
       </tr>
       </thead>
       <tbody>
-      {% for machine in machines %}
-
-      {% endfor %}
+        {% for backupEvent in backupEvents %}
+          <tr>
+            <td class="collapsing">{{ backupEvent.backupTime }}</td>
+            <td class="collapsing">{{ backupEvent.transferSize }}</td>
+            <td class="collapsing">{{ backupEvent.transferTimeSec }}</td>
+            <td class="collapsing">{{ backupEvent.rsyncExitCode }}</td>
+            <td>{{ backupEvent.rsyncExitReason }}</td>
+          </tr>
+        {% endfor %}
       </tbody>
     </table>
   </div>
