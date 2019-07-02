@@ -37,6 +37,8 @@ router.get('/:name',(req, res, next) => {
     backupCalendar.forEach(week => {
       week.forEach(day => {
         day.backupEvents.forEach(backupEvent => {
+          backupEvent.transferSizeStr = util.getFormattedSize(backupEvent.transferSize);
+          backupEvent.transferTimeStr = util.getFormattedTimespan(backupEvent.transferTimeSec);
           machineInfo.backupEvents.push(backupEvent);
         });
       })

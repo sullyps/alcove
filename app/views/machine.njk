@@ -72,9 +72,13 @@
       <tbody>
         {% for backupEvent in backupEvents %}
           <tr>
-            <td class="collapsing">{{ backupEvent.backupTime }}</td>
-            <td class="collapsing">{{ backupEvent.transferSize }}</td>
-            <td class="collapsing">{{ backupEvent.transferTimeSec }}</td>
+            {% if backupEvent.rsyncExitCode %}
+              <td class="collapsing negative"><i class="exclamation triangle icon"></i>{{ backupEvent.backupTime }}</td>
+            {% else %}
+              <td class="collapsing positive"><i class="check circle icon"></i>{{ backupEvent.backupTime }}</td>
+            {% endif %}
+            <td class="collapsing">{{ backupEvent.transferSizeStr }}</td>
+            <td class="collapsing">{{ backupEvent.transferTimeStr }}</td>
             <td class="collapsing">{{ backupEvent.rsyncExitCode }}</td>
             <td>{{ backupEvent.rsyncExitReason }}</td>
           </tr>
