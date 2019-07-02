@@ -26,12 +26,19 @@
                 <tr>
                   {% for day in week %}
                     <td class="
-                      {{ 'disabled' if not day.bucket }}
+                      {{ 'disabled' if not day.bucket and not day.id}}
                       {{ 'today-td-border' if day.today }}
                       {{ 'positive' if day.bucket and day.successfulBackups > 0 }}
                       {{ 'negative' if day.bucket and day.successfulBackups === 0 }}
                       {{ 'warning' if not day.bucket and day.attemptedBackups > 0 }}
-                    ">{{ day.dateString }}</td>
+                      {{ 'selectable' if day.id }}
+                    ">
+                      {% if day.id %}
+                        <a href="#backupevent-{{ day.id }}">{{ day.dateString }}</a>
+                      {% else %}
+                        {{ day.dateString }}
+                      {% endif %}
+                    </td>
                   {% endfor %}
                 </tr>
               {% endfor %}
@@ -71,7 +78,7 @@
       </thead>
       <tbody>
         {% for backupEvent in backupEvents %}
-          <tr>
+          <tr id="backupevent-{{ backupEvent.id }}">
             {% if backupEvent.rsyncExitCode %}
               <td class="collapsing negative"><i class="exclamation triangle icon"></i>{{ backupEvent.backupTime }}</td>
             {% else %}
