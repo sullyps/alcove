@@ -56,9 +56,9 @@ body
 
 
 /* System Dashboard */
-#logo
+#dashboard-logo
 {
-  max-height: 100px;
+  max-height: 90px;
   max-width: 100%;
 }
 
@@ -67,20 +67,15 @@ body
   margin: 0;
 }
 
-#dashboard-header-stats-labels
+#dashboard-header-stats-container
 {
-  width: 110px;
+  display: inline-block;
 }
 
-#dashboard-header-stats
-{
-  float: right;
-}
-
-#dashboard-header-segment
+.dashboard-header-segment
 {
   text-align: center;
-  font-size: 18px;
+  font-size: 18px !important;
 }
 
 

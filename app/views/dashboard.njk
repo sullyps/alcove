@@ -3,34 +3,32 @@
 {% block content %}
 <div>
   <div class="ui fluid stackable grid" id="dashboard-header-grid">
-    <div class="row" id="dashboard-header-row-top">
-      <div class="six wide column">
-        <a href="/dashboard"><img id="logo" src="/logo.png"></a>
+    <div class="row">
+      <div class="left floated left aligned six wide column">
+        <a href="/dashboard"><img src="/logo.png" alt="Alcove Backup System logo" id="dashboard-logo"></a>
       </div>
-      <div class="ten wide column">
-        <div class="ui statistics" id="dashboard-header-stats">
+      <div class="right floated right aligned ten wide column">
+        <div class="ui statistics" id="dashboard-header-stats-container">
           <div class="green statistic">
             <div class="value">
               {{ successfulMachines }}
             </div>
-            <div class="label" id="dashboard-header-stats-labels">
-              Successful
+            <div class="label">
+              All Backups
             </div>
-          </div>
-          <div class="yellow statistic">
+          </div><div class="yellow statistic">
             <div class="value">
               {{ partiallySuccessfulMachines }}
             </div>
-            <div class="label" id="dashboard-header-stats-labels">
-              Partially Successful
+            <div class="label">
+              Some Backups
             </div>
-          </div>
-          <div class="red statistic">
+          </div><div class="red statistic">
             <div class="value">
               {{ unsuccessfulMachines }}
             </div>
-            <div class="label" id="dashboard-header-stats-labels">
-              Unsuccessful
+            <div class="label">
+              No Backups
             </div>
           </div>
         </div>
@@ -39,18 +37,18 @@
 
     <div class="three column row">
       <div class="column">
-        <div class="ui segment" id="dashboard-header-segment">
-          Total backup size: <br /> <span class="bold" id="totalSize">...</span>
+        <div class="ui segment dashboard-header-segment">
+          Total backup size: <br><span class="bold" id="totalSize">...</span>
         </div>
       </div>
       <div class="column">
-        <div class="ui segment" id="dashboard-header-segment">
-          Free space: <br /> <span class="bold" id="freeSpace">...</span>
+        <div class="ui segment dashboard-header-segment">
+          Free space: <br><span class="bold" id="freeSpace">...</span>
         </div>
       </div>
       <div class="column">
-        <div class="ui segment" id="dashboard-header-segment">
-          Running since: <br /> <span class="bold"> {{ lastBackupSystemRestart }} </span>
+        <div class="ui segment dashboard-header-segment">
+          Running since: <br><span class="bold">{{ lastBackupSystemRestart }}</span>
         </div>
       </div>
     </div>
@@ -59,12 +57,12 @@
       <div class="column">
         <table class="ui striped selectable sortable celled table">
           <thead>
-          <tr>
-            <th>Machine Name</th>
-            <th class="nine wide">Status</th>
-            <th>Total Size</th>
-            <th>Last Backup</th>
-          </tr>
+            <tr>
+              <th>Machine Name</th>
+              <th class="eight wide">Status</th>
+              <th>Total Size</th>
+              <th>Last Backup</th>
+            </tr>
           </thead>
           <tbody>
           {% for machine in machines %}

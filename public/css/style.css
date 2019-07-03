@@ -30,22 +30,19 @@ body {
   margin: 0 0 8px 0 !important; }
 
 /* System Dashboard */
-#logo {
-  max-height: 100px;
+#dashboard-logo {
+  max-height: 90px;
   max-width: 100%; }
 
 #dashboard-header-grid {
   margin: 0; }
 
-#dashboard-header-stats-labels {
-  width: 110px; }
+#dashboard-header-stats-container {
+  display: inline-block; }
 
-#dashboard-header-stats {
-  float: right; }
-
-#dashboard-header-segment {
+.dashboard-header-segment {
   text-align: center;
-  font-size: 18px; }
+  font-size: 18px !important; }
 
 /* Machine Dashboard */
 .today-td-border {
