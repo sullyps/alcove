@@ -11,24 +11,31 @@
         <div class="ui statistics" id="dashboard-header-stats-container">
           <div class="green statistic">
             <div class="value">
-              {{ successfulMachines }}
+              {{ allBackups }}
             </div>
             <div class="label">
               All Backups
             </div>
           </div><div class="yellow statistic">
             <div class="value">
-              {{ partiallySuccessfulMachines }}
+              {{ someBackups }}
             </div>
             <div class="label">
               Some Backups
             </div>
           </div><div class="red statistic">
             <div class="value">
-              {{ unsuccessfulMachines }}
+              {{ noBackups }}
             </div>
             <div class="label">
               No Backups
+            </div>
+          </div><div class="black statistic">
+            <div class="value">
+              {{ idle }}
+            </div>
+            <div class="label">
+              Idle
             </div>
           </div>
         </div>
