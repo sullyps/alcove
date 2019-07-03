@@ -28,7 +28,7 @@
                   {% for day in week %}
                     <td class="
                       {{ 'disabled' if not day.bucket and not day.id}}
-                      {{ 'today-td-border' if day.today }}
+                      {{ 'machine-dashboard-calendar-today-border' if day.today }}
                       {{ 'positive' if day.bucket and day.successfulBackups > 0 }}
                       {{ 'negative' if (day.bucket or day.attemptedBackups > 0) and day.successfulBackups === 0 }}
                       {{ 'warning' if not day.bucket and day.successfulBackups > 0 }}
