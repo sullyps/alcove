@@ -30,8 +30,8 @@
                       {{ 'disabled' if not day.bucket and not day.id}}
                       {{ 'today-td-border' if day.today }}
                       {{ 'positive' if day.bucket and day.successfulBackups > 0 }}
-                      {{ 'negative' if day.bucket and day.successfulBackups === 0 }}
-                      {{ 'warning' if not day.bucket and day.attemptedBackups > 0 }}
+                      {{ 'negative' if (day.bucket or day.attemptedBackups > 0) and day.successfulBackups === 0 }}
+                      {{ 'warning' if not day.bucket and day.successfulBackups > 0 }}
                       {{ 'selectable' if day.id }}
                     ">
                       {% if day.id %}
