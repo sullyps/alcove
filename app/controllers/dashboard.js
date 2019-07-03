@@ -19,10 +19,10 @@ router.get('/', (req, res, next) => {
   getSuccessfulBackupEvents()
   .then(successfulBackupEvents => {
     let machineStatuses = getMachineStatuses();
-    dashboard.successfulMachines = machineStatuses.successful;
-    dashboard.partiallySuccessfulMachines = machineStatuses.partiallySuccessful;
-    dashboard.unsuccessfulMachines = machineStatuses.unsuccessful;
-    dashboard.idleMachines = machineStatuses.idle;
+    dashboard.allBackups = machineStatuses.allBackups;
+    dashboard.someBackups = machineStatuses.someBackups;
+    dashboard.noBackups = machineStatuses.noBackups;
+    dashboard.idle = machineStatuses.idle;
 
     dashboard.machines = [];
     for (let machineName in machines)
@@ -111,17 +111,17 @@ function getOldestBackupDate()
 function getMachineStatuses()
 {
   let machineStatuses = {
-    successful: 0,
-    partiallySuccessful: 0,
-    unsuccessful: 0,
+    allBackups: 0,
+    someBackups: 0,
+    noBackups: 0,
     idle: 0
   };
   for (let machineName in machines)
   {
     let machineStatus = getMachineStatus(machineName);
-    if (machineStatus === 0) machineStatuses.successful++;
-    else if (machineStatus === 1) machineStatuses.partiallySuccessful++;
-    else if (machineStatus === 2) machineStatuses.unsuccessful++;
+    if (machineStatus === 0) machineStatuses.allBackups++;
+    else if (machineStatus === 1) machineStatuses.someBackups++;
+    else if (machineStatus === 2) machineStatuses.noBackups++;
     else machineStatuses.idle++;
   }
   return machineStatuses;
@@ -134,9 +134,9 @@ function getMachineStatuses()
  *   The name of the machine to inspect for status
  * @returns
  *   The status code of the machine
- *   0 = Successful machine - All backups succeeded
- *   1 = Partially successful machine - Some backups succeeded
- *   2 = Unsuccessful machine - All backups failed
+ *   0 = All backups - All backups succeeded
+ *   1 = Some backups - Some backups succeeded
+ *   2 = No backups - All backups failed
  *   3 = Idle machine - No backups were attempted
  */
 function getMachineStatus(machineName)

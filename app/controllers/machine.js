@@ -27,22 +27,14 @@ router.get('/:name',(req, res, next) => {
   config = system.getConfig();
   db = models.getDatabase();
 
-  getBackupCalendar(machine, 5)
-  .then(backupCalendar => {
+  getBackupEvents(machine, 5)
+  .then(backupEvents => {
     const machineInfo = {
+      title: `${machine.name} :: Alcove Backup System`,
       machine: machine,
-      backupCalendar: backupCalendar,
-      backupEvents: []
+      backupCalendar: backupEvents.calendar,
+      backupEvents: backupEvents.backupEvents
     };
-    backupCalendar.forEach(week => {
-      week.forEach(day => {
-        day.backupEvents.forEach(backupEvent => {
-          backupEvent.transferSizeStr = util.getFormattedSize(backupEvent.transferSize);
-          backupEvent.transferTimeStr = util.getFormattedTimespan(backupEvent.transferTimeSec);
-          machineInfo.backupEvents.push(backupEvent);
-        });
-      })
-    });
     machineInfo.backupEvents.sort((a, b) => b.backupTime - a.backupTime);
     res.render('machine', machineInfo);
   });
@@ -56,15 +48,18 @@ module.exports = app => {
  * Gets a history of all the backups on the given machine
  * in a calendar format i.e. each is given a day and the
  * events are arranged in a matrix that shows the past
- * five weeks
+ * five weeks. All events that don't fit on the calendar
+ * but still have buckets are included in the list that
+ * follows
  * @param machine
  *   The machine to check for backup events
  * @param CALENDAR_ROWS
  *   The number of rows to include in the calendar (defaults to 5)
  * @returns
- *   The calendar object with the backup events
+ *   An object containing the calendar object with the backup events
+ *   and a list of backup events
  */
-function getBackupCalendar(machine, CALENDAR_ROWS = 5)
+function getBackupEvents(machine, CALENDAR_ROWS = 5)
 {
   let today = new Date();
 
@@ -104,20 +99,44 @@ function getBackupCalendar(machine, CALENDAR_ROWS = 5)
     calendar[i].dateString = `${calendar[i].date.getMonth() + 1}/${calendar[i].date.getDate()}`;
   }
 
+  // Count which days should have attempted to back up and add to the calendar
+  const buckets = system.getBuckets(machine.schedule, new Date());
+  buckets.forEach(bucket => {
+    for (let i = 0; i < calendar.length; i++)
+    {
+      if (util.sameDay(calendar[i].date, bucket.date))
+      {
+        calendar[i].bucket = true;
+        return;
+      }
+    }
+  });
+
+  // Find the oldest bucket or the oldest date on the calendar (whichever is older)
+  // and only query the DB for events after that
+  const oldestIncludedBackupEvent = buckets.reduce((minimum, current) => {
+    return current.date < minimum.date ? current : minimum;
+  }, {
+    date: calendar[0].date.setHours(0, 0, 0, 0)
+  });
+
   // Query the DB for all backup events that belong on the calendar
   return db.BackupEvent.findAll({
     where: {
       machine: machine.name,
       backupTime: {
-        [Op.gte]: calendar[0].date.setHours(0, 0, 0, 0)
+        [Op.gte]: oldestIncludedBackupEvent.date
       }
     },
     order: [['backupTime']]
   })
   .then(backupEvents => {
+    // Add formatted versions of each backup event's information;
     // Add backup events to each calendar date and update each day's
     // count of successful and attempted backups
     backupEvents.forEach(backupEvent => {
+      backupEvent.transferSizeStr = util.getFormattedSize(backupEvent.transferSize);
+      backupEvent.transferTimeStr = util.getFormattedTimespan(backupEvent.transferTimeSec);
       for (let i = 0; i < calendar.length; i++)
       {
         if (util.sameDay(calendar[i].date, backupEvent.backupTime))
@@ -128,19 +147,6 @@ function getBackupCalendar(machine, CALENDAR_ROWS = 5)
           {
             calendar[i].successfulBackups++;
           }
-          return;
-        }
-      }
-    });
-
-    // Count which days should have attempted to back up
-    const buckets = system.getBuckets(machine.schedule, new Date());
-    buckets.forEach(bucket => {
-      for (let i = 0; i < calendar.length; i++)
-      {
-        if (util.sameDay(calendar[i].date, bucket.date))
-        {
-          calendar[i].bucket = true;
           return;
         }
       }
@@ -174,6 +180,9 @@ function getBackupCalendar(machine, CALENDAR_ROWS = 5)
       calendarMatrix.push(row);
     }
 
-    return calendarMatrix;
+    return {
+      calendar: calendarMatrix,
+      backupEvents: backupEvents
+    };
   });
 }

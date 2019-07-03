@@ -1,11 +1,11 @@
 {% extends 'layout.njk' %}
 
 {% block content %}
-  <div class="dashboard-body">
+  <div>
     <div class="ui fluid stackable grid" id="dashboard-header-grid">
       <div class="row" id="dashboard-header-row-top">
         <div class="six wide column">
-          <a href="/dashboard"><img id="logo" src="/logo.png"></a>
+          <a href="/dashboard"><img id="dashboard-logo" src="/logo.png"></a>
           <h1>Machine: {{ machine.name }}</h1>
           <h1></h1>
         </div>
@@ -30,8 +30,8 @@
                       {{ 'disabled' if not day.bucket and not day.id}}
                       {{ 'today-td-border' if day.today }}
                       {{ 'positive' if day.bucket and day.successfulBackups > 0 }}
-                      {{ 'negative' if day.bucket and day.successfulBackups === 0 }}
-                      {{ 'warning' if not day.bucket and day.attemptedBackups > 0 }}
+                      {{ 'negative' if (day.bucket or day.attemptedBackups > 0) and day.successfulBackups === 0 }}
+                      {{ 'warning' if not day.bucket and day.successfulBackups > 0 }}
                       {{ 'selectable' if day.id }}
                     ">
                       {% if day.id %}
@@ -51,52 +51,56 @@
 {#      <div class="three column row">#}
 {#        <div class="column">#}
 {#          <div class="ui segment" id="dashboard-header-segment">#}
-{#            Total Backup Size: <br /> <span class="dashboard-bold" id="totalSize">...</span>#}
+{#            Total Backup Size: <br /> <span class="bold" id="totalSize">...</span>#}
 {#          </div>#}
 {#        </div>#}
 {#        <div class="column">#}
 {#          <div class="ui segment" id="dashboard-header-segment">#}
-{#            Free Space: <br /> <span class="dashboard-bold" id="freeSpace">...</span>#}
+{#            Free Space: <br /> <span class="bold" id="freeSpace">...</span>#}
 {#          </div>#}
 {#        </div>#}
 {#        <div class="column">#}
 {#          <div class="ui segment" id="dashboard-header-segment">#}
-{#            Running since: <br /> <span class="dashboard-bold"> {{ lastBackupSystemRestart }} </span>#}
+{#            Running since: <br /> <span class="bold"> {{ lastBackupSystemRestart }} </span>#}
 {#          </div>#}
 {#        </div>#}
 {#      </div>#}
-    </div>
 
-    <table class="ui striped selectable sortable celled table" id="dashboard-table">
-      <thead>
-      <tr>
-        <th class="collapsing">Backup Time</th>
-        <th class="collapsing">Transfer Size</th>
-        <th class="collapsing">Transfer Time</th>
-        <th class="collapsing">Exit Code</th>
-        <th>Rsync Exit Reason</th>
-      </tr>
-      </thead>
-      <tbody>
-        {% for backupEvent in backupEvents %}
-          <tr id="backupevent-{{ backupEvent.id }}">
-            {% if backupEvent.rsyncExitCode %}
-              <td class="collapsing negative"><i class="exclamation triangle icon"></i>{{ backupEvent.backupTime }}</td>
-            {% else %}
-              <td class="collapsing positive"><i class="check circle icon"></i>{{ backupEvent.backupTime }}</td>
-            {% endif %}
-            <td class="collapsing">{{ backupEvent.transferSizeStr }}</td>
-            <td class="collapsing">{{ backupEvent.transferTimeStr }}</td>
-            <td class="collapsing">{{ backupEvent.rsyncExitCode }}</td>
-            <td>{{ backupEvent.rsyncExitReason }}</td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+      <div class="one column row">
+        <div class="column">
+          <table class="ui striped selectable sortable celled table" id="machine-table">
+            <thead>
+            <tr>
+              <th class="collapsing">Backup Time</th>
+              <th class="collapsing">Transfer Size</th>
+              <th class="collapsing">Transfer Time</th>
+              <th class="collapsing">Exit Code</th>
+              <th>Rsync Exit Reason</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for backupEvent in backupEvents %}
+              <tr id="backupevent-{{ backupEvent.id }}">
+                {% if backupEvent.rsyncExitCode %}
+                  <td class="collapsing negative"><i class="exclamation circle icon"></i>{{ backupEvent.backupTime }}</td>
+                {% else %}
+                  <td class="collapsing positive"><i class="check circle icon"></i>{{ backupEvent.backupTime }}</td>
+                {% endif %}
+                <td class="collapsing">{{ backupEvent.transferSizeStr }}</td>
+                <td class="collapsing">{{ backupEvent.transferTimeStr }}</td>
+                <td class="collapsing">{{ backupEvent.rsyncExitCode }}</td>
+                <td>{{ backupEvent.rsyncExitReason }}</td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
   </div>
 {% endblock %}
 
 {% block js %}
-  <script src="/js/vendor/jquery.tablesort.min.js"></script>
-  <script src="/js/machine.js"></script>
+{#  <script src="/js/vendor/jquery.tablesort.min.js"></script>#}
+{#  <script src="/js/machine.js"></script>#}
 {% endblock %}

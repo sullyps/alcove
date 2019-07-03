@@ -1,108 +1,117 @@
 {% extends 'layout.njk' %}
 
 {% block content %}
-<div class="dashboard-body">
+<div>
   <div class="ui fluid stackable grid" id="dashboard-header-grid">
-    <div class="row" id="dashboard-header-row-top">
-      <div class="six wide column">
-        <a href="/dashboard"><img id="logo" src="/logo.png"></a>
+    <div class="row">
+      <div class="left floated left aligned six wide column">
+        <a href="/dashboard"><img src="/logo.png" alt="Alcove Backup System logo" id="dashboard-logo"></a>
       </div>
-      <div class="ten wide column">
-        <div class="ui statistics" id="dashboard-header-stats">
+      <div class="right floated right aligned ten wide column">
+        <div class="ui statistics" id="dashboard-header-stats-container">
           <div class="green statistic">
             <div class="value">
-              {{ successfulMachines }}
+              {{ allBackups }}
             </div>
-            <div class="label" id="dashboard-header-stats-labels">
-              Successful
+            <div class="label">
+              All Backups
             </div>
-          </div>
-          <div class="yellow statistic">
+          </div><div class="yellow statistic">
             <div class="value">
-              {{ partiallySuccessfulMachines }}
+              {{ someBackups }}
             </div>
-            <div class="label" id="dashboard-header-stats-labels">
-              Partially Successful
+            <div class="label">
+              Some Backups
             </div>
-          </div>
-          <div class="red statistic">
+          </div><div class="red statistic">
             <div class="value">
-              {{ unsuccessfulMachines }}
+              {{ noBackups }}
             </div>
-            <div class="label" id="dashboard-header-stats-labels">
-              Unsuccessful
+            <div class="label">
+              No Backups
+            </div>
+          </div><div class="black statistic">
+            <div class="value">
+              {{ idle }}
+            </div>
+            <div class="label">
+              Idle
             </div>
           </div>
         </div>
       </div>
     </div>
+
     <div class="three column row">
       <div class="column">
-        <div class="ui segment" id="dashboard-header-segment">
-          Total Backup Size: <br /> <span class="dashboard-bold" id="totalSize">...</span>
+        <div class="ui segment dashboard-header-segment">
+          Total backup size: <br><span class="bold" id="totalSize">...</span>
         </div>
       </div>
       <div class="column">
-        <div class="ui segment" id="dashboard-header-segment">
-          Free Space: <br /> <span class="dashboard-bold" id="freeSpace">...</span>
+        <div class="ui segment dashboard-header-segment">
+          Free space: <br><span class="bold" id="freeSpace">...</span>
         </div>
       </div>
       <div class="column">
-        <div class="ui segment" id="dashboard-header-segment">
-          Running since: <br /> <span class="dashboard-bold"> {{ lastBackupSystemRestart }} </span>
+        <div class="ui segment dashboard-header-segment">
+          Running since: <br><span class="bold">{{ lastBackupSystemRestart }}</span>
         </div>
+      </div>
+    </div>
+
+    <div class="one column row">
+      <div class="column">
+        <table class="ui striped selectable sortable celled table" id="dashboard-table">
+          <thead>
+            <tr>
+              <th>Machine Name</th>
+              <th class="eight wide">Status</th>
+              <th>Total Size</th>
+              <th>Last Backup</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for machine in machines %}
+            <tr>
+              <td class="selectable">
+                <a href="/machine/{{ machine.name }}" class="bold"> {{ machine.name }} </a>
+              </td>
+              <!--Spacing is very important- please do not change it.-->
+              {% if machine.scheduledBackups == 0 %}
+                <td>
+                  <i class="minus icon"></i>
+                  {{ machine.successfulBackups }} of {{ machine.scheduledBackups }} backups successful
+                </td>
+              {% elif machine.scheduledBackups == machine.successfulBackups %}
+                <td class="positive">
+                  <i class="check icon"></i>
+                  {{ machine.successfulBackups }} of {{ machine.scheduledBackups }} backups successful
+                </td>
+              {% elif machine.successfulBackups == 0 %}
+                <td class="negative">
+                  <i class="exclamation circle icon"></i>
+                  {{ machine.successfulBackups }} of {{ machine.scheduledBackups }} backups successful
+                </td>
+              {% else %}
+                <td class="warning">
+                  <i class="exclamation triangle icon"></i>
+                  {{ machine.successfulBackups }} of {{ machine.scheduledBackups }} backups successful
+                </td>
+              {% endif %}
+              <td>...</td>
+              <td>{{ machine.timeSinceLastBackup }}</td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
-
-  <table class="ui striped selectable sortable celled table" id="dashboard-table">
-    <thead>
-      <tr>
-        <th class="dashboard-table-name"> Machine Name </th>
-        <th class="dashboard-table-status"> Status </th>
-        <th class="dashboard-table-size"> Total Size </th>
-        <th> Last Backup </th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for machine in machines %}
-        <tr>
-          <td class="selectable">
-            <a href="/machine/{{ machine.name }}" class="dashboard-bold"> {{ machine.name }} </a>
-          </td>
-          <!--Spacing is very important; please do not change it.-->
-          {% if machine.scheduledBackups == 0 %}
-            <td>
-              <span class="dashboard-grey">   <i class="minus icon"></i>
-              {{ machine.successfulBackups }} of {{ machine.scheduledBackups }} backups successful</span>
-            </td>
-          {% elif machine.scheduledBackups == machine.successfulBackups %}
-            <td>
-              <span class="dashboard-green"><i class="thumbs up icon"></i></span>
-              {{ machine.successfulBackups }} of {{ machine.scheduledBackups }} backups successful
-            </td>
-          {% elif machine.successfulBackups == 0 %}
-            <td class="error">
-              <i class="attention icon"></i>
-              {{ machine.successfulBackups }} of {{ machine.scheduledBackups }} backups successful
-            </td>
-          {% else %}
-            <td class="warning">
-              <span class=dashboard-yellow><i class="question icon"></i></span>
-              {{ machine.successfulBackups }} of {{ machine.scheduledBackups }} backups successful
-            </td>
-          {% endif %}
-          <td>...</td>
-          <td>{{ machine.timeSinceLastBackup }}</td>
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
 </div>
 {% endblock %}
 
 {% block js %}
-  <script src="/js/vendor/jquery.tablesort.min.js"></script>
+{#  <script src="/js/vendor/jquery.tablesort.min.js"></script>#}
   <script src="/js/dashboard.js"></script>
-  <script class="text/javascript"> $('table').tablesort(); </script>
 {% endblock %}

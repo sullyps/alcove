@@ -1,59 +1,11 @@
-#logo {
-  margin-top: 8px;
-  width: 200px; }
-
-.dashboard-green {
-  color: green; }
-
-.dashboard-yellow {
-  color: #A0B000; }
-
-.dashboard-grey {
-  color: grey; }
-
-.dashboard-bold {
-  font-weight: bold; }
-
-.dashboard-body {
-  min-height: 100vh;
+/* All pages */
+body {
   background-color: #D0D0D0; }
 
-.dashboard-table-name {
-  width: 20%; }
+.bold {
+  font-weight: bold; }
 
-.dashboard-table-status {
-  width: 30%; }
-
-.dashboard-table-size {
-  width: 15%; }
-
-#dashboard-header-grid {
-  margin-top: 0px;
-  padding-left: 4%;
-  padding-right: 4%; }
-
-#dashboard-header-title {
-  padding-top: 10px;
-  margin-left: -50px;
-  min-width: 250px;
-  font-size: 10px;
-  text-align: center; }
-
-#dashboard-header-stats-labels {
-  width: 110px; }
-
-#dashboard-header-stats {
-  float: right; }
-
-#dashboard-header-segment {
-  text-align: center;
-  font-size: 18px;
-  background-color: #EEEEEE; }
-
-#dashboard-table {
-  margin-left: 4%;
-  width: 92%; }
-
+/* Login Page */
 #login-image {
   display: block;
   margin: 20px auto 0 auto; }
@@ -77,6 +29,22 @@
 #login-error {
   margin: 0 0 8px 0 !important; }
 
+/* System Dashboard */
+#dashboard-logo {
+  max-height: 90px;
+  max-width: 100%; }
+
+#dashboard-header-grid {
+  margin: 0; }
+
+#dashboard-header-stats-container {
+  display: inline-block; }
+
+.dashboard-header-segment {
+  text-align: center;
+  font-size: 18px !important; }
+
+/* Machine Dashboard */
 .today-td-border {
   border: 1px solid black !important;
   box-sizing: border-box; }
