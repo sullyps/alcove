@@ -30,6 +30,7 @@ router.get('/:name',(req, res, next) => {
   getBackupCalendar(machine, 5)
   .then(backupCalendar => {
     const machineInfo = {
+      title: `${machine.name} :: Alcove Backup System`,
       machine: machine,
       backupCalendar: backupCalendar,
       backupEvents: []
