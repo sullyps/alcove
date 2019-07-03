@@ -45,6 +45,6 @@ body {
   font-size: 18px !important; }
 
 /* Machine Dashboard */
-.today-td-border {
+.machine-dashboard-calendar-today-border {
   border: 1px solid black !important;
   box-sizing: border-box; }
