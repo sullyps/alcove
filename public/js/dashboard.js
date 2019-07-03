@@ -1,3 +1,5 @@
+// $('#dashboard-table').tablesort();
+
 $.ajax({
   method: "GET",
   url: "/api/system/size",
