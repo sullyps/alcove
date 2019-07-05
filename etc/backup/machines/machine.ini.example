@@ -15,7 +15,7 @@
 ; directories, using multiple lines and the [] syntax.
 ; + Only specify directories, not individual files.
 ; + All listed directories need to be absolute paths.
-; + There should be no wildcards (*).
+; + There should be no double or triple wildcards (** or ***).
 ;
 ; If not specified, defaults are /home and /etc.
 ;
@@ -35,7 +35,7 @@
 
 ; Specific files or directories to ignore.
 ; + These should always be absolute paths
-; + There should be no wildcards (*).
+; + There should be no double or triple wildcards (** or ***).
 ; Ex] Do not backup .cache from the "user1" home account
 ;   ignore_files[] = /home/user1/.cache
 ;
