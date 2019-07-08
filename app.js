@@ -28,7 +28,6 @@ locker.lock()
   process.exit(-7);
 })
 .then(() => {
-
   // Explicitly warn about non-production modes
   if (DEVEL)
   {
@@ -44,20 +43,19 @@ locker.lock()
   // fit to an 80 character screen.
   // NOTE2: This is intended to be a system service so the config is hardcoded
   //
-  try
-  {
-    config = configInit.getConfig(CONFIG);
-  } catch (error)
-  {
-    // Record startup error in the log
-    let msg = '[Config ERROR] ' + error.message;
-    // And output to the console (for immediate feedback to sys-admin)
-    console.error(wrap.wrap(msg, {width: 80, noTrim: true}));
-    // NOTE: This isn't recommended but until unless we replaced the uncaught
-    // exception handler (requires Node >=9.3), it really is the best way.
-    process.exit(-3);
-  }
-
+  return configInit.getConfig(CONFIG);
+})
+.catch(error => {
+  // Record startup error in the log
+  let msg = '[Config ERROR] ' + error.message;
+  // And output to the console (for immediate feedback to sys-admin)
+  console.error(wrap.wrap(msg, {width: 80, noTrim: true}));
+  // NOTE: This isn't recommended but until unless we replaced the uncaught
+  // exception handler (requires Node >=9.3), it really is the best way.
+  process.exit(-3);
+})
+.then(configuration => {
+  config = configuration;
   // If in development mode and an rsync key file is specified, give warning
   if (DEVEL && config.rsync.identity)
   {
