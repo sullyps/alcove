@@ -45,8 +45,9 @@
 ;   schedule = "DAYS(N);[HH:MM]"
 ; SCHEDULE 
 ;   DAYS
-;     A comma separated values representing the days of the week on which
-;     to perform a backup (valid values are 0-6)
+;     A comma separated list of values representing the days of the week on which
+;     to perform a backup (valid values are 0-6). Ranges are also allowed e.g. 1-5
+;     is Monday through Friday
 ;   N
 ;     The number of backups to keep
 ;   + Any number of schedules can be defined, separated by a single pipe (|)

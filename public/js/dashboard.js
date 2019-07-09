@@ -21,8 +21,17 @@ $.ajax({
   }
   else
   {
-    errorMessage = "Internal error on backup system size request" + statusText;
+    errorMessage = "Internal error on backup system size request: " + statusText;
   }
-  // TODO:  handle this in the UI
+  $('.dir-size-segment').remove();
+  $('#dashboard-header-segments')
+  .removeClass('three column row')
+  .addClass('two column row')
+  .prepend(
+    `<div class="column">` +
+    `  <div class="ui red segment dashboard-header-segment">` +
+    `    Error: <br><span class="bold">${errorMessage}</span>` +
+    `  </div>` +
+    `</div>`);
   console.error(errorMessage);
 });
