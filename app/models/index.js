@@ -24,7 +24,6 @@ module.exports = {
     // Read our model definitions and associate relationships
     let sequelize = new Sequelize(DB_URL, {
       storage: path.join(config.data_dir, "events.db"),
-      operatorsAliases: false,
       logging: false
     });
     fs.readdirSync(__dirname).filter((file) => {

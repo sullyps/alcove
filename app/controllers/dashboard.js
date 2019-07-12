@@ -86,20 +86,32 @@ function getSuccessfulBackupEvents()
  */
 function getOldestBackupDate()
 {
-  // TODO: let's see if we can clean up this confusing flow (see linter)
   let backups = [];
   for (let machineName in machines)
   {
     let machine = machines[machineName];
     let machinePath = path.join(config.data_dir, machine.name);
-    backups.push(...fs.readdirSync(machinePath).filter(backup => {
-      return fs.statSync(path.join(machinePath, backup)).isDirectory() &&
-          backup !== rsync.getInProgressName();
-    }));
+    backups.push(...getPreviousBackupNames(machinePath));
   }
   return util.parseISODateString(backups.reduce((min, value) => {
     return value < min ? value : min;
   }));
+}
+
+/**
+ * Reads the data directory of a certain machine and inspects
+ * for a list of backup names (dates) that aren't currently in
+ * progress (i.e. not rsync.getInProgressName())
+ * @param machinePath
+ *   The path to the data directory of the specific machine
+ * @returns
+ *   A list of backup names (dates) as strings
+ */
+function getPreviousBackupNames(machinePath)
+{
+  return fs.readdirSync(machinePath).filter(backup => {
+    return fs.statSync(path.join(machinePath, backup)).isDirectory() && backup !== rsync.getInProgressName();
+  });
 }
 
 /**

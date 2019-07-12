@@ -27,11 +27,10 @@
                 <tr>
                   {% for day in week %}
                     <td class="
-                      {{ 'disabled' if not day.bucket and not day.id}}
+                      {{ 'disabled' if not day.bucket }}
                       {{ 'machine-dashboard-calendar-today-border' if day.today }}
-                      {{ 'positive' if day.bucket and day.successfulBackups > 0 }}
-                      {{ 'negative' if (day.bucket or day.attemptedBackups > 0) and day.successfulBackups === 0 }}
-                      {{ 'warning' if not day.bucket and day.successfulBackups > 0 }}
+                      {{ 'positive' if day.bucket and day.bucket.backup }}
+                      {{ 'negative' if day.bucket and not day.bucket.backup }}
                       {{ 'selectable' if day.id }}
                     ">
                       {% if day.id %}
