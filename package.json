@@ -47,11 +47,11 @@
   "devDependencies": {
     "gulp": "^4.0.0",
     "gulp-jshint": "^2.1",
-    "gulp-livereload": "^4.0.1",
-    "gulp-nodemon": "^2.4.1",
+    "gulp-livereload": "^4.0",
+    "gulp-nodemon": "^2.4",
     "gulp-plumber": "^1.2",
     "gulp-sass": "^4.0",
     "jest": "^24.8",
-    "jshint": "^2.9"
+    "jshint": "^2.10"
   }
 }
