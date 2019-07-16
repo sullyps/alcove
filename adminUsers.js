@@ -35,34 +35,53 @@ function exit(message, code)
 }
 
 // Initialize database
+// Promise can't be rejected because the program will terminate early if something goes wrong
 let db;
-try
-{
-  db = models.getDatabase();
-}
-catch (error)
-{
-  // Parse config file
-  let config;
+new Promise(resolve => {
   try
   {
-    config = configInit.getConfig(CONFIG);
+    db = models.getDatabase();
+    resolve();
   }
   catch (error)
   {
-    // NOTE: See app.js for notes about config file parsing
-    exit('[Config ERROR] ' + error.message, -3);
+    // Parse config file
+    return configInit.getConfig(CONFIG)
+    .catch(error => {
+      // NOTE: See app.js for notes about config file parsing
+      exit('[Config ERROR] ' + error.message, -3);
+    })
+    .then(config => {
+      db = models.init(config);
+      resolve();
+    })
+    .catch(error => {
+      exit('Error loading the Events DB. Check your configuration and data files: ' + error.message, -2);
+    });
   }
-
-  try
-  {
-    db = models.init(config);
-  }
-  catch (error)
-  {
-    exit('Error loading the Events DB. Check your configuration and data files: ' + error.message, -2);
-  }
-}
+})
+.then(() => {
+  // Ask user what operation to perform (add user, delete user, or change password)
+  console.log('Welcome to the Alcove CLI User Management script');
+  console.log('  1) Add a new User');
+  console.log('  2) Delete a User');
+  console.log('  3) Edit a User');
+  console.log('  (Any other entry to cancel)');
+  let schema = {
+    properties: {
+      choice: {
+        description: 'What do you want to do? ',
+        required: true
+      }
+    }
+  };
+  input.get(schema, (err, results) => {
+    if (results.choice === '1') addUser();
+    else if (results.choice=== '2') deleteUser();
+    else if (results.choice=== '3') changePassword();
+    else exit('Quitting...', 0);
+  });
+});
 
 /**
  * Adds a user to the Alcove database given the username and password supplied.
@@ -284,24 +303,3 @@ function changePassword() {
     });
   });
 }
-
-// Ask user what operation to perform (add user, delete user, or change password)
-console.log('Welcome to the Alcove CLI User Management script');
-console.log('  1) Add a new User');
-console.log('  2) Delete a User');
-console.log('  3) Edit a User');
-console.log('  (Any other entry to cancel)');
-let schema = { 
-  properties: { 
-    choice: { 
-      description: 'What do you want to do? ',
-      required: true
-    }
-  }
-};
-input.get(schema, (err, results) => {
-  if (results.choice === '1') addUser();
-  else if (results.choice=== '2') deleteUser();
-  else if (results.choice=== '3') changePassword();
-  else exit('Quitting...', 0);
-});
