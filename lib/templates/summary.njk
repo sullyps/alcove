@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <title>{{ fromDate }} to {{ toDate }} Summary Email :: Alcove Backup System</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
         {% include "summary-style.njk" %}
@@ -8,51 +9,51 @@
 </head>
 <body>
 <div id="backup-summary-container" class="bg-color-dark">
-    <h2 id="backup-summary-title" class="bg-color-medium color-normal bold">Backup Summary from {{fromDate}} to {{toDate}}</h2>
+    <h2 id="backup-summary-title" class="bg-color-medium color-normal bold">Backup Summary from {{ fromDate }} to {{ toDate }}</h2>
 
     <div id="backup-summary-block-container">
         <div class="backup-summary-block">
             <div class="backup-summary-block-content bg-color-light">
-                <p class="color-normal">Total Disk Space Used: {{totalSize}}</p>
-                <p class="color-normal">Disk Space Remaining: {{freeSpace}}</p>
+                <p class="color-normal">Total Disk Space Used: {{ totalSize }}</p>
+                <p class="color-normal">Disk Space Remaining: {{ freeSpace }}</p>
             </div>
         </div><
         <div class="backup-summary-block">
             <div class="backup-summary-block-content bg-color-light">
                 <p class="color-normal">Last Backup System Startup:</p>
-                <p><span class="color-most-important">{{lastStartDate}}</span> <span class="color-normal bold">{{lastStartTime}}</span></p>
+                <p><span class="color-most-important">{{ lastStartDate }}</span> <span class="color-normal bold">{{ lastStartTime }}</span></p>
             </div>
         </div><
         <div class="backup-summary-block">
             <div class="backup-summary-block-content bg-color-light">
-                <p class="color-normal">Backup System Startups: {{startEvents}}</p>
-                <p class="color-normal">Backup System Shutdowns: <span class="color-error">{{stopEvents}}</span></p>
+                <p class="color-normal">Backup System Startups: {{ startEvents }}</p>
+                <p class="color-normal">Backup System Shutdowns: <span class="color-error">{{ stopEvents }}</span></p>
             </div>
         </div>
     </div>
 
     {% for machine in machines %}
         <div class="machine-summary">
-            <h3 class="machine-name bg-color-medium color-normal bold">{{machine.name}}</h3>
-            <h2 class="machine-info bg-color-medium color-normal no-bold">Total Number of Backups: {{machine.numberBackups}}</h2>
-            <h2 class="machine-info bg-color-medium color-normal no-bold">Total Disk Space Used: {{machine.diskSpace}}</h2>
+            <h3 class="machine-name bg-color-medium color-normal bold">{{ machine.name }}</h3>
+            <h2 class="machine-info bg-color-medium color-normal no-bold">Total Number of Backups: {{ machine.numberBackups }}</h2>
+            <h2 class="machine-info bg-color-medium color-normal no-bold">Total Disk Space Used: {{ machine.diskSpace }}</h2>
             <table class="machine-table bg-color-light color-least-important">
                 {% for event in machine.events %}
                     <tr>
                         <td class="machine-table-td">
                             {% if event.exitCode %}
-                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAMAAAAMCGV4AAAApVBMVEUAAAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAB0VaXZAAAANnRSTlMAAQMEBQgJCgsUFRYXHCAmKCkqKywvOD0+P0BMVWJreHmAjqawsrm6vsDKztrc5ujt8/f5+/1hhYlcAAAAkklEQVQIHQXBiyLCYAAG0POX6+ZaaLmFVcRWNL73fzTnQGmWSZZNAeo+SZJ0p1APWV+PHUw+s68ofV5A/Z10RZM1uNjnbZOZNhO4/cvCTVq7HOE+eeIkW7sc85g84DBbbaaekzuYptVk85rfK/CRmdInP+dgka5wNuRrMja6fM9QQd0nSZK+Asp8lWQ1LwAYAf4BMlAUa33c/2AAAAAASUVORK5CYII=">
+                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAMAAAAMCGV4AAAApVBMVEUAAAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAB0VaXZAAAANnRSTlMAAQMEBQgJCgsUFRYXHCAmKCkqKywvOD0+P0BMVWJreHmAjqawsrm6vsDKztrc5ujt8/f5+/1hhYlcAAAAkklEQVQIHQXBiyLCYAAG0POX6+ZaaLmFVcRWNL73fzTnQGmWSZZNAeo+SZJ0p1APWV+PHUw+s68ofV5A/Z10RZM1uNjnbZOZNhO4/cvCTVq7HOE+eeIkW7sc85g84DBbbaaekzuYptVk85rfK/CRmdInP+dgka5wNuRrMja6fM9QQd0nSZK+Asp8lWQ1LwAYAf4BMlAUa33c/2AAAAAASUVORK5CYII=" alt="Red &quot;x&quot;">
                             {% else %}
-                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAMAAAAMCGV4AAAARVBMVEUAAAAAgAAAgAAAgAAAgAAAgAAAgAAAgAAAgAAAgAAAgAAAgAAAgAAAgAAAgAAAgAAAgAAAgAAAgAAAgAAAgAAAgAAAgAC0uT70AAAAFnRSTlMAAgMPHDg8PkZHYmNkZoyPkbW8zuj7NEkdAQAAAExJREFUCFt9yDcCgCAAxdAvKFasmPsf1UEpLmR7kSq1zY+eoxweWDMXgF5yl5WkGWCUOgg2UzsQ7BQpcwJ34jcy40h8x5Apmc2VrPUAifgFVJ/N4H8AAAAASUVORK5CYII=">
+                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAMAAAAMCGV4AAAARVBMVEUAAAAAgAAAgAAAgAAAgAAAgAAAgAAAgAAAgAAAgAAAgAAAgAAAgAAAgAAAgAAAgAAAgAAAgAAAgAAAgAAAgAAAgAAAgAC0uT70AAAAFnRSTlMAAgMPHDg8PkZHYmNkZoyPkbW8zuj7NEkdAQAAAExJREFUCFt9yDcCgCAAxdAvKFasmPsf1UEpLmR7kSq1zY+eoxweWDMXgF5yl5WkGWCUOgg2UzsQ7BQpcwJ34jcy40h8x5Apmc2VrPUAifgFVJ/N4H8AAAAASUVORK5CYII=" alt="Green check mark">
                             {% endif %}
                         </td>
-                        <td class="machine-table-td color-normal">{{event.size}}</td>
-                        <td class="machine-table-td color-most-important">{{event.minutes}}</td>
-                        <td class="machine-table-td">{{event.date}}</td>
-                        <td class="machine-table-td">{{event.time}}</td>
+                        <td class="machine-table-td color-normal">{{ event.size }}</td>
+                        <td class="machine-table-td color-most-important">{{ event.minutes }}</td>
+                        <td class="machine-table-td">{{ event.date }}</td>
+                        <td class="machine-table-td">{{ event.time }}</td>
                         <td class="machine-table-td">
                             {% if event.exitCode %}
-                                Exit Code <span class="color-error">{{event.exitCode}}</span>: {{event.errReason}}
+                                Exit Code <span class="color-error">{{ event.exitCode }}</span>: {{ event.errReason }}
                             {% else %}
                                 Successful backup
                             {% endif %}
@@ -60,7 +61,7 @@
                     </tr>
                 {% else %}
                     <tr>
-                        <td class="machine-table-td color-normal bold">No attempts were made to back up {{machine.name}}</td>
+                        <td class="machine-table-td color-normal bold">No attempts were made to back up {{ machine.name }}</td>
                     </tr>
                 {% endfor %}
             </table>
