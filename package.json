@@ -37,6 +37,7 @@
     "nunjucks": "^3.2",
     "path": "^0.12",
     "prompt": "^1.0",
+    "request": "^2.88",
     "rsyncwrapper": "^3.0",
     "sequelize": "^5.10",
     "serve-favicon": "^2.5",
