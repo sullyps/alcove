@@ -24,6 +24,11 @@ for i in `find app/ lib/ -type f`; do
 done
 
 ##
+# Copy user management script and make executable
+cp adminUsers.js $dest/
+chmod +x $dest/adminUsers.js
+
+##
 # Copy all static assets
 cp -r public/ $dest/
 cp package.json $dest/
