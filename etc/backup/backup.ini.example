@@ -152,4 +152,10 @@
 ; Leave blank to disable Slack notifications
 [notifications.slack]
 ; Slack Incoming WebHook URL
-webhook=https://hooks.slack.com/services/XXXXXXXXX/YYYYYYYYY/ZZZZZZZZZZZZZZZZZZZZZZZZ
+webhook=https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX
+
+; The frequency at which notifications should be sent to Slack
+; Valid settings are 'summary' (default) and 'all'
+; 'summary' sends the same notifications as email and SMS
+; 'all' sends notifications of all backup processes
+;level=all
