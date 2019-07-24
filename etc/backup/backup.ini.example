@@ -146,4 +146,16 @@
 ; The region that supports SMS from AWS
 ;aws_region='us-east-1'
 
+; Slack
+; If this section is specified, notifications will be sent to the following
+; Slack WebHook as described by slack.com/apps/A0F7XDUAZ-incoming-webhooks
+; Leave blank to disable Slack notifications
+[notifications.slack]
+; Slack Incoming WebHook URL
+webhook=https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX
 
+; The frequency at which notifications should be sent to Slack
+; Valid settings are 'summary' (default) and 'all'
+; 'summary' sends the same notifications as email and SMS
+; 'all' sends notifications of all backup processes
+;level=all
