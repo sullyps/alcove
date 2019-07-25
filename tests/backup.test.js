@@ -124,6 +124,25 @@ describe('BackupEvents save to the database', () => {
 });
 
 describe('ProcessEvents save to the database', () => {
+  test('Add startup event', done => {
+    system.__addProcessStartEvent()
+    .then(() => {
+      return db.ProcessEvent.findAll({
+        where: {
+          event: 'start'
+        }
+      });
+    })
+    .then(processEvents => {
+      expect(processEvents).toHaveLength(1);
+      expect(processEvents[0]).toMatchObject({
+        event: 'start'
+      });
+    })
+    .then(done)
+    .catch(done.fail);
+  });
+
   test('Add successful shutdown', done => {
     system.__addProcessExitEvent(0)
     .then(() => {
