@@ -7,9 +7,19 @@ const path = require('path');
 // This will always be a relative path to the tests directory, where
 // these tests are located.
 const dir = path.join(__dirname, 'tmp', 'backup-dirs');
-const machine = {
+const machine1 = {
   schedule: '0,2-6(6)|1(4);[23:59]',
-  name: 'docker-container',
+  name: 'docker-container-1',
+  host: 'localhost',
+  backupDirectories: [ '/home', '/home/node/***', '/backup_test/***' ],
+  ignoreExtensions: [],
+  ignoreFiles: [],
+  lastBackup: {},
+  failures: []
+};
+const machine2 = {
+  schedule: '0,2-6(6)|1(4);[23:59]',
+  name: 'docker-container-2',
   host: 'localhost',
   backupDirectories: [ '/home', '/home/node/***', '/backup_test/***' ],
   ignoreExtensions: [],
@@ -75,11 +85,11 @@ afterEach(() => {
 
 describe('BackupEvents save to the database', () => {
   test('Add successful BackupEvent', done => {
-    system.__insertBackupEvent(machine, rsyncStats1)
+    system.__insertBackupEvent(machine1, rsyncStats1)
     .then(() => {
       return db.BackupEvent.findAll({
         where: {
-          machine: machine.name,
+          machine: machine1.name,
           rsyncExitCode: 0
         }
       });
@@ -87,7 +97,7 @@ describe('BackupEvents save to the database', () => {
     .then(backupEvents => {
       expect(backupEvents).toHaveLength(1);
       expect(backupEvents[0]).toMatchObject({
-        machine: machine.name,
+        machine: machine1.name,
         rsyncExitCode: rsyncStats1.code,
         transferSize: rsyncStats1.totalTransferredFileSize,
         transferTimeSec: rsyncStats1.totalTransferTime
@@ -98,11 +108,11 @@ describe('BackupEvents save to the database', () => {
   });
 
   test('Add unsuccessful BackupEvent', done => {
-    system.__insertBackupEvent(machine, rsyncStats2)
+    system.__insertBackupEvent(machine1, rsyncStats2)
     .then(() => {
       return db.BackupEvent.findAll({
         where: {
-          machine: machine.name,
+          machine: machine1.name,
           rsyncExitCode: {
             [db.Sequelize.Op.ne]: 0
           }
@@ -112,7 +122,7 @@ describe('BackupEvents save to the database', () => {
     .then(backupEvents => {
       expect(backupEvents).toHaveLength(1);
       expect(backupEvents[0]).toMatchObject({
-        machine: machine.name,
+        machine: machine1.name,
         rsyncExitCode: rsyncStats2.code,
         rsyncExitReason: rsyncStats2.error,
         transferTimeSec: rsyncStats2.totalTransferTime
@@ -184,6 +194,60 @@ describe('ProcessEvents save to the database', () => {
         exitCode: 2,
         exitReason: 'TERMINATED'
       });
+    })
+    .then(done)
+    .catch(done.fail);
+  });
+});
+
+describe('Reading from the database works', () => {
+  let time;
+
+  beforeAll(done => {
+    // Clear all BackupEvents from the db
+    return db.BackupEvent.destroy({
+      force: true,
+      truncate: true,
+      cascade: false
+    })
+    .then(() => {
+      // Add first set of BackupEvents
+      let firstBackupEvents = [];
+      firstBackupEvents.push(system.__insertBackupEvent(machine1, rsyncStats1));
+      firstBackupEvents.push(system.__insertBackupEvent(machine1, rsyncStats2));
+      firstBackupEvents.push(system.__insertBackupEvent(machine2, rsyncStats1));
+      firstBackupEvents.push(system.__insertBackupEvent(machine2, rsyncStats2));
+      return Promise.all(firstBackupEvents);
+    })
+    .then(() => {
+      time = new Date();
+
+      // Add second set of BackupEvents
+      let secondBackupEvents = [];
+      secondBackupEvents.push(system.__insertBackupEvent(machine1, rsyncStats1));
+      secondBackupEvents.push(system.__insertBackupEvent(machine1, rsyncStats2));
+      secondBackupEvents.push(system.__insertBackupEvent(machine2, rsyncStats1));
+      secondBackupEvents.push(system.__insertBackupEvent(machine2, rsyncStats2));
+      return Promise.all(secondBackupEvents);
+    })
+    .then(() => {
+      done();
+    });
+  });
+
+  test('Get all backup events since a date for all machines', done => {
+    system.getBackupEvents(time)
+    .then(backupEvents => {
+      expect(backupEvents).toHaveLength(4);
+    })
+    .then(done)
+    .catch(done.fail);
+  });
+
+  test('Get all backup events since a date for one machine', done => {
+    system.getBackupEvents(time, machine1.name)
+    .then(backupEvents => {
+      expect(backupEvents).toHaveLength(2);
     })
     .then(done)
     .catch(done.fail);
