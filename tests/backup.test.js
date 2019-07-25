@@ -70,7 +70,7 @@ afterEach(() => {
   fs.removeSync(dir);
 });
 
-describe('Database operations work', () => {
+describe('BackupEvents save to the database', () => {
   test('Add successful BackupEvent', done => {
     system.__insertBackupEvent(machine, rsyncStats1)
     .then(() => {
@@ -113,6 +113,33 @@ describe('Database operations work', () => {
         rsyncExitCode: rsyncStats2.code,
         rsyncExitReason: rsyncStats2.error,
         transferTimeSec: rsyncStats2.totalTransferTime
+      });
+    })
+    .then(done)
+    .catch(done.fail);
+  });
+});
+
+describe('ProcessEvents save to the database', () => {
+  test('Add unsuccessful shutdown', done => {
+    const exit = jest.spyOn(process, 'exit').mockImplementation(code => {});
+    system.__addProcessExitEvent(2)
+    .then(() => {
+      expect(exit).toHaveBeenCalledWith(2);
+      return db.ProcessEvent.findAll({
+        where: {
+          exitCode: {
+            [db.Sequelize.Op.ne]: 0
+          }
+        }
+      });
+    })
+    .then(processEvents => {
+      expect(processEvents).toHaveLength(1);
+      expect(processEvents[0]).toMatchObject({
+        event: 'exit',
+        exitCode: 2,
+        exitReason: 'TERMINATED'
       });
     })
     .then(done)
