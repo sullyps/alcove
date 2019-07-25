@@ -9,7 +9,7 @@ const path = require('path');
 const dir = path.join(__dirname, 'tmp', 'backup-dirs');
 const machine1 = {
   schedule: '0,2-6(6)|1(4);[23:59]',
-  name: 'docker-container',
+  name: 'docker-container-1',
   host: 'localhost',
   backupDirectories: [ '/home', '/home/node/***', '/backup_test/***' ],
   ignoreExtensions: [],
@@ -19,7 +19,7 @@ const machine1 = {
 };
 const machine2 = {
   schedule: '0,2-6(6)|1(4);[23:59]',
-  name: 'docker-container',
+  name: 'docker-container-2',
   host: 'localhost',
   backupDirectories: [ '/home', '/home/node/***', '/backup_test/***' ],
   ignoreExtensions: [],
@@ -57,6 +57,9 @@ const invalidNames = ['incorrect-dir-name', '2018-06-15', '2018-06-15T18:49:00:0
 let config;
 let db;
 
+// Prevent adding a shutdown event to the DB from shutting down the entire system
+const exit = jest.spyOn(process, 'exit').mockImplementation(code => {});
+
 beforeAll(done => {
   config = JSON.parse(fs.readFileSync(path.join(__dirname, 'test.config.json')));
   fs.emptyDirSync(config.data_dir);
@@ -80,21 +83,171 @@ afterEach(() => {
   fs.removeSync(dir);
 });
 
-describe('Database operations work', () => {
-  test('Add BackupEvent', done => {
+describe('BackupEvents save to the database', () => {
+  test('Add successful BackupEvent', done => {
     system.__insertBackupEvent(machine1, rsyncStats1)
     .then(() => {
       return db.BackupEvent.findAll({
         where: {
           machine: machine1.name,
-          rsyncExitCode: rsyncStats1.code,
-          transferSize: rsyncStats1.totalTransferredFileSize || 0,
-          transferTimeSec: rsyncStats1.totalTransferTime || 0
+          rsyncExitCode: 0
         }
       });
     })
     .then(backupEvents => {
-      expect(backupEvents.length).toBe(1);
+      expect(backupEvents).toHaveLength(1);
+      expect(backupEvents[0]).toMatchObject({
+        machine: machine1.name,
+        rsyncExitCode: rsyncStats1.code,
+        transferSize: rsyncStats1.totalTransferredFileSize,
+        transferTimeSec: rsyncStats1.totalTransferTime
+      });
+    })
+    .then(done)
+    .catch(done.fail);
+  });
+
+  test('Add unsuccessful BackupEvent', done => {
+    system.__insertBackupEvent(machine1, rsyncStats2)
+    .then(() => {
+      return db.BackupEvent.findAll({
+        where: {
+          machine: machine1.name,
+          rsyncExitCode: {
+            [db.Sequelize.Op.ne]: 0
+          }
+        }
+      });
+    })
+    .then(backupEvents => {
+      expect(backupEvents).toHaveLength(1);
+      expect(backupEvents[0]).toMatchObject({
+        machine: machine1.name,
+        rsyncExitCode: rsyncStats2.code,
+        rsyncExitReason: rsyncStats2.error,
+        transferTimeSec: rsyncStats2.totalTransferTime
+      });
+    })
+    .then(done)
+    .catch(done.fail);
+  });
+});
+
+describe('ProcessEvents save to the database', () => {
+  test('Add startup event', done => {
+    system.__addProcessStartEvent()
+    .then(() => {
+      return db.ProcessEvent.findAll({
+        where: {
+          event: 'start'
+        }
+      });
+    })
+    .then(processEvents => {
+      expect(processEvents).toHaveLength(1);
+      expect(processEvents[0]).toMatchObject({
+        event: 'start'
+      });
+    })
+    .then(done)
+    .catch(done.fail);
+  });
+
+  test('Add successful shutdown', done => {
+    system.__addProcessExitEvent(0)
+    .then(() => {
+      expect(exit).toHaveBeenCalledWith(0);
+      return db.ProcessEvent.findAll({
+        where: {
+          exitCode: 0
+        }
+      });
+    })
+    .then(processEvents => {
+      expect(processEvents).toHaveLength(1);
+      expect(processEvents[0]).toMatchObject({
+        event: 'exit',
+        exitCode: 0,
+        exitReason: 'COMPLETED'
+      });
+    })
+    .then(done)
+    .catch(done.fail);
+  });
+
+  test('Add unsuccessful shutdown', done => {
+    system.__addProcessExitEvent(2)
+    .then(() => {
+      expect(exit).toHaveBeenCalledWith(2);
+      return db.ProcessEvent.findAll({
+        where: {
+          exitCode: {
+            [db.Sequelize.Op.ne]: 0
+          }
+        }
+      });
+    })
+    .then(processEvents => {
+      expect(processEvents).toHaveLength(1);
+      expect(processEvents[0]).toMatchObject({
+        event: 'exit',
+        exitCode: 2,
+        exitReason: 'TERMINATED'
+      });
+    })
+    .then(done)
+    .catch(done.fail);
+  });
+});
+
+describe('Reading from the database works', () => {
+  let time;
+
+  beforeAll(done => {
+    // Clear all BackupEvents from the db
+    return db.BackupEvent.destroy({
+      force: true,
+      truncate: true,
+      cascade: false
+    })
+    .then(() => {
+      // Add first set of BackupEvents
+      let firstBackupEvents = [];
+      firstBackupEvents.push(system.__insertBackupEvent(machine1, rsyncStats1));
+      firstBackupEvents.push(system.__insertBackupEvent(machine1, rsyncStats2));
+      firstBackupEvents.push(system.__insertBackupEvent(machine2, rsyncStats1));
+      firstBackupEvents.push(system.__insertBackupEvent(machine2, rsyncStats2));
+      return Promise.all(firstBackupEvents);
+    })
+    .then(() => {
+      time = new Date();
+
+      // Add second set of BackupEvents
+      let secondBackupEvents = [];
+      secondBackupEvents.push(system.__insertBackupEvent(machine1, rsyncStats1));
+      secondBackupEvents.push(system.__insertBackupEvent(machine1, rsyncStats2));
+      secondBackupEvents.push(system.__insertBackupEvent(machine2, rsyncStats1));
+      secondBackupEvents.push(system.__insertBackupEvent(machine2, rsyncStats2));
+      return Promise.all(secondBackupEvents);
+    })
+    .then(() => {
+      done();
+    });
+  });
+
+  test('Get all backup events since a date for all machines', done => {
+    system.getBackupEvents(time)
+    .then(backupEvents => {
+      expect(backupEvents).toHaveLength(4);
+    })
+    .then(done)
+    .catch(done.fail);
+  });
+
+  test('Get all backup events since a date for one machine', done => {
+    system.getBackupEvents(time, machine1.name)
+    .then(backupEvents => {
+      expect(backupEvents).toHaveLength(2);
     })
     .then(done)
     .catch(done.fail);
