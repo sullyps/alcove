@@ -7,17 +7,7 @@ const path = require('path');
 // This will always be a relative path to the tests directory, where
 // these tests are located.
 const dir = path.join(__dirname, 'tmp', 'backup-dirs');
-const machine1 = {
-  schedule: '0,2-6(6)|1(4);[23:59]',
-  name: 'docker-container',
-  host: 'localhost',
-  backupDirectories: [ '/home', '/home/node/***', '/backup_test/***' ],
-  ignoreExtensions: [],
-  ignoreFiles: [],
-  lastBackup: {},
-  failures: []
-};
-const machine2 = {
+const machine = {
   schedule: '0,2-6(6)|1(4);[23:59]',
   name: 'docker-container',
   host: 'localhost',
@@ -81,20 +71,49 @@ afterEach(() => {
 });
 
 describe('Database operations work', () => {
-  test('Add BackupEvent', done => {
-    system.__insertBackupEvent(machine1, rsyncStats1)
+  test('Add successful BackupEvent', done => {
+    system.__insertBackupEvent(machine, rsyncStats1)
     .then(() => {
       return db.BackupEvent.findAll({
         where: {
-          machine: machine1.name,
-          rsyncExitCode: rsyncStats1.code,
-          transferSize: rsyncStats1.totalTransferredFileSize || 0,
-          transferTimeSec: rsyncStats1.totalTransferTime || 0
+          machine: machine.name,
+          rsyncExitCode: 0
         }
       });
     })
     .then(backupEvents => {
-      expect(backupEvents.length).toBe(1);
+      expect(backupEvents).toHaveLength(1);
+      expect(backupEvents[0]).toMatchObject({
+        machine: machine.name,
+        rsyncExitCode: rsyncStats1.code,
+        transferSize: rsyncStats1.totalTransferredFileSize,
+        transferTimeSec: rsyncStats1.totalTransferTime
+      });
+    })
+    .then(done)
+    .catch(done.fail);
+  });
+
+  test('Add unsuccessful BackupEvent', done => {
+    system.__insertBackupEvent(machine, rsyncStats2)
+    .then(() => {
+      return db.BackupEvent.findAll({
+        where: {
+          machine: machine.name,
+          rsyncExitCode: {
+            [db.Sequelize.Op.ne]: 0
+          }
+        }
+      });
+    })
+    .then(backupEvents => {
+      expect(backupEvents).toHaveLength(1);
+      expect(backupEvents[0]).toMatchObject({
+        machine: machine.name,
+        rsyncExitCode: rsyncStats2.code,
+        rsyncExitReason: rsyncStats2.error,
+        transferTimeSec: rsyncStats2.totalTransferTime
+      });
     })
     .then(done)
     .catch(done.fail);
