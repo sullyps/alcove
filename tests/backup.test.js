@@ -47,6 +47,9 @@ const invalidNames = ['incorrect-dir-name', '2018-06-15', '2018-06-15T18:49:00:0
 let config;
 let db;
 
+// Prevent adding a shutdown event to the DB from shutting down the entire system
+const exit = jest.spyOn(process, 'exit').mockImplementation(code => {});
+
 beforeAll(done => {
   config = JSON.parse(fs.readFileSync(path.join(__dirname, 'test.config.json')));
   fs.emptyDirSync(config.data_dir);
@@ -121,8 +124,29 @@ describe('BackupEvents save to the database', () => {
 });
 
 describe('ProcessEvents save to the database', () => {
+  test('Add successful shutdown', done => {
+    system.__addProcessExitEvent(0)
+    .then(() => {
+      expect(exit).toHaveBeenCalledWith(0);
+      return db.ProcessEvent.findAll({
+        where: {
+          exitCode: 0
+        }
+      });
+    })
+    .then(processEvents => {
+      expect(processEvents).toHaveLength(1);
+      expect(processEvents[0]).toMatchObject({
+        event: 'exit',
+        exitCode: 0,
+        exitReason: 'COMPLETED'
+      });
+    })
+    .then(done)
+    .catch(done.fail);
+  });
+
   test('Add unsuccessful shutdown', done => {
-    const exit = jest.spyOn(process, 'exit').mockImplementation(code => {});
     system.__addProcessExitEvent(2)
     .then(() => {
       expect(exit).toHaveBeenCalledWith(2);
