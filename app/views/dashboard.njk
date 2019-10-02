@@ -38,17 +38,18 @@
     </div>
     <div class="three column row">
       <div class="column">
-        <div class="ui segment" id="dashboard-header-segment">
+        <div class="ui segment dashboard-header-segment">
           Total Backup Size: <br /> <span class="dashboard-bold" id="totalSize">...</span>
+          <div class="ui popup" id="totalSizePopup"></div>
         </div>
       </div>
       <div class="column">
-        <div class="ui segment" id="dashboard-header-segment">
+        <div class="ui segment dashboard-header-segment">
           Free Space: <br /> <span class="dashboard-bold" id="freeSpace">...</span>
         </div>
       </div>
       <div class="column">
-        <div class="ui segment" id="dashboard-header-segment">
+        <div class="ui segment dashboard-header-segment">
           Running since: <br /> <span class="dashboard-bold"> {{ lastBackupSystemRestart }} </span>
         </div>
       </div>
@@ -98,6 +99,15 @@
       {% endfor %}
     </tbody>
   </table>
+</div>
+<div class="template" id="sizePopupTemplate">
+  <div class="content">
+    <div class="header">Details</div>
+    <div class="description">
+      <p><b>Type:</b> <span class="type">...</span></p>
+      <p><b>When:</b> <span class="time">...</span></p>
+    </div>
+  </div>
 </div>
 {% endblock %}
 

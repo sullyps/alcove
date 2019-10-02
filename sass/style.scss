@@ -65,12 +65,14 @@
 {
   float:right;
 }
-#dashboard-header-segment
+
+.dashboard-header-segment
 {
   text-align:center;
   font-size:18px;
   background-color:#EEEEEE;
 }
+
 #dashboard-table
 {
   margin-left:4%;
@@ -111,4 +113,9 @@
 #login-error
 {
   margin: 0 0 8px 0 !important;
+}
+
+.template
+{
+  display: none;
 }

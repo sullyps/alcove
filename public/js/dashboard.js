@@ -4,8 +4,21 @@ $.ajax({
   timeout: 15000
 })
 .done((data, statusText, xhr) => {
-  $("#totalSize").text(xhr.responseJSON.dirSize);
+  // Free space is just a string we can display
   $("#freeSpace").text(xhr.responseJSON.freeSpace);
+
+  // Total size is an object so that we can create a popup that will indicate how accurate
+  // the measurement is, and when it was last completed.
+  // First just the string to display
+  $("#totalSize").text(xhr.responseJSON.usedSpace.size);
+ 
+  // Now create the popup
+  $("#totalSizePopup").empty().append($("#sizePopupTemplate").html());
+  $("#totalSizePopup .type").text(xhr.responseJSON.usedSpace.type);
+  $("#totalSizePopup .time").text(xhr.responseJSON.usedSpace.time);
+
+  // And finally tell the triggering element to popup on hover
+  $("#totalSize").popup({ inline: true, position: "bottom center" });
 })
 .fail((xhr, statusText) => {
   let errorMessage;
@@ -21,6 +34,6 @@ $.ajax({
   {
     errorMessage = "Internal error on backup system size request" + statusText;
   }
-  // TODO:  handle this in the UI
+  // TODO:  handle this in the UI as well
   console.error(errorMessage);
 });
