@@ -40,7 +40,7 @@
     "rsyncwrapper": "^3.0",
     "sequelize": "^4.41",
     "serve-favicon": "^2.5",
-    "sqlite3": "^4.0",
+    "sqlite3": "^4.1",
     "wordwrapjs": "^3.0"
   },
   "devDependencies": {
