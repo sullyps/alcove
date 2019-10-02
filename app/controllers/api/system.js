@@ -1,19 +1,22 @@
 const express = require('express'),
       router = express.Router(),
       system = require('../../../lib/system'),
-      util = require('../../../lib/util');
+      util = require('../../../lib/util'),
+      logging = require('../../../lib/config/log4js');
 
+const logger = logging.getLogger();
 router.get('/size',(req, res, next) => {
-  let config = system.getConfig();
-  Promise.all([util.findDirSize(config.data_dir), util.findFreeSpace(config.data_dir)])
+  Promise.all([system.getUsedSpaceDisplay(), system.getFreeSpaceDisplay()])
     .then(results => {
       res.json({
-        dirSize: util.getFormattedSize(results[0] * 1024), 
-        freeSpace: util.getFormattedSize(results[1] * 1024)
+        usedSpace: results[0], 
+        freeSpace: results[1]
       });
     })
     .catch(err => {
-      // TODO: log this
+      logger.error('Error while reading file system sizes:', err.message);
+      logger.debug(err);
+
       res.json({'error': 'An internal error occurred...'});
     });
 });
