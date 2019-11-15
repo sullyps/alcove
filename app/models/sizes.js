@@ -8,12 +8,7 @@ module.exports = (sequelize, DataTypes) => {
     //   for the 'machine' or else "." if the measurement is a totalSize measurement 
     //   for the whole 'machine'.
     'location' : DataTypes.STRING,
-    'size' : DataTypes.INTEGER,
-    // TODO: this value might not be necessary, only possible before prepareMachines has completed...
-    'dirty' : {
-      'type' : DataTypes.BOOLEAN,
-      'defaultValue': false
-    }
+    'size' : DataTypes.INTEGER
   }, {
     classMethods: {
       associate: (models) => {
