@@ -25,6 +25,10 @@ router.get('/:name/backup/:backup_id/size',(req, res, next) => {
   config = system.getConfig();
   db = models.getDatabase();
 
+
+  // Placeholder for Promise results
+  let size = {};
+
   // Attempt to find the request backup event
   const id = parseInt(req.params.backup_id, 10);
   db.BackupEvent.findOne({
@@ -39,31 +43,31 @@ router.get('/:name/backup/:backup_id/size',(req, res, next) => {
     {
       return res.status(404).json({ error: 'No backup with id "' + id + '" for machine "' + machine.name + '"'});
     }
+
     logger.trace(backupEvent);
+    size.type = 'complete';
+
+    // Check rsync status
     if (backupEvent.rsyncExitCode)
     {
-      return res.json({ size: util.getFormattedSize(0) });
+      // There was an rsync error, so size might be off
+      size.type = 'approximate';
+      size.rsyncExitCode = backupEvent.rsyncExitCode;
     }
-    // List the subdirectories for the requested machine
-    const machinePath = path.join(config.data_dir, machine.name);
-    let backups = fs.readdirSync(machinePath).filter(backup => {
-      return fs.statSync(path.join(machinePath, backup)).isDirectory() &&
-          backup !== rsync.getInProgressName();
-    });
-    // Checks the subdirectories for backups within the time specified in the database
-    const tolerance = 300000;
-    const backupTime = backupEvent.backupTime.getTime() - (1000 * backupEvent.transferTimeSec);
-    for (let backup of backups)
-    {
-      if (Math.abs(util.parseISODateString(backup).getTime() - backupTime) <= tolerance)
-      {
-        // TODO: use memory models
-        // Old call was:
-        //util.getFormattedSize(util.findDirSize(path.join(machinePath, backup))) });
-        return res.json({ size: 'TODO' });
+
+    // Get any size measurement for this directory based on Sizes.location == BackupEvent.dir
+    let dir = backupEvent.dir.split('/').slice(-1);
+    return db.Sizes.findOne({
+      where: {
+        location: dir,
+        machine: machine.name
       }
-    }
-    return res.status(404).json({ error: 'Backup directory not found.' });
+    });
+  })
+  .then(dbSizeRecord => {
+    if (!dbSizeRecord) size.type = 'unknown';
+    else size.size = dbSizeRecord.size;
+    res.json(size);
   })
   .catch(() => {
     return res.status(500).json({ error: 'There was an internal problem, please contact support...' });
