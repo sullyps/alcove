@@ -17,7 +17,6 @@ module.exports = (sequelize, DataTypes) => {
     'transferSize' : DataTypes.INTEGER,
     'transferTimeSec' : DataTypes.INTEGER,
     'dir' : DataTypes.STRING,
-    'size' : DataTypes.INTEGER
   }, {
     classMethods: {
       associate: (models) => {
