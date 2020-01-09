@@ -67,7 +67,7 @@
     </thead>
     <tbody>
       {% for machine in machines %}
-        <tr>
+      <tr id="{{ machine.name | lower }}-row">
           <td>
             <a href="/machine/{{ machine.name }}" class="dashboard-bold"> {{ machine.name }} </a>
           </td>
@@ -93,7 +93,9 @@
               {{ machine.successfulBackups }} of {{ machine.scheduledBackups }} backups successful
             </td>
           {% endif %}
-          <td>...</td>
+          <td>
+            <span class="machine-size">{{ machine.totalSize }}</span>
+          </td>
           <td>{{ machine.timeSinceLastBackup }}</td>
         </tr>
       {% endfor %}

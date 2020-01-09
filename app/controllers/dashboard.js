@@ -36,10 +36,13 @@ router.get('/', (req, res, next) => {
           break;
         }
       }
+      // TODO: Could make use of complete/approx/unknown theme here too
+      let totalSize = (machines[machineName].totalSize) ? machines[machineName].totalSize.size : 'unknown';
       dashboard.machines.push({
         name: machineName,
         successfulBackups: getSuccessfulBackups(machineName),
         scheduledBackups: getScheduledBackups(machineName),
+        totalSize: util.getFormattedSize(totalSize),
         timeSinceLastBackup: timeSinceLastBackup
       });
     }
