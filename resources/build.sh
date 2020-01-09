@@ -2,7 +2,7 @@
 
 dest="dist"
 
-# Go to the project root (assuming
+# Go to the project root (assuming app.js lives there and only there)
 while [[ ! -f app.js ]]; do
   cd ..
   if [[ `pwd` == '/' ]]; then
@@ -22,6 +22,10 @@ for i in `find app/ lib/ -type f`; do
   mkdir -p `dirname $dest/$i`
   sed '/^\s*\/\* test-code \*\/\s*$/,/^\s*\/\* end-test-code \*\/\s*$/d' $i > $dest/$i
 done
+
+#
+# Remove the debug route
+rm $dest/app/controllers/api/debug.js
 
 ##
 # Copy all static assets
