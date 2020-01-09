@@ -159,7 +159,8 @@ function getMachineStatus(machineName)
  */
 function getSuccessfulBackups(machineName)
 {
-  // TODO: use memory models
+  let machine = system.getMachines()[machineName];
+  // TODO: use memory model ^^^
   // Old call was:
   //return util.countSubdirectoriesExclude(path.join(config.data_dir, machineName), [rsync.getInProgressName()]);
   return 0; // TODO
@@ -175,7 +176,7 @@ function getSuccessfulBackups(machineName)
  */
 function getScheduledBackups(machineName)
 {
-  return system.getBuckets(machines[machineName].schedule, new Date()).length;
+  return system.getMachines()[machineName].buckets.length;
 }
 
 /**
