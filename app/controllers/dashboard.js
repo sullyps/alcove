@@ -16,38 +16,43 @@ router.get('/', (req, res, next) => {
   machines = system.getMachines();
 
   let dashboard = {};
-  getSuccessfulBackupEvents()
-  .then(successfulBackupEvents => {
-    let machineStatuses = getMachineStatuses();
-    dashboard.successfulMachines = machineStatuses.successful;
-    dashboard.partiallySuccessfulMachines = machineStatuses.partiallySuccessful;
-    dashboard.unsuccessfulMachines = machineStatuses.unsuccessful;
-    dashboard.idleMachines = machineStatuses.idle;
+  let machineStatuses = getMachineStatuses();
+  dashboard.successfulMachines = machineStatuses.successful;
+  dashboard.partiallySuccessfulMachines = machineStatuses.partiallySuccessful;
+  dashboard.unsuccessfulMachines = machineStatuses.unsuccessful;
+  dashboard.idleMachines = machineStatuses.idle;
 
-    dashboard.machines = [];
-    for (let machineName in machines)
+  dashboard.machines = [];
+  for (let machineName in machines)
+  {
+    let timeSinceLastBackup = 'No backups were found for this machine';
+    let lastBackup;
+    for (let bucket of machines[machineName].buckets)
     {
-      let timeSinceLastBackup = 'No backups were found for this machine';
-      for (let backupEvent of successfulBackupEvents)
+      bucketDate = Date.parse(bucket.date);
+      // Only look at successful backups
+      if (bucket.backup && (!lastBackup || bucketDate > lastBackup))
       {
-        if (backupEvent.machine === machineName)
-        {
-          timeSinceLastBackup = util.getFormattedTimespan(new Date().getTime() - backupEvent.backupTime) + ' ago';
-          break;
-        }
+        lastBackup = Date.parse(bucket.date);
+        timeSinceLastBackup = util.getFormattedTimespan(new Date().getTime() - lastBackup) + ' ago';
       }
-      // TODO: Could make use of complete/approx/unknown theme here too
-      let totalSize = (machines[machineName].totalSize) ? machines[machineName].totalSize.size : 'unknown';
-      dashboard.machines.push({
-        name: machineName,
-        successfulBackups: getSuccessfulBackups(machineName),
-        scheduledBackups: getScheduledBackups(machineName),
-        totalSize: util.getFormattedSize(totalSize),
-        timeSinceLastBackup: timeSinceLastBackup
-      });
     }
+    // TODO: Could make use of complete/approx/unknown theme here too
+    let totalSize = (machines[machineName].totalSize) ? machines[machineName].totalSize.size : 'unknown';
+    dashboard.machines.push({
+      name: machineName,
+      successfulBackups: getSuccessfulBackups(machineName),
+      scheduledBackups: getScheduledBackups(machineName),
+      totalSize: util.getFormattedSize(totalSize),
+      timeSinceLastBackup: timeSinceLastBackup
+    });
+  }
 
-    return getProcessEvents();
+  db.ProcessEvent.findAll({
+    where: {
+      event : 'start'
+    },
+    order: [['eventTime', 'DESC']]
   })
   .then(processEvents => {
     dashboard.lastBackupSystemRestart = util.getFormattedDate(processEvents[0].eventTime);
@@ -163,10 +168,7 @@ function getMachineStatus(machineName)
 function getSuccessfulBackups(machineName)
 {
   let machine = system.getMachines()[machineName];
-  // TODO: use memory model ^^^
-  // Old call was:
-  //return util.countSubdirectoriesExclude(path.join(config.data_dir, machineName), [rsync.getInProgressName()]);
-  return 0; // TODO
+  return machine.buckets.filter(bucket => bucket.backup).length;
 }
 
 /**
@@ -180,22 +182,4 @@ function getSuccessfulBackups(machineName)
 function getScheduledBackups(machineName)
 {
   return system.getMachines()[machineName].buckets.length;
-}
-
-/**
- * Gets an array of ProcessEvents (in a promise) in
- * order from the most recent to the least recent.
- * (Typically used to find the most recent restart.)
- * @returns
- *   A promise containing an array of ProcessEvents
- *   in order from most recent to least recent.
- */
-function getProcessEvents()
-{
-  return db.ProcessEvent.findAll({
-    where: {
-      event : 'start'
-    },
-    order: [['eventTime', 'DESC']]
-  });
 }
