@@ -26,8 +26,8 @@ describe('Bucket creation', () => {
     const date = new Date(1420095600000);
     // 2016-01-03T10:00:00.000Z
     const date2 = new Date(1451815200000);
-    const buckets = system.getBuckets(schedule, date);
-    const buckets2 = system.getBuckets(schedule2, date2);
+    const buckets = system.__getBuckets(schedule, date);
+    const buckets2 = system.__getBuckets(schedule2, date2);
     
     expect(buckets).toEqual( [{ date: new Date('Fri Dec 05 2014 00:00:00 GMT-0600 (CST)') },
         { date: new Date('Mon Dec 08 2014 00:00:00 GMT-0600 (CST)') },

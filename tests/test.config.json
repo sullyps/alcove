@@ -1,4 +1,4 @@
 {
-  "data_dir": "/opt/backup/tests/tmp",
+  "data_dir": "/tmp/alcove/",
   "environment": "test"
 }

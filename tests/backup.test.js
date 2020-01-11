@@ -7,6 +7,7 @@ const path = require('path');
 // This will always be a relative path to the tests directory, where
 // these tests are located.
 const dir = path.join(__dirname, 'tmp', 'backup-dirs');
+const bucket = 'Wed Nov 27 2019 07:27:00 GMT+0000 (UTC)';
 const machine1 = {
   schedule: '0,2-6(6)|1(4);[23:59]',
   name: 'docker-container-1',
@@ -85,7 +86,7 @@ afterEach(() => {
 
 describe('BackupEvents save to the database', () => {
   test('Add successful BackupEvent', done => {
-    system.__insertBackupEvent(machine1, rsyncStats1)
+    system.__insertBackupEvent(machine1, bucket, rsyncStats1)
     .then(() => {
       return db.BackupEvent.findAll({
         where: {
@@ -108,7 +109,7 @@ describe('BackupEvents save to the database', () => {
   });
 
   test('Add unsuccessful BackupEvent', done => {
-    system.__insertBackupEvent(machine1, rsyncStats2)
+    system.__insertBackupEvent(machine1, bucket, rsyncStats2)
     .then(() => {
       return db.BackupEvent.findAll({
         where: {
@@ -213,10 +214,10 @@ describe('Reading from the database works', () => {
     .then(() => {
       // Add first set of BackupEvents
       let firstBackupEvents = [];
-      firstBackupEvents.push(system.__insertBackupEvent(machine1, rsyncStats1));
-      firstBackupEvents.push(system.__insertBackupEvent(machine1, rsyncStats2));
-      firstBackupEvents.push(system.__insertBackupEvent(machine2, rsyncStats1));
-      firstBackupEvents.push(system.__insertBackupEvent(machine2, rsyncStats2));
+      firstBackupEvents.push(system.__insertBackupEvent(machine1, bucket, rsyncStats1));
+      firstBackupEvents.push(system.__insertBackupEvent(machine1, bucket, rsyncStats2));
+      firstBackupEvents.push(system.__insertBackupEvent(machine2, bucket, rsyncStats1));
+      firstBackupEvents.push(system.__insertBackupEvent(machine2, bucket, rsyncStats2));
       return Promise.all(firstBackupEvents);
     })
     .then(() => {
@@ -224,10 +225,10 @@ describe('Reading from the database works', () => {
 
       // Add second set of BackupEvents
       let secondBackupEvents = [];
-      secondBackupEvents.push(system.__insertBackupEvent(machine1, rsyncStats1));
-      secondBackupEvents.push(system.__insertBackupEvent(machine1, rsyncStats2));
-      secondBackupEvents.push(system.__insertBackupEvent(machine2, rsyncStats1));
-      secondBackupEvents.push(system.__insertBackupEvent(machine2, rsyncStats2));
+      secondBackupEvents.push(system.__insertBackupEvent(machine1, bucket, rsyncStats1));
+      secondBackupEvents.push(system.__insertBackupEvent(machine1, bucket, rsyncStats2));
+      secondBackupEvents.push(system.__insertBackupEvent(machine2, bucket, rsyncStats1));
+      secondBackupEvents.push(system.__insertBackupEvent(machine2, bucket, rsyncStats2));
       return Promise.all(secondBackupEvents);
     })
     .then(() => {
