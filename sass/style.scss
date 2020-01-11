@@ -9,8 +9,10 @@ body
   font-weight: bold;
 }
 
-
-
+.template
+{
+  display: none;
+}
 
 
 /* Login Page */
@@ -52,10 +54,8 @@ body
 }
 
 
-
-
-
 /* System Dashboard */
+/* TODO: Check if any of these styles are no longer applied due to changing class names */
 #dashboard-logo
 {
   max-height: 90px;
@@ -77,9 +77,29 @@ body
   text-align: center;
   font-size: 18px !important;
 }
+#dashboard-header-title
+{
+  padding-top:10px;
+  margin-left:-50px;
+  min-width:250px;
+  font-size:10px;
+  text-align:center;
+}
+#dashboard-header-stats-labels
+{
+  width:110px;
+}
+#dashboard-header-stats
+{
+  float:right;
+}
 
-
-
+.dashboard-header-segment
+{
+  text-align:center;
+  font-size:18px;
+  background-color:#EEEEEE;
+}
 
 
 /* Machine Dashboard */

@@ -42,7 +42,7 @@
     "sequelize": "^5.15",
     "serve-favicon": "^2.5",
     "single-instance": "^0.0",
-    "sqlite3": "^4.0",
+    "sqlite3": "^4.1",
     "wordwrapjs": "^4.0"
   },
   "devDependencies": {

@@ -36,7 +36,7 @@ router.get('/:name',(req, res, next) => {
       backupCalendar: backupEvents.calendar,
       backupEvents: backupEvents.backupEvents
     };
-    machineInfo.backupEvents.sort((a, b) => b.backupTime - a.backupTime);
+    //machineInfo.backupEvents.sort((a, b) => b.backupTime - a.backupTime);
     res.render('machine', machineInfo);
   });
 });
@@ -98,7 +98,10 @@ function getBackupEvents(machine, CALENDAR_ROWS = 5)
     calendar[i].dateString = `${calendar[i].date.getMonth() + 1}/${calendar[i].date.getDate()}`;
   }
 
+  return new Promise((resolve, reject) => { resolve("TODO"); });
+  /*
   return new Promise((resolve, reject) => {
+    // FIXME: Use memory models
     const dataDir = (config.data_dir[0] === '/') ? path.join(config.data_dir, machine.name) : path.join(config.app.root, config.data_dir, machine.name);
     system.fillBuckets(system.getBuckets(machine.schedule, new Date()), dataDir, machine, (_, __, ___, buckets) => {
 
@@ -179,5 +182,5 @@ function getBackupEvents(machine, CALENDAR_ROWS = 5)
         };
       }));
     });
-  });
+  });*/
 }
