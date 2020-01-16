@@ -20,7 +20,7 @@ helpful commentary.
 
 ## Requirements
 
-Required version of Node.js: **9.3.0**
+Required version of Node.js: **10.x**
 
 Older versions might work as well, but recent development has been using this
 version of Node exclusively.
