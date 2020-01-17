@@ -1,6 +1,6 @@
 'use strict';
 const DEVEL = (process.env.NODE_ENV !== "production");
-const CONFIG = (DEVEL ? "." : "") + "/etc/backup/backup.ini";
+const CONFIG = (DEVEL ? "." : "") + "/etc/alcove/alcove.ini";
 
 // Include 3rd party libraries
 const express = require('express'),

@@ -31,13 +31,13 @@ The system will not start without a system config and at least one machine confi
 
 ### System Config
 
-Look at the example in `<project_root>/etc/backup/backup.ini.example`. Your config only
+Look at the example in `<project_root>/etc/alcove/alcove.ini.example`. Your config only
 needs to contain the *required* options that don't have defaults (`data_dir`,
 `notifications.email_to` & `notifications.email_from`)
 
 ### Machine Config
 
-Look at the example in `<project_root>/etc/backup/machines/machine.ini.example`. Your
+Look at the example in `<project_root>/etc/alcove/machines/machine.ini.example`. Your
 config only needs to have the *required* options. (`name`, `ip`, and `schedule`)
 
 ### Connections

@@ -1,4 +1,5 @@
 # Table of Exit Codes
+
 The first thing to check if you receive an exit code termination is the logs.
 Likely there will be some error message describing the cause of the
 termination and an error stack trace to point you to the place in the code

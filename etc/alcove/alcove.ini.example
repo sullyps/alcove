@@ -20,7 +20,7 @@
 ;port=3000
 
 ; Storage location of the log files.
-;log_dir='/var/log/backup-system'
+;log_dir='/var/log/alcove'
 
 ; Logging level: ALL < TRACE < DEBUG < INFO < WARN < ERROR < FATAL < MARK | OFF
 ; (Defaults to ERROR)
@@ -53,7 +53,7 @@
 ;max_simultaneous = 6
 
 ; ssh key location to use as the identity to connect to the remote machines.
-;identity = '/etc/backup/private.key'
+;identity = '/etc/alcove/private.key'
 
 ; User to connect to the remote machines. Defaults to root.
 ;user = 'root'

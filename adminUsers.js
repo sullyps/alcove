@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 const DEVEL = (process.env.NODE_ENV !== 'production');
-const CONFIG = (DEVEL ? '.' : '') + '/etc/backup/backup.ini';
+const CONFIG = (DEVEL ? '.' : '') + '/etc/alcove/alcove.ini';
 
 const input = require('prompt'),
       argon = require('argon2'),
