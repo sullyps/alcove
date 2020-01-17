@@ -10,7 +10,7 @@
 # Start the service
 start() {
         initlog -c "echo -n Starting Alcove server: "
-        forever start /usr/share/alcove/app.js -l /var/log/alcove.log -e /var/log/alcove.err.log
+        forever start /usr/share/alcove/app.js -a -l >(logger -t alcove-forever) -e >(logger -t alcove-forever) -o >(logger -t alcover-forever)
         ### Create the lock file ###
         touch /var/lock/subsys/alcove
         success $"Alcove server startup"

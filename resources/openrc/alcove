@@ -10,7 +10,7 @@ extra_commands="checkconfig"
 : ${ALCOVE_CONFIG:=${ALCOVE_CONFDIR}/backup.ini}
 : ${ALCOVE_PIDFILE:=${RC_PREFIX%/}/run/${SVCNAME}.pid}
 
-command="forever start ${ALCOVE_DIR}/app.js -l /var/log/alcove.log -e /var/log/alcove.err.log"
+command="forever start ${ALCOVE_DIR}/app.js -a -l >(logger -t alcove-forever) -o >(logger -t alcove-forever) -e >(logger -t alcove-forever)"
 pidfile="${ALCOVE_PIDFILE}"
 
 depend() {
