@@ -57,14 +57,13 @@ locker.lock()
 .then(configuration => {
   config = configuration;
   // If in development mode and an rsync key file is specified, give warning
-  if (DEVEL && config.rsync.identity)
+  // FIXME: Change this to a simple ownership / permissions check, it applies to all ENVs
+  if (config.rsync.identity)
   {
     console.warn('**  Warning **');
-    console.warn('*** You are running in a development environment and have ***');
-    console.warn('*** configured an SSH identity in your config file.       ***');
-    console.warn('If you are using a docker container, make sure the file permissions');
-    console.warn('for your keys match the docker user, or your rsync connections');
-    console.warn('will always fail.');
+    console.warn('*** You have configured an SSH identity. ***');
+    console.warn('Make sure the file permissions for your keys match your backup user,');
+    console.warn('or your rsync connections will always fail.');
   }
 
   //
