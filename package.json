@@ -1,7 +1,7 @@
 {
-  "name": "bioneos-backup-system",
-  "version": "0.1.0",
-  "description": "Our internal backup system",
+  "name": "alcove-backup-system",
+  "version": "0.0.2",
+  "description": "The Alcove backup system",
   "main": "app.js",
   "jest": {
     "runner": "jest-runner",

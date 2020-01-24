@@ -1,30 +1,40 @@
-FROM node:8
+FROM node:10.18.1-stretch
 
 # Create app directories
-RUN ln -s /opt/backup/etc/backup /etc/backup
-WORKDIR /opt/backup/
+RUN mkdir -p /etc/alcove/ssl; \
+    mkdir /src
+WORKDIR /opt/alcove/
+COPY docker-entrypoint.sh docker-entrypoint.sh
 
-# Install the global gulp executable
+# Install the global gulp executable (container global)
 RUN npm install gulp -g
-
-# Prevent 404 error on apt-get commands as per https://superuser.com/a/1423685
-RUN printf "deb http://archive.debian.org/debian/ jessie main\ndeb-src http://archive.debian.org/debian/ jessie main\ndeb http://security.debian.org jessie/updates main\ndeb-src http://security.debian.org jessie/updates main" > /etc/apt/sources.list
 
 # Install sendmail compatible executable
 RUN apt-get update && apt-get install -y ssmtp && echo "FromLineOverride=YES" >> /etc/ssmtp/ssmtp.conf
 
 # Install openssh-client package for key generation, use rsa protocol
 # Place keys inside /home/node/.ssh and set ownership to node user
-RUN apt-get install -y openssh-client && mkdir /home/node/.ssh && ssh-keygen -t rsa -N '' -f /home/node/.ssh/id_rsa && chown node:node -R /home/node/.ssh
-
-# Configure StrictHostKeyChecking to 'no'
+RUN mkdir /home/node/.ssh; \
+    ssh-keygen -t rsa -N '' -f /home/node/.ssh/id_rsa; \
+    chown node:node -R /home/node/.ssh
+# Turn off StrictHostKeyChecking
 RUN echo "StrictHostKeyChecking no" >> /etc/ssh/ssh_config
 
-# Install rsync
-RUN apt-get install -y rsync
+# Install rsync, sudo
+RUN apt-get install -y rsync sudo
 
-# Drop privileges
+# Generate self-signed cert
+# TODO: allow for an env variable to specify the cert params
+RUN mkdir -p etc/alcove/ssl/; \
+  openssl ecparam -out etc/alcove/ssl/ssl.key -name prime256v1 -genkey; \
+  openssl req -x509 -new -key etc/alcove/ssl/ssl.key -out etc/alcove/ssl/ssl.crt -days 365 -subj "/C=US/ST=Iowa/L=Coralville/O=Bio::Neos, Inc./CN=localhost"
+
+
+# Drop privileges, retain sudo capability for data/logs
+RUN chown -R node:node .
+RUN echo 'Cmnd_Alias CHMOD=/bin/chmod 777 /src/*' >> /etc/sudoers; \
+    echo 'node ALL=(ALL:ALL) NOPASSWD:CHMOD' >> /etc/sudoers
 USER node
 EXPOSE 3000
 
-CMD [ "npm", "start" ]
+CMD [ "/opt/alcove/docker-entrypoint.sh" ]

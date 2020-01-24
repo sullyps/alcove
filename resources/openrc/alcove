@@ -1,0 +1,39 @@
+#!/sbin/openrc-run
+# Copyright 2020 Bio::Neos, Inc.
+# Distributed under the terms of the GNU General Public License v2
+
+extra_commands="checkconfig"
+
+# TODO: Rename this to "/etc/alcove"!
+: ${ALCOVE_DIR:=${RC_PREFIX%/}/usr/share/alcove}
+: ${ALCOVE_CONFDIR:=${RC_PREFIX%/}/etc/backup}
+: ${ALCOVE_CONFIG:=${ALCOVE_CONFDIR}/backup.ini}
+: ${ALCOVE_PIDFILE:=${RC_PREFIX%/}/run/${SVCNAME}.pid}
+
+command="forever start ${ALCOVE_DIR}/app.js -a -l >(logger -t alcove-forever) -o >(logger -t alcove-forever) -e >(logger -t alcove-forever)"
+pidfile="${ALCOVE_PIDFILE}"
+
+depend() {
+  use logger net dns
+}
+
+checkconfig() {
+  if [ ! -e "${ALCOVE_CONFIG}" ] ; then
+    eerror "You need an ${ALCOVE_CONFIG} file to run the Alcove Backup System."
+    eerror "There is a sample file in ${ALCOVE_CONFDIR}/backup.ini.example"
+    return 1
+  fi
+}
+
+start_pre() {
+  # Sanity check 
+  checkconfig || return $?
+}
+
+stop_pre() {
+  # Sanity check only performed on restarts
+  # (i.e. don't stop the daemon if we know it will not be able to restart)
+  if [ "${RC_CMD}" = "restart" ] ; then
+    checkconfig || return $?
+  fi
+}

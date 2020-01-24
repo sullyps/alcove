@@ -32,7 +32,7 @@ console IAM user and then generate an 'Access Key' for that user.
 - Search for and select `AmazonSNSRole` to apply to the account
 - Review and create the user
 - Do not forget to enter the `Secret access key` on the final screen into your
-  `backup.ini` config file as there is no other way to retrieve that key once
+  `alcove.ini` config file as there is no other way to retrieve that key once
   the screen has been closed.
 
 ## Step 2: Create a SNS topic
@@ -50,7 +50,7 @@ If you only want to send to a single phone number, skip this step and simply
 enter the number in the `sms_to` field of the config using the E.164 format.
 
 ## Step 4: Configure the config files
-- In `backup.ini`, the `notifications.sms` section should contain an `sms_to` field
+- In `alcove.ini`, the `notifications.sms` section should contain an `sms_to` field
   with the topic ARN OR a single phone number if you only want to send messages
   to one number
  

@@ -35,6 +35,8 @@ chmod +x $dest/adminUsers.js
 ##
 # Copy all static assets
 cp -r public/ $dest/
+cp -r resources/openrc/ $dest/
+cp -r resources/sysv/ $dest/
 cp package.json $dest/
 
 ## 

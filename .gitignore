@@ -5,7 +5,7 @@ node_modules
 resources/htpassword
 data
 logs
-etc/backup/*
+etc/alcove/*
 dist
 
 # Temporary disk storage for tests
@@ -17,7 +17,7 @@ tests/tmp**
 .*.swp
 
 # Reallow these
-!etc/backup/backup.ini.example
-!etc/backup/machines/machine.ini.example
-!etc/backup/ssl/README
+!etc/alcove/alcove.ini.example
+!etc/alcove/machines/machine.ini.example
+!etc/alcove/ssl/README
 
