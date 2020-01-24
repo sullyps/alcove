@@ -17,7 +17,7 @@ tests/tmp**
 .*.swp
 
 # Reallow these
-!etc/alcove/backup.ini.example
+!etc/alcove/alcove.ini.example
 !etc/alcove/machines/machine.ini.example
 !etc/alcove/ssl/README
 
