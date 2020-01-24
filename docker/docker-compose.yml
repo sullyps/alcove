@@ -1,0 +1,14 @@
+version: '3.2'
+
+services:
+  alcove:
+    build: .
+    environment:
+      - NODE_ENV="development"
+    ports:
+      - "127.0.0.1:3333:443"
+    volumes:
+      - type: bind
+        source: ../
+        target: /src
+    container_name: alcove-dev
