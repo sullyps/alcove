@@ -1,10 +1,8 @@
 FROM node:10.18.1-stretch
 
 # Create app directories
-RUN mkdir -p /etc/alcove/ssl; \
-    mkdir /src
+RUN mkdir -p /etc/alcove/ssl
 WORKDIR /opt/alcove/
-COPY docker-entrypoint.sh docker-entrypoint.sh
 
 # Install the global gulp executable (container global)
 RUN npm install gulp -g
@@ -25,16 +23,19 @@ RUN apt-get install -y rsync sudo
 
 # Generate self-signed cert
 # TODO: allow for an env variable to specify the cert params
-RUN mkdir -p etc/alcove/ssl/; \
-  openssl ecparam -out etc/alcove/ssl/ssl.key -name prime256v1 -genkey; \
-  openssl req -x509 -new -key etc/alcove/ssl/ssl.key -out etc/alcove/ssl/ssl.crt -days 365 -subj "/C=US/ST=Iowa/L=Coralville/O=Bio::Neos, Inc./CN=localhost"
+RUN mkdir -p /etc/alcove/ssl/; \
+  openssl ecparam -out /etc/alcove/ssl/ssl.key -name prime256v1 -genkey; \
+  openssl req -x509 -new -key /etc/alcove/ssl/ssl.key -out /etc/alcove/ssl/ssl.crt \
+    -days 365 -subj "/C=US/ST=Iowa/L=Coralville/O=Bio::Neos, Inc./CN=localhost"
 
+# Entrypoint
+COPY docker-entrypoint.sh /docker-entrypoint.sh
 
 # Drop privileges, retain sudo capability for data/logs
 RUN chown -R node:node .
-RUN echo 'Cmnd_Alias CHMOD=/bin/chmod 777 /src/*' >> /etc/sudoers; \
+RUN echo 'Cmnd_Alias CHMOD=/bin/chmod 777 /opt/alcove/*' >> /etc/sudoers; \
     echo 'node ALL=(ALL:ALL) NOPASSWD:CHMOD' >> /etc/sudoers
 USER node
 EXPOSE 3000
 
-CMD [ "/opt/alcove/docker-entrypoint.sh" ]
+CMD [ "/docker-entrypoint.sh" ]
