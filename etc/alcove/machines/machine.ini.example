@@ -60,8 +60,8 @@
 ; The SCHEDULE and TIME must be separated by a single semi-colon (;)
 ; The entire string must be surrounded with quotes ("")
 ; Ex] Backup every day at 3AM, keep 7 copies
-;   schedule=0,1,2,3,4,5,6(7);[03:00]
+;   schedule="0,1,2,3,4,5,6(7);[03:00]"
 ; Ex] Backup every Monday at 1AM, keep 4 copies
-;   schedule=1(4);[01:00]
+;   schedule="1(4);[01:00]"
 ;
-;schedule=
+;schedule=""

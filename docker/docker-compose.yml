@@ -1,4 +1,4 @@
-version: '3.2'
+version: '3.7'
 
 services:
   alcove:
@@ -10,5 +10,12 @@ services:
     volumes:
       - type: bind
         source: ../
-        target: /src
+        target: /opt/alcove/
+      - type: volume
+        source: node_modules
+        target: /src/node_modules
     container_name: alcove-dev
+
+volumes:
+  node_modules:
+    name: alcove_node_modules

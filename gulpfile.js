@@ -16,8 +16,6 @@ gulp.task('init', (done) => {
   fs.ensureDirSync('./data/');
   fs.ensureDirSync('./logs/');
   fs.ensureDirSync('./etc/');
-  fs.ensureDirSync('./etc/backup/');
-  fs.ensureDirSync('./etc/backup/ssl/');
   fs.ensureDirSync('./resources/');
   
   // Add any other required directories here
@@ -54,8 +52,8 @@ gulp.task('sass', (done) => {
 });
 
 gulp.task('watch', (done) => {
-  gulp.watch('./sass/**/*.scss', gulp.series('sass'));
-  gulp.watch(jsSrc, gulp.series('lint'));
+  gulp.watch('./sass/**/*.scss', {usePolling: true}, gulp.series('sass'));
+  gulp.watch(jsSrc, {usePolling: true}, gulp.series('lint'));
   
   // Signal completion
   done();
