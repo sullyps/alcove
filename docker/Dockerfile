@@ -26,7 +26,8 @@ RUN apt-get install -y rsync sudo
 RUN mkdir -p /etc/alcove/ssl/; \
   openssl ecparam -out /etc/alcove/ssl/ssl.key -name prime256v1 -genkey; \
   openssl req -x509 -new -key /etc/alcove/ssl/ssl.key -out /etc/alcove/ssl/ssl.crt \
-    -days 365 -subj "/C=US/ST=Iowa/L=Coralville/O=Bio::Neos, Inc./CN=localhost"
+    -days 365 -subj "/C=US/ST=Iowa/L=Coralville/O=Bio::Neos, Inc./CN=localhost"; \
+  chown node:node /etc/alcove/ssl/*
 
 # Entrypoint
 COPY docker-entrypoint.sh /docker-entrypoint.sh

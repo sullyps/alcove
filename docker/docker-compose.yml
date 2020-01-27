@@ -6,7 +6,7 @@ services:
     environment:
       - NODE_ENV="development"
     ports:
-      - "127.0.0.1:3333:443"
+      - "127.0.0.1:3333:3000"
     volumes:
       - type: bind
         source: ../
