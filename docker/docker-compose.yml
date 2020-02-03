@@ -6,7 +6,7 @@ services:
     environment:
       - NODE_ENV="development"
     ports:
-      - "127.0.0.1:3333:3000"
+      - "127.0.0.1:443:3000"
     volumes:
       - type: bind
         source: ../
@@ -14,8 +14,13 @@ services:
       - type: volume
         source: node_modules
         target: /opt/alcove/node_modules
+      - type: volume
+        source: config
+        target: /opt/alcove/etc
     container_name: alcove-dev
 
 volumes:
   node_modules:
     name: alcove_node_modules
+  config:
+    name: alcove_config
