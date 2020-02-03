@@ -95,10 +95,10 @@ locker.lock()
 .then(() => {
   // System
   logger.debug('Starting main process...');
-  system.init(config, db);
+  return system.init(config, db);
 })
 .catch(err => {
-  logger.error('Error during Backup System startup: ' + err.message);
+  logger.error('Error during Alcove Backup System startup: ' + err.message);
   logger.debug(err.stack);
   process.exit(-1);
 })
@@ -108,16 +108,22 @@ locker.lock()
   require('./lib/config/express')(app, config);
 
   // Start either HTTP or HTTPS server, based on configuration file
+  logger.debug('Starting the monitoring web interface...');
   if (config.secure)
   {
     let key = fs.readFileSync(config.secure.key, 'utf-8');
     let cert = fs.readFileSync(config.secure.cert, 'utf-8');
-    require('https').createServer({'key': key, 'cert': cert}, app).listen(config.port);
     logger.info('HTTPS Monitoring interface ready and listening on port ' + config.port + '...');
+    require('https').createServer({'key': key, 'cert': cert}, app).listen(config.port);
   }
   else
   {
-    app.listen(config.port);
     logger.info('HTTP Monitoring interface ready and listening on port ' + config.port + '...');
+    app.listen(config.port);
   }
+})
+.catch(err => {
+  logger.error('Error while starting the Alcove Backup System UI: ' + err.message);
+  logger.debug(err.stack);
+  process.exit(-1);
 });

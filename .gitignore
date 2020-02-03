@@ -6,6 +6,7 @@ resources/htpassword
 data
 logs
 etc/alcove/*
+config/*
 dist
 
 # Temporary disk storage for tests
@@ -16,8 +17,12 @@ tests/tmp**
 *~
 .*.swp
 
-# Reallow these
+# Reallow these (old)
 !etc/alcove/alcove.ini.example
 !etc/alcove/machines/machine.ini.example
 !etc/alcove/ssl/README
+
+!config/alcove.ini.example
+!config/machines/machine.ini.example
+!config/ssl/README
 
