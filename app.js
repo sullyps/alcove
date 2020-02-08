@@ -69,8 +69,18 @@ locker.lock()
   //
   // Create the logger as configured
   //
-  logging.configure(config);
-  logger = logging.getLogger();
+  try
+  {
+    logging.configure(config);
+    logger = logging.getLogger();
+  }
+  catch(error)
+  {
+    const msg = '[Config ERROR] ' + error.message;
+    console.error(wrap.wrap(msg, {width: 80, noTrim: true}));
+    throw(error)
+  }
+
   logger.info(config.app.name + ' v' + config.app.version + ' starting up!');
 
 
