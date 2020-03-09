@@ -6,7 +6,7 @@ cd /opt/alcove
 if [ ! -f node_modules/ready ]; then
   ##
   # Install / compile modules
-  sudo chmod 777 node_modules
+  sudo chmod 777 /opt/alcove/node_modules
   npm install
 
   # Finish install
