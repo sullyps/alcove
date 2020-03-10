@@ -43,3 +43,32 @@ I intend for this guide to be a living document, and reviewed on a periodic basi
   * We are open to a "restore" feature through this interface, however.
   * We potentially will allow a "generate config file" feature that would generate a new config, but
     would not be able to restart the system (you would need root access to the system ideally).
+
+
+## Areas for Improvement
+
+As with any project, some areas of this project are poorly designed, or had been created in the
+midst of changing requirements and unknown constraints. This section is to serve as a collection of
+the areas of the system that are currently functional, but could be done better. Generally
+sections noted in this area should prevent the following:
+
+1. Enhanced functionality (the ability to add or improve future features)
+2. Improved modularity or extensibility
+3. Easier maintenance due to organization or clarity
+4. Noticeable performance improvements
+
+By addressing these areas we should be able to acheive at least one of the above goals. We are not
+going to try to reduce complexity just to reduce code size, or for minor performance gains, or the 
+sake of doing something in a different way. If one of the above goals cannot be achieved, an area
+shouldn't be listed in this section.
+
+* Side effects of some methods in `lib/system.js`
+  * Several methods of the main system rely on mutating objects, resulting in a confusing flow.
+  * Several methods also seem to be responsible for multiple different requirements, violating the
+    single responsibility principle and leading to confusing code.
+* Inconsistent usage of callbacks, promises, and returns
+  * We need to decide on a single best implementation and apply it consistently.
+* Documentation of important Memory structures
+  * Because we are not using TypeScript we have opened the door for some runtime errors based on
+    dynamic types and poorly documented structures. At a minimum, these should have detailed
+    descriptions accessible for all developers.
