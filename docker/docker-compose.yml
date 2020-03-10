@@ -12,11 +12,11 @@ services:
         source: ../
         target: /opt/alcove/
       - type: volume
-        source: node_modules
-        target: /opt/alcove/node_modules
-      - type: volume
         source: config
         target: /opt/alcove/etc
+      - type: volume
+        source: node_modules
+        target: /opt/alcove/node_modules
     container_name: alcove-dev
 
 volumes:

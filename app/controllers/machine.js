@@ -98,89 +98,57 @@ function getBackupEvents(machine, CALENDAR_ROWS = 5)
     calendar[i].dateString = `${calendar[i].date.getMonth() + 1}/${calendar[i].date.getDate()}`;
   }
 
-  return new Promise((resolve, reject) => { resolve("TODO"); });
-  /*
-  return new Promise((resolve, reject) => {
-    // FIXME: Use memory models
-    const dataDir = (config.data_dir[0] === '/') ? path.join(config.data_dir, machine.name) : path.join(config.app.root, config.data_dir, machine.name);
-    system.fillBuckets(system.getBuckets(machine.schedule, new Date()), dataDir, machine, (_, __, ___, buckets) => {
 
-      // Count which days should have attempted to back up and add to the calendar
-      buckets.forEach(bucket => {
-        for (let i = 0; i < calendar.length; i++)
+  return new Promise((resolve, reject) => { 
+    // Count which days should have attempted to back up and add to the calendar
+    machine.buckets.forEach(bucket => {
+      for (let i = 0; i < calendar.length; i++)
+      {
+        if (util.sameDay(calendar[i].date, bucket.date))
         {
-          if (util.sameDay(calendar[i].date, bucket.date))
-          {
-            calendar[i].bucket = bucket;
-            return;
-          }
+          calendar[i].bucket = bucket;
+          return;
         }
-      });
-
-      // Find the oldest bucket or the oldest date on the calendar (whichever is older)
-      // and only query the DB for events after that
-      const oldestIncludedBackupEvent = buckets.reduce((minimum, current) => {
-        return current.date < minimum.date ? current : minimum;
-      }, {
-        date: calendar[0].date.setHours(0, 0, 0, 0)
-      });
-
-      // Query the DB for all backup events that belong on the calendar
-      resolve(db.BackupEvent.findAll({
-        where: {
-          machine: machine.name,
-          backupTime: {
-            [Op.gte]: oldestIncludedBackupEvent.date
-          }
-        },
-        order: [['backupTime']]
-      })
-      .then(backupEvents => {
-        // Add formatted versions of each backup event's information;
-        // Add backup events to each calendar date and update each day's
-        // count of successful and attempted backups
-        backupEvents.forEach(backupEvent => {
-          backupEvent.transferSizeStr = util.getFormattedSize(backupEvent.transferSize);
-          backupEvent.transferTimeStr = util.getFormattedTimespan(backupEvent.transferTimeSec);
-          for (let i = 0; i < calendar.length; i++)
-          {
-            if (util.sameDay(calendar[i].date, backupEvent.backupTime))
-            {
-              calendar[i].backupEvents.push(backupEvent);
-              return;
-            }
-          }
-        });
-
-        // Assign backup event IDs to the calendar days in order to make days with events clickable
-        calendar.forEach(day => {
-          let mostRecentEventDate;
-          day.backupEvents.forEach(backupEvent => {
-            if (day.id === undefined || backupEvent.backupTime > mostRecentEventDate)
-            {
-              mostRecentEventDate = backupEvent.backupTime;
-              day.id = backupEvent.id;
-            }
-          });
-        });
-
-        // Convert the flat array to a 2D array like an actual calendar
-        let calendarMatrix = [];
-        for (let i = 0; i < CALENDAR_ROWS; i++)
-        {
-          let row = [];
-          for (let j = 0; j < 7; j++)
-          {
-            row.push(calendar[(7 * i) + j]);
-          }
-          calendarMatrix.push(row);
-        }
-
-        return {
-          calendar: calendarMatrix,
-          backupEvents: backupEvents
-        };
-      }));
+      }
     });
-  });*/
+
+    // Find the oldest bucket or the oldest date on the calendar (whichever is older)
+    // and only query the DB for events after that
+    const oldestIncludedBackupEvent = machine.buckets.reduce((minimum, current) => {
+      return current.date < minimum.date ? current : minimum;
+    }, {
+      date: calendar[0].date.setHours(0, 0, 0, 0)
+    });
+
+    // Convert the flat array to a 2D array like an actual calendar
+    // TODO: This is unnecessary, we could just render the flat array as a matrix in the template...
+    let calendarMatrix = [];
+    for (let i = 0; i < CALENDAR_ROWS; i++)
+    {
+      let row = [];
+      for (let j = 0; j < 7; j++)
+      {
+        row.push(calendar[(7 * i) + j]);
+      }
+      calendarMatrix.push(row);
+    }
+
+    // Transform the machine memory object into a simplified list of backups
+    // TODO: We need additional information from the DB events, either load these here or request via AJAX
+    let backupEvents = machine.buckets
+      .filter(bucket => {
+        return (bucket.backup)
+      })
+      .map(bucket => {
+        return { 
+          date: util.getFormattedDate(new Date(Date.parse(bucket.backup.date))), 
+          size: util.getFormattedSize(bucket.backup.size)
+        };
+      });
+
+    resolve({
+      calendar: calendarMatrix,
+      backupEvents: backupEvents
+    });
+  });
 }

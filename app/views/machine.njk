@@ -71,6 +71,7 @@
             <thead>
             <tr>
               <th class="collapsing">Backup Time</th>
+              <th class="collapsing">Size on Disk</th>
               <th class="collapsing">Transfer Size</th>
               <th class="collapsing">Transfer Time</th>
               <th class="collapsing">Exit Code</th>
@@ -79,12 +80,13 @@
             </thead>
             <tbody>
             {% for backupEvent in backupEvents %}
-              <tr id="backupevent-{{ backupEvent.id }}">
+              <tr>
                 {% if backupEvent.rsyncExitCode %}
-                  <td class="collapsing negative"><i class="exclamation circle icon"></i>{{ backupEvent.backupTime }}</td>
+                  <td class="collapsing negative"><i class="exclamation circle icon"></i>{{ backupEvent.date }}</td>
                 {% else %}
-                  <td class="collapsing positive"><i class="check circle icon"></i>{{ backupEvent.backupTime }}</td>
+                  <td class="collapsing positive"><i class="check circle icon"></i>{{ backupEvent.date }}</td>
                 {% endif %}
+                <td class="collapsing">{{ backupEvent.size }}</td>
                 <td class="collapsing">{{ backupEvent.transferSizeStr }}</td>
                 <td class="collapsing">{{ backupEvent.transferTimeStr }}</td>
                 <td class="collapsing">{{ backupEvent.rsyncExitCode }}</td>

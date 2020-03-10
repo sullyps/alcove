@@ -5,6 +5,9 @@ and might consider this for production as well. However, this is a new decision
 and thus, our thinking on the environment setup will be in a state of flux
 until we finalize our plans.
 
+**Out of Date, needs to be updated for latest environment**
+
+
 ## Requirements
 
 There are several components that will require appropriate handling to allow
