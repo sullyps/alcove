@@ -57,7 +57,7 @@ locker.lock()
 .then(configuration => {
   config = configuration;
   // If in development mode and an rsync key file is specified, give warning
-  // FIXME: Change this to a simple ownership / permissions check, it applies to all ENVs
+  // TODO: Change this to a simple ownership / permissions check, it applies to all ENVs
   if (config.rsync.identity)
   {
     console.warn('**  Warning **');
@@ -78,7 +78,7 @@ locker.lock()
   {
     const msg = '[Config ERROR] ' + error.message;
     console.error(wrap.wrap(msg, {width: 80, noTrim: true}));
-    throw(error)
+    throw(error);
   }
 
   logger.info(config.app.name + ' v' + config.app.version + ' starting up!');
