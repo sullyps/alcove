@@ -1,7 +1,7 @@
 {
   "name": "alcove-backup-system",
-  "version": "0.0.3",
-  "description": "The Alcove backup system, prerelease 3",
+  "version": "0.0.4_work",
+  "description": "The Alcove backup system",
   "homepage": "https://github.com/bioneos/alcove",
   "repository": "https://github.com/bioneos/alcove.git",
   "main": "app.js",
