@@ -1,7 +1,9 @@
 {
   "name": "alcove-backup-system",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "The Alcove backup system",
+  "homepage": "https://github.com/bioneos/alcove",
+  "repository": "https://github.com/bioneos/alcove.git",
   "main": "app.js",
   "jest": {
     "runner": "jest-runner",
@@ -46,13 +48,13 @@
     "wordwrapjs": "^4.0"
   },
   "devDependencies": {
-    "gulp": "^4.0.0",
+    "gulp": "^4.0",
     "gulp-jshint": "^2.1",
     "gulp-livereload": "^4.0",
-    "gulp-nodemon": "^2.4",
+    "gulp-nodemon": "^2.5",
     "gulp-plumber": "^1.2",
     "gulp-sass": "^4.0",
-    "jest": "^24.8",
+    "jest": "^25.2",
     "jshint": "^2.10"
   }
 }
