@@ -3,18 +3,27 @@ const system = require('../lib/system.js'),
       path = require('path'),
       fs = require('fs-extra');
 
-const dir = path.join(__dirname,'tmp','backup_test');
+const dir = path.join(__dirname,'tmp', 'bucket_test');
 
+// 'tmp' directory
+beforeAll(() => {
+  if (!fs.existsSync(path.dirname(dir)))
+    fs.mkdirSync(path.dirname(dir));
+});
+afterAll(() => {
+  if (fs.existsSync(path.dirname(dir)))
+    fs.rmdirSync(path.dirname(dir));
+});
+
+// 'tmp/bucket_test' directory
 beforeEach(() => {
   if (fs.existsSync(dir))
     fs.removeSync(dir);
   fs.mkdirSync(dir);
 });
-
 afterEach(() => {
   if (fs.existsSync(dir))
     fs.removeSync(dir);
-  fs.mkdirSync(dir);
 });
 
 // Testing bucket generation from a schedule object and date
