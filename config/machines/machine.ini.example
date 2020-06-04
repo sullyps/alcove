@@ -11,6 +11,7 @@
 ;host=
 
 ; The port of the SSH server on the machine
+; Must be equal to 22 or between 1024 and 65535 (inclusive)
 ; Defaults to 22 when blank
 ;port = 12345
 
