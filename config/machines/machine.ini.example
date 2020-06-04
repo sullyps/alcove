@@ -10,6 +10,11 @@
 ;
 ;host=
 
+; The port of the SSH server on the machine
+; Must be equal to 22 or between 1024 and 65535 (inclusive)
+; Defaults to 22 when blank
+;port = 12345
+
 ; Your list of backup directories. 
 ; Specify all directories you want included in the list of backed up 
 ; directories, using multiple lines and the [] syntax.
