@@ -3,7 +3,7 @@ const util = require('../lib/util.js');
 const config = require('../lib/config/init.js');
 
 describe('Schedule Manipulation', () => {
-  const schedule1 = '0,1,2,3,4,5,6(7)|1(5);[9:15]';
+  const schedule1 = '0,1,2,3,4,5,6(14)|1(5);[9:15]';
   const schedule2 = '1,3,5(4)|1(10)|6(3);[23:59]';
   const schedule3 = '1-5,6(7);[11:04]';
   const schedule4 = '6-2,4(3);[11:06]';
@@ -17,7 +17,7 @@ describe('Schedule Manipulation', () => {
 
       expect(scheduleObj1).toEqual({
         time : { minutes : 15, hours : 9 },
-        daysSets : [ { number : 7, days : [0,1,2,3,4,5,6] },
+        daysSets : [ { number : 14, days : [0,1,2,3,4,5,6] },
           { number : 5,days : [1] } ]
       });
 
