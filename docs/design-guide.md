@@ -1,5 +1,6 @@
 # Design Guide
-## Bio::Neos Backup System
+
+## Alcove Backup System
 
 I've been struggling with exactly what I want to do to maintain some level of consistency among the
 codebase for this project and I think perhaps creating a guide to record important design decisions
@@ -43,7 +44,6 @@ I intend for this guide to be a living document, and reviewed on a periodic basi
   * We are open to a "restore" feature through this interface, however.
   * We potentially will allow a "generate config file" feature that would generate a new config, but
     would not be able to restart the system (you would need root access to the system ideally).
-
 
 ## Areas for Improvement
 
