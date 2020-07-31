@@ -21,7 +21,7 @@ You can download Docker here:
 - [MacOS](https://download.docker.com/mac/stable/Docker.dmg)
 - [Windows](https://download.docker.com/win/stable/Docker%20Desktop%20Installer.exe)
 
-From the project root, run the following command to create an image of Alcove called `alcove`:
+Once Docker is running, from the project root, run the following command to create an image of Alcove called `alcove`:
 
 ```shell script
 docker build -t alcove docker/
@@ -33,7 +33,7 @@ This command might take a while depending on your internet speed since it has to
 docker container run -it -p 3000:3000 -v "$(pwd):/opt/alcove" -u root --name alcove alcove bash
 ```
 
-This command creates a container called `alcove` from the image `alcove`. It forwards connections from port 3000 on your computer to port 3000 in the container. It also creates a bind mount between the current working directory on your computer (which should be the project root) and `/opt/alcove` in the container. This means that project files changed on your computer get changed in the container and vice versa. Finally, the command enters a bash shell as the `root` user.
+This command creates a container called `alcove` from the image `alcove`. It forwards connections from port 3000 on your computer to port 3000 in the container. It also creates a bind mount between the current working directory on your computer (which should be the project root) and `/opt/alcove` in the container. This means that project files changed on your computer get changed in the container and vice versa. Finally, the command enters a bash shell inside the container as the `root` user.
 
 Once the command finishes, you should see a shell starting with `root@d6d42b77be85:/opt/alcove#` where `d6d42b77be85` is the container ID.
 
@@ -131,13 +131,13 @@ Creating a machine configuration file is much simpler. Simply create a file in `
 
 ### Additional Configuration
 
-To finish up your configuration, you need to create some mock files on which to test backups. If you use the configuration files above, the following command (from the container shell) will create the necessary files to test if the backup functionality is working:
+To finish up your configuration, you need to create some mock files on which to test backups. If you use the configuration files from above, the following command (from the container shell) will create the necessary files to test if the backup functionality is working:
 
 ```shell script
 mkdir /backup-test && echo "This file should be ignored because of its extension" > /backup-test/ext-ignore.testignored && echo "This file should be backed up" > /backup-test/essay.txt && echo "This Markdown file should be backed up" > /backup-test/another-file.md && mkdir /backup-test/ignored && echo "This file should be ignored because of the directory in which it is located" > /backup-test/ignored/dir-ignore.txt && echo "This file should be ignored because it is specifically ignored in the machine config" > /backup-test/ignore-me.txt
 ```
 
-Next, to enable HTTPS on the monitoring interface, you need to generate an SSL certificate. To do this, create an `ssl` folder in the `<project_root>/etc/alcove` directory. Then, run the following commands (from the container) in that folder:
+Next, to enable HTTPS on the monitoring interface, you need to generate an SSL certificate. To do this, create an `ssl` folder in the `<project_root>/etc/alcove` directory. Then, run the following two commands (from the container) in that folder:
 
 ```shell script
 openssl ecparam -out ssl.key -name prime256v1 -genkey
@@ -154,7 +154,7 @@ ssh-keygen -t rsa -b 4096 -C "your.email@gmail.com"
 
 Once you've done this, you should be able to run `npm start`. If you get no errors, then you're mostly done with setting up your development environment. You can now stop the system using <kbd>CTRL</kbd>+<kbd>C</kbd>.
 
-To allow SSH connections using your SSH key, run the following command:
+To allow SSH connections using your SSH key, run the following command in the container shell:
 
 ```shell script
 cat ~/.ssh/id_rsa.pub > ~/.ssh/authorized_keys && cat ~/.ssh/id_rsa.pub > ~/.ssh/known_hosts
@@ -178,7 +178,7 @@ Press `1` to add a user. Then, choose whatever username and password you want. Y
 
 You're finally ready to test everything! Make note of the current time. Then, edit the time in the `machine.ini` schedule to be a few minutes in the future (remember these times are in 24-hour UTC). Change the time in the `alcove.ini` summary schedule to be one minute after that. Now, start Alcove again using `npm start`.
 
-After the time in `machine.ini` has passed, check the logs for any errors, and check `<project_root>/data/backup-test/alpha` for a timestamped backup folder. Inside that folder, check for `essay.txt` and `another-file.md`. If any files besides those two exist, something went wrong.
+After the time in `machine.ini` has passed, check the logs for any errors, and check `<project_root>/data/backup-test/alpha` for a timestamped backup folder. Inside that folder, check for `essay.txt` and `another-file.md`. If any files besides those two exist or if no files exist, something went wrong.
 
 After the time in `alcove.ini` has passed (one minute later), check your email for an HTML email containing a summary of the system status and each machine.
 
@@ -190,7 +190,7 @@ Finally, you should take a look at the database. Open a new terminal tab and ent
 sqlite3 data/events.db
 ```
 
-This should open a new SQLite shell. If you're unfamiliar with SQLite syntax, you can learn it [here](https://www.sqlitetutorial.net/).
+This should open a new SQLite shell. If you're unfamiliar with SQLite syntax, you can learn about it [here](https://www.sqlitetutorial.net/).
 
 To see each table in the database, run the following command:
 
