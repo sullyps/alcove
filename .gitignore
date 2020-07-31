@@ -17,6 +17,9 @@ tests/tmp**
 *~
 .*.swp
 
+# MacOS
+.DS_Store
+
 # Reallow these (old)
 !etc/alcove/alcove.ini.example
 !etc/alcove/machines/machine.ini.example
