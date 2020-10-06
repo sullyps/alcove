@@ -8,12 +8,14 @@ extra_commands="checkconfig"
 : ${ALCOVE_CONFDIR:=${RC_PREFIX%/}/etc/backup}
 : ${ALCOVE_CONFIG:=${ALCOVE_CONFDIR}/backup.ini}
 : ${ALCOVE_PIDFILE:=${RC_PREFIX%/}/run/${SVCNAME}.pid}
+pidfile="${ALCOVE_PIDFILE}"
 
 export NODE_ENV=production
 command="/usr/bin/forever"
 # TODO: Don't hardcode log dir! Maybe use a syslogger module?
-command_args="start ${ALCOVE_DIR}/app.js -a -l /var/log/alcove/alcove-forever"
-pidfile="${ALCOVE_PIDFILE}"
+command_args="-a -l /var/log/alcove/alcove-forever.log ${ALCOVE_DIR}/app.js"
+command_background="true"
+
 
 depend() {
   use logger net dns
