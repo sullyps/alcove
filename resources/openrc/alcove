@@ -5,17 +5,16 @@
 extra_commands="checkconfig"
 
 : ${ALCOVE_DIR:=${RC_PREFIX%/}/usr/share/alcove}
-: ${ALCOVE_CONFDIR:=${RC_PREFIX%/}/etc/backup}
-: ${ALCOVE_CONFIG:=${ALCOVE_CONFDIR}/backup.ini}
+: ${ALCOVE_CONFDIR:=${RC_PREFIX%/}/etc/alcove}
+: ${ALCOVE_CONFIG:=${ALCOVE_CONFDIR}/alcove.ini}
 : ${ALCOVE_PIDFILE:=${RC_PREFIX%/}/run/${SVCNAME}.pid}
 pidfile="${ALCOVE_PIDFILE}"
 
 export NODE_ENV=production
-command="/usr/bin/forever"
 # TODO: Don't hardcode log dir! Maybe use a syslogger module?
-command_args="-a -l /var/log/alcove/alcove-forever.log ${ALCOVE_DIR}/app.js"
+command="/usr/bin/forever"
+command_args="-a -l /var/log/alcove/alcove-forever.log --pidfile ${pidfile} ${ALCOVE_DIR}/app.js"
 command_background="true"
-
 
 depend() {
   use logger net dns
@@ -24,7 +23,7 @@ depend() {
 checkconfig() {
   if [ ! -e "${ALCOVE_CONFIG}" ] ; then
     eerror "You need an ${ALCOVE_CONFIG} file to run the Alcove Backup System."
-    eerror "There is a sample file in ${ALCOVE_CONFDIR}/backup.ini.example"
+    eerror "There is a sample file in ${ALCOVE_CONFDIR}/alcove.ini.example"
     return 1
   fi
 }
@@ -40,4 +39,7 @@ stop_pre() {
   if [ "${RC_CMD}" = "restart" ] ; then
     checkconfig || return $?
   fi
+
+  # We have to shutdown the alcove script before we end forever:
+  ${command} stop ${ALCOVE_DIR}/app.js
 }
