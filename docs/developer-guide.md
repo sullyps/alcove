@@ -163,7 +163,7 @@ cat ~/.ssh/id_rsa.pub > ~/.ssh/authorized_keys && cat ~/.ssh/id_rsa.pub > ~/.ssh
 Next, you should turn on your SSH server. You need to do this every time you restart the Docker container. Run the following command:
 
 ```shell script
-/etc/init.d ssh start
+service ssh start
 ```
 
 If you ever want to restart or stop the SSH server, run the same command as above but replace `start` with `restart` or `stop`.
