@@ -176,7 +176,7 @@ node adminUsers.js
 
 Press `1` to add a user. Then, choose whatever username and password you want. You will use these to log in to the monitoring interface later.
 
-You're finally ready to test everything! Make note of the current time. Then, edit the time in the `machine.ini` schedule to be a few minutes in the future (remember these times are in 24-hour UTC). Change the time in the `alcove.ini` summary schedule to be one minute after that. Now, start Alcove again using `npm start`.
+You're finally ready to test everything! Make note of the current time. Then, edit the time in the `machine.ini` schedule to be a few minutes in the future (remember these times are in 24-hour UTC). Change the time in the `alcove.ini` summary schedule to be one minute after that. Now, start Alcove again using `npm start`. (You will repeat this step every time you want to simulate a backup event. Your backup and email schedules specified in `machine.ini` and `alcove.ini` should specify backups and emails every day during development.)
 
 After the time in `machine.ini` has passed, check the logs for any errors, and check `<project_root>/data/backup-test/alpha` for a timestamped backup folder. Inside that folder, check for `essay.txt` and `another-file.md`. If any files besides those two exist or if no files exist, something went wrong.
 
