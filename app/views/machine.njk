@@ -10,40 +10,7 @@
           <h1></h1>
         </div>
         <div class="ten wide column">
-          <table class="ui celled unstackable table">
-            <thead>
-              <tr>
-                <th>Sa</th>
-                <th>M</th>
-                <th>Tu</th>
-                <th>W</th>
-                <th>Th</th>
-                <th>F</th>
-                <th>Su</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for week in backupCalendar %}
-                <tr>
-                  {% for day in week %}
-                    <td class="
-                      {{ 'disabled' if not day.bucket }}
-                      {{ 'machine-dashboard-calendar-today-border' if day.today }}
-                      {{ 'positive' if day.bucket and day.bucket.backup }}
-                      {{ 'negative' if day.bucket and not day.bucket.backup }}
-                      {{ 'selectable' if day.id }}
-                    ">
-                      {% if day.id %}
-                        <a href="#backupevent-{{ day.id }}">{{ day.dateString }}</a>
-                      {% else %}
-                        {{ day.dateString }}
-                      {% endif %}
-                    </td>
-                  {% endfor %}
-                </tr>
-              {% endfor %}
-            </tbody>
-          </table>
+          <div class="ui calendar" id="inline-calendar"></div>
         </div>
       </div>
 
@@ -104,4 +71,22 @@
 {% block js %}
 {#  <script src="/js/vendor/jquery.tablesort.min.js"></script>#}
 {#  <script src="/js/machine.js"></script>#}
+ <script>
+  let backupCalendar = [];
+  {% for week in backupCalendar %}
+    {% for day in week %}
+      backupCalendar.push({
+        bucket: "{{day.bucket}}",
+        today: "{{day.today}}",
+        backup: "{{day.bucket.backup}}",
+        id: "{{day.id}}",
+        date: "{{day.date}}",
+      });
+    {% endfor %}
+  {% endfor %}
+ </script>
+ <script src="/js/machine.js"></script>
+ <script>
+  generateCalendar(backupCalendar);
+ </script>
 {% endblock %}
