@@ -8,6 +8,34 @@ body {
 .template {
   display: none; }
 
+.version-tag {
+  font-family: Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 12px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  padding-left: 7px;
+  padding-right: 4px;
+  background-color: #4b94cb;
+  color: white;
+  border-radius: 3.75px 0px 0px 3.75px; }
+
+.version-number-tag {
+  font-family: Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 12px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  padding-left: 3px;
+  padding-right: 7px;
+  background-color: #4172b0;
+  color: white;
+  border-radius: 0px 3.75px 3.75px 0px; }
+
+.footer {
+  text-align: center;
+  position: relative;
+  margin-top: 115px;
+  width: 100%; }
+
 /* Login Page */
 #login-image {
   display: block;
