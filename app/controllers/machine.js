@@ -28,7 +28,7 @@ router.get('/:name',(req, res, next) => {
   config = system.getConfig();
   db = models.getDatabase();
 
-  getBackupEvents(machine, 5)
+  getBackupEvents(machine, machine.buckets.length)
   .then(backupEvents => {
     const machineInfo = {
       title: `${machine.name} :: Alcove Backup System`,
@@ -60,7 +60,7 @@ module.exports = app => {
  *   An object containing the calendar object with the backup events
  *   and a list of backup events
  */
-function getBackupEvents(machine, CALENDAR_ROWS = 5)
+function getBackupEvents(machine, CALENDAR_ROWS = 5) 
 {
   let today = new Date();
 
