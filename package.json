@@ -34,12 +34,13 @@
     "log4js": "^6.3",
     "memorystore": "^1.6",
     "method-override": "^3.0",
-    "nodemailer": "^6.4",
+    "nodemailer": "^6.6.3",
     "nunjucks": "^3.2",
     "path": "^0.12",
     "prompt": "^1.0",
     "request": "^2.88",
     "rsyncwrapper": "^3.0",
+    "sass": "^1.35.2",
     "sequelize": "^5.22",
     "serve-favicon": "^2.5",
     "single-instance": "^0.0",
@@ -52,7 +53,7 @@
     "gulp-livereload": "^4.0",
     "gulp-nodemon": "^2.5",
     "gulp-plumber": "^1.2",
-    "gulp-sass": "^4.1",
+    "gulp-sass": "^5.0.0",
     "jest": "^26.0",
     "jshint": "^2.11"
   }
