@@ -3,7 +3,7 @@ const gulp = require('gulp'),
   plumber = require('gulp-plumber'),
   livereload = require('gulp-livereload'),
   jshint = require('gulp-jshint'),
-  sass = require('gulp-sass'),
+  sass = require('gulp-sass')(require('sass')),
   fs = require('fs-extra');
 const exec = require('child_process').exec;
 
