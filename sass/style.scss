@@ -149,3 +149,76 @@ body
 .machine-dashboard-disabled {
   pointer-events:none;
   opacity:0.4; }
+
+  .bar-chart-border {
+    border-style: solid;
+    background-color: white;
+    border-color: white;
+    width: 85%;
+    border-top-width: 8px;
+    height: 80px;
+    border-radius: 5px;
+  }
+  //bar chart
+  .chart {
+    background: white;
+    height: 40px;
+    width: 96.5%;   
+    border-radius: 5px;
+    overflow: hidden;
+    text-align: center;
+    margin: auto;
+    position: relative;
+  }
+   
+  //bar chart sections
+  .all-backups-bar {
+    background-color: green;
+    float: left;
+    height: 100%;
+    width: var(--bar-value);
+    text-align: center;
+  }
+  .some-backups-bar {
+    background-color: #FFD700;
+    float: left;
+    height: 100%;
+    width: var(--bar-value);
+  }
+  .no-backups-bar {
+    background-color: #DB2828;
+    float: left;
+    height: 100%;
+    width: var(--bar-value);
+  }
+  .idle-bar {
+    background-color: #A0A0A0;
+    width: var(--bar-value);
+    float: left;
+    height: 100%;
+  }
+   
+  //chart legend
+  .x-axis {
+    text-align: center;
+    padding: .5em 0 2.5em;
+  }
+  .legend {
+    margin: 0 auto;
+    padding: 0;
+    font-size: .9em;
+  }
+  .legend li {
+    display: inline-block;
+    padding: .25em 1em;
+    line-height: 1em;
+  }
+  //chart numbers
+  .dashboard-stats-numbers {
+    line-height: 40px;
+    vertical-align: middle;
+    font-weight: bold;
+    font-size: 1.25em;
+    color: white;
+  } 
+  

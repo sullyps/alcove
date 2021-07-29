@@ -6,40 +6,30 @@
     <div class="eight wide column">
       <img id="logo" src="/logo.png">
     </div>
-    <div class="eight wide column">
-      <div class="ui statistics" id="dashboard-header-stats">
-        <div class="green statistic">
-          <div class="value">
-            {{ machineStatuses.allBackups }}
+
+    <div class="eight wide column" id = "dashboard-header-stats">
+    <div class = "bar-chart-border">
+      <div class="chart">
+        <div class="all-backups-bar" style = "--bar-value: {{((machineStatuses.allBackups)/(machineStatuses.someBackups + machineStatuses.allBackups + machineStatuses.noBackups + machineStatuses.idle))*100}}%;">
+          <span class = "dashboard-stats-numbers">{{machineStatuses.allBackups}}</span>
           </div>
-          <div class="label" id="dashboard-header-stats-labels">
-            All Backups
+        <div class="some-backups-bar" style = "--bar-value: {{((machineStatuses.someBackups)/(machineStatuses.someBackups + machineStatuses.allBackups + machineStatuses.noBackups + machineStatuses.idle))*100}}%;">
+          <span class = "dashboard-stats-numbers">{{machineStatuses.someBackups}}</span>
           </div>
+        <div class="no-backups-bar" style = "--bar-value: {{((machineStatuses.noBackups)/(machineStatuses.someBackups + machineStatuses.allBackups + machineStatuses.noBackups + machineStatuses.idle))*100}}%;">
+          <span class = "dashboard-stats-numbers">{{machineStatuses.noBackups}}</span>
+          </div>
+        <div class="idle-bar" style = "--bar-value: {{((machineStatuses.idle)/(machineStatuses.someBackups + machineStatuses.allBackups + machineStatuses.noBackups + machineStatuses.idle))*100}}%;">
+          <span class = "dashboard-stats-numbers">{{machineStatuses.idle}}</span>
         </div>
-        <div class="yellow statistic">
-          <div class="value">
-            {{ machineStatuses.someBackups }}
-          </div>
-          <div class="label" id="dashboard-header-stats-labels">
-            Some Backups
-          </div>
-        </div>
-        <div class="red statistic">
-          <div class="value">
-            {{ machineStatuses.noBackups }}
-          </div>
-          <div class="label" id="dashboard-header-stats-labels">
-            No Backups
-          </div>
-        </div>
-        <div class="grey statistic">
-          <div class="value">
-            {{ machineStatuses.idle }}
-          </div>
-          <div class="label" id="dashboard-header-stats-labels">
-            Idle
-          </div>
-        </div>
+      </div>
+      <div class = "x-axis">
+        <ul class = "legend">
+          <li><a class="ui green empty circular label"></a> All Backups</li>
+          <li><a class="ui yellow empty circular label"></a> Some Backups</li>
+          <li><a class="ui red empty circular label"></a> No Backups</li>
+          <li><a class="ui grey empty circular label"></a> Idle</li>
+        </ul>
       </div>
     </div>
   </div>
