@@ -1,15 +1,18 @@
 /* All pages */
 body {
-  background-color: #D0D0D0; }
+  background-color: #D0D0D0;
+}
 
 .bold {
-  font-weight: bold; }
+  font-weight: bold;
+}
 
 .template {
-  display: none; }
+  display: none;
+}
 
 .version-tag {
-  font-family: Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 12px;
   padding-top: 6px;
   padding-bottom: 6px;
@@ -17,10 +20,11 @@ body {
   padding-right: 4px;
   background-color: #4b94cb;
   color: white;
-  border-radius: 3.75px 0px 0px 3.75px; }
+  border-radius: 3.75px 0px 0px 3.75px;
+}
 
 .version-number-tag {
-  font-family: Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 12px;
   padding-top: 6px;
   padding-bottom: 6px;
@@ -28,80 +32,174 @@ body {
   padding-right: 7px;
   background-color: #4172b0;
   color: white;
-  border-radius: 0px 3.75px 3.75px 0px; }
+  border-radius: 0px 3.75px 3.75px 0px;
+}
 
 .footer {
   text-align: center;
   position: relative;
   margin-top: 115px;
-  width: 100%; }
+  width: 100%;
+}
 
 /* Login Page */
 #login-image {
   display: block;
-  margin: 20px auto 0 auto; }
+  margin: 20px auto 0 auto;
+}
 
 #login-form {
   margin: calc(50vh - 199px) auto 0 auto;
-  width: 300px; }
+  width: 300px;
+}
 
 @media (max-height: 440px) {
   #login-form {
-    margin: 20px auto 0 auto; } }
-
+    margin: 20px auto 0 auto;
+  }
+}
 .login-form-item {
   margin-bottom: 8px;
-  width: 100%; }
+  width: 100%;
+}
 
 #login-button {
   margin-bottom: 8px;
-  text-align: right; }
+  text-align: right;
+}
 
 #login-error {
-  margin: 0 0 8px 0 !important; }
+  margin: 0 0 8px 0 !important;
+}
 
 /* System Dashboard */
 /* TODO: Check if any of these styles are no longer applied due to changing class names */
 #dashboard-logo {
   max-height: 90px;
-  max-width: 100%; }
+  max-width: 100%;
+}
 
 #dashboard-header-grid {
-  margin: 0; }
+  margin: 0;
+}
 
 #dashboard-header-stats-container {
-  display: inline-block; }
+  display: inline-block;
+}
 
 .dashboard-header-segment {
   text-align: center;
-  font-size: 18px !important; }
+  font-size: 18px !important;
+}
 
 #dashboard-header-title {
   padding-top: 10px;
   margin-left: -50px;
   min-width: 250px;
   font-size: 10px;
-  text-align: center; }
+  text-align: center;
+}
 
 #dashboard-header-stats-labels {
-  width: 110px; }
+  width: 110px;
+}
 
 #dashboard-header-stats {
-  float: right; }
+  float: right;
+}
 
 .dashboard-header-segment {
   text-align: center;
   font-size: 18px;
-  background-color: #EEEEEE; }
+  background-color: #EEEEEE;
+}
 
 /* Machine Dashboard */
 .machine-dashboard-calendar-today-border {
   border: 1px solid black !important;
-  box-sizing: border-box; }
+  box-sizing: border-box;
+}
 
 .machine-dashboard-link-non-selectable {
-  pointer-events: none; }
+  pointer-events: none;
+}
 
 .machine-dashboard-disabled {
   pointer-events: none;
-  opacity: 0.4; }
+  opacity: 0.4;
+}
+
+.bar-chart-border {
+  border-style: solid;
+  background-color: white;
+  border-color: white;
+  width: 85%;
+  border-top-width: 8px;
+  height: 80px;
+  border-radius: 5px;
+}
+
+.chart {
+  background: white;
+  height: 40px;
+  width: 96.5%;
+  border-radius: 5px;
+  overflow: hidden;
+  text-align: center;
+  margin: auto;
+  position: relative;
+}
+
+.all-backups-bar {
+  background-color: green;
+  float: left;
+  height: 100%;
+  width: var(--bar-value);
+  text-align: center;
+}
+
+.some-backups-bar {
+  background-color: #FFD700;
+  float: left;
+  height: 100%;
+  width: var(--bar-value);
+}
+
+.no-backups-bar {
+  background-color: #DB2828;
+  float: left;
+  height: 100%;
+  width: var(--bar-value);
+}
+
+.idle-bar {
+  background-color: #A0A0A0;
+  width: var(--bar-value);
+  float: left;
+  height: 100%;
+}
+
+.x-axis {
+  text-align: center;
+  padding: 0.5em 0 2.5em;
+}
+
+.legend {
+  margin: 0 auto;
+  padding: 0;
+  font-size: 0.9em;
+}
+
+.legend li {
+  display: inline-block;
+  padding: 0.25em 1em;
+  line-height: 1em;
+}
+
+.dashboard-stats-numbers {
+  line-height: 40px;
+  vertical-align: middle;
+  font-weight: bold;
+  font-size: 1.25em;
+  color: white;
+}
