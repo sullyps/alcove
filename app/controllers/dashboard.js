@@ -130,7 +130,8 @@ function getMachineStatuses()
     allBackups: 0,
     someBackups: 0,
     noBackups: 0,
-    idle: 0
+    idle: 0,
+    total: 0
   };
   for (let machineName in machines)
   {
@@ -139,6 +140,8 @@ function getMachineStatuses()
     else if (machineStatus === 1) machineStatuses.someBackups++;
     else if (machineStatus === 2) machineStatuses.noBackups++;
     else machineStatuses.idle++;
+
+    machineStatuses.total++;
   }
   return machineStatuses;
 }

@@ -8,23 +8,23 @@
     </div>
 
     <div class="eight wide column" id = "dashboard-header-stats">
-    <div class = "bar-chart-border">
+    <div class="bar-chart-border">
       <div class="chart">
-        <div class="all-backups-bar" style = "--bar-value: {{((machineStatuses.allBackups)/(machineStatuses.someBackups + machineStatuses.allBackups + machineStatuses.noBackups + machineStatuses.idle))*100}}%;">
-          <span class = "dashboard-stats-numbers">{{machineStatuses.allBackups}}</span>
+        <div class="all-backups-bar" style = "--bar-value: {{ ((machineStatuses.allBackups)/(machineStatuses.total)) * 100 }}%;">
+          <span class="dashboard-stats-numbers">{{ machineStatuses.allBackups }}</span>
           </div>
-        <div class="some-backups-bar" style = "--bar-value: {{((machineStatuses.someBackups)/(machineStatuses.someBackups + machineStatuses.allBackups + machineStatuses.noBackups + machineStatuses.idle))*100}}%;">
-          <span class = "dashboard-stats-numbers">{{machineStatuses.someBackups}}</span>
+        <div class="some-backups-bar" style = "--bar-value: {{ ((machineStatuses.someBackups)/(machineStatuses.total)) * 100 }}%;">
+          <span class="dashboard-stats-numbers">{{ machineStatuses.someBackups }}</span>
           </div>
-        <div class="no-backups-bar" style = "--bar-value: {{((machineStatuses.noBackups)/(machineStatuses.someBackups + machineStatuses.allBackups + machineStatuses.noBackups + machineStatuses.idle))*100}}%;">
-          <span class = "dashboard-stats-numbers">{{machineStatuses.noBackups}}</span>
+        <div class="no-backups-bar" style = "--bar-value: {{ ((machineStatuses.noBackups)/(machineStatuses.total)) * 100 }}%;">
+          <span class="dashboard-stats-numbers">{{ machineStatuses.noBackups }}</span>
           </div>
-        <div class="idle-bar" style = "--bar-value: {{((machineStatuses.idle)/(machineStatuses.someBackups + machineStatuses.allBackups + machineStatuses.noBackups + machineStatuses.idle))*100}}%;">
-          <span class = "dashboard-stats-numbers">{{machineStatuses.idle}}</span>
+        <div class="idle-bar" style = "--bar-value: {{ ((machineStatuses.idle)/(machineStatuses.total)) * 100 }}%;">
+          <span class="dashboard-stats-numbers">{{ machineStatuses.idle }}</span>
         </div>
       </div>
-      <div class = "x-axis">
-        <ul class = "legend">
+      <div class="x-axis">
+        <ul class="legend">
           <li><a class="ui green empty circular label"></a> All Backups</li>
           <li><a class="ui yellow empty circular label"></a> Some Backups</li>
           <li><a class="ui red empty circular label"></a> No Backups</li>
