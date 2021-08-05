@@ -142,7 +142,11 @@ function getBackupEvents(machine, CALENDAR_ROWS = 5)
       .map(bucket => {
         return { 
           date: util.getFormattedDate(new Date(Date.parse(bucket.backup.date))), 
-          size: util.getFormattedSize(bucket.backup.size)
+          size: util.getFormattedSize(bucket.backup.size),
+          transferSize: util.getFormattedSize(bucket.backup.transferSize), 
+          transferTimeSec: util.getFormattedTimespan(bucket.backup.transferTimeSec),
+          rsyncExitCode: bucket.backup.rsyncExitCode, 
+          rsyncExitReason: bucket.backup.rsyncExitReason
         };
       });
 

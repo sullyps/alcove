@@ -54,8 +54,8 @@
                   <td class="collapsing positive"><i class="check circle icon"></i>{{ backupEvent.date }}</td>
                 {% endif %}
                 <td class="collapsing">{{ backupEvent.size }}</td>
-                <td class="collapsing">{{ backupEvent.transferSizeStr }}</td>
-                <td class="collapsing">{{ backupEvent.transferTimeStr }}</td>
+                <td class="collapsing">{{ backupEvent.transferSize }}</td>
+                <td class="collapsing">{{ backupEvent.transferTimeSec }}</td>
                 <td class="collapsing">{{ backupEvent.rsyncExitCode }}</td>
                 <td>{{ backupEvent.rsyncExitReason }}</td>
               </tr>
