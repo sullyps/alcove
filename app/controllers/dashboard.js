@@ -40,7 +40,11 @@ router.get('/', (req, res, next) => {
       successfulBackups: getSuccessfulBackups(machineName),
       scheduledBackups: getScheduledBackups(machineName),
       totalSize: util.getFormattedSize(totalSize),
-      timeSinceLastBackup: timeSinceLastBackup
+      timeSinceLastBackup: timeSinceLastBackup,
+      inProgress: getMachine(machineName).inProgress,
+      backupStartTime: util.getFormattedTimespan(new Date().getTime()-getMachine(machineName).backupStartTime),
+      backupRetryTime: getMachine(machineName).backupRetryTime,
+      formattedBackupRetryTime: util.getFormattedTimespan(getMachine(machineName).backupRetryTime-new Date().getTime()),
     });
   }
 
@@ -193,4 +197,8 @@ function getSuccessfulBackups(machineName)
 function getScheduledBackups(machineName)
 {
   return system.getMachines()[machineName].buckets.length;
+}
+
+function getMachine(machineName){
+  return system.getMachines()[machineName]
 }

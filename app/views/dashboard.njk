@@ -60,6 +60,7 @@
     <thead>
       <tr>
         <th class="dashboard-table-name"> Machine Name </th>
+        <th class="dashboard-table-progress"> Progress </th>
         <th class="dashboard-table-status"> Status </th>
         <th class="dashboard-table-size"> Total Size </th>
         <th> Last Successful Backup </th>
@@ -71,6 +72,34 @@
           <td>
             <a href="/machine/{{ machine.name }}" class="dashboard-bold"> {{ machine.name }} </a>
           </td>
+
+          {% for machine in machines %}
+          {% if machine.inProgress == true %}
+          <td>
+          <div "backupInProgress"><div class="ui active inline small blue elastic loader"></div>
+          started {{machine.backupStartTime}} ago </div>
+          </td>
+
+          {% else %}
+          {% if machine.backupRetryTime == -1 %}
+          <td>
+          <span class="backupSuccessful"> No backup in progress </span>
+          </td>
+          
+          {% elif machine.backupRetryTime == 0 %}
+          <td>
+          <span class="backupFailedNoRetry"> Last backup failed: started {{machine.backupStartTime}} ago. No more attempts will be made to complete this backup. </span>
+          </td>
+          {% else %}
+          <td>
+          <span class="backupFailed"> Last backup failed: started {{machine.backupStartTime}} ago. Next attempt scheduled for {{machine.formattedBackupRetryTime}}. </span>
+          </td>
+          
+          {% endif %}
+          {% endif %}
+
+          {% endfor %}
+
           <!--Spacing is very important; please do not change it.-->
           {% if machine.scheduledBackups == 0 %}
             <td>
