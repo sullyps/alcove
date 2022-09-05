@@ -1,4 +1,4 @@
-FROM node:10.19-stretch
+FROM node:18.1.0
 
 # Create app directories
 RUN mkdir -p /etc/alcove/ssl
