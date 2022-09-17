@@ -11,10 +11,19 @@ let config, db;
 
 const logger = require('../../../lib/config/log4js').getLogger();
 
-router.get('/:name/trigger_backup', (req, res, next) => {
+router.get('/:name/trigger-backup', (req, res, next) => {
 	// Attempt to grab the machine that is requested
 	let machine = system.getMachines()[req.params.name];
-	if (machine) {
+	
+	// the modified response object from the callback
+	let machineStats = {
+		name: machine.name,
+		size: machine.totalSize.size,
+		schedule: machine.schedule,
+		backupDirectories: machine.backupDirectories
+	};
+
+	if (!machine) {
 		logger.warn(
 			'API Request for unknown machine with name: "' + req.params.name + '"'
 		);
@@ -27,11 +36,12 @@ router.get('/:name/trigger_backup', (req, res, next) => {
 			.json({ error: 'No machine with name "' + req.params.name + '"' });
 	}
 
-	logger.trace(machine);
+	// on success, send back the machineStats object from above
 	rsync.runRsync(system.getConfig(), machine, () => {
 		res.json({
 			success: true,
-			message: `backup successfully completed for ${machine.name}`
+			message: `backup successful`,
+			machineStats: `${JSON.stringify(machineStats)}`
 		});
 	});
 });
