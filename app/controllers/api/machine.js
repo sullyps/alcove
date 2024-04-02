@@ -36,13 +36,13 @@ router.get('/:name/trigger-backup', (req, res, next) => {
 			.json({ error: 'No machine with name "' + req.params.name + '"' });
 	}
 
-	// on success, send back the machineStats object from above
-	rsync.runRsync(system.getConfig(), machine, () => {
-		res.json({
-			success: true,
-			message: `backup successful`,
-			machineStats: `${JSON.stringify(machineStats)}`
-		});
+	system.backupProcess(machine, true);
+
+	// TODO: Change this from always returning successful
+	return res.json({
+		success: true,
+		message: `backup successful`,
+		machineStats: `${JSON.stringify(machineStats)}`
 	});
 });
 

@@ -26,3 +26,27 @@ function generateCalendar(calendar) {
     });
 }
 
+/**
+ * Makes an immediate backup of a machine given it's name.
+ */
+function makeImmediateBackup() {
+  $('.backup-button').attr('disabled', 'disabled');
+
+  const machineName = document.URL.split("/")[4];
+
+  fetch(`/api/machine/${machineName}/trigger-backup`)
+    .then(response => {
+      response.json()
+        .then(json => {
+          console.log(json);
+          setTimeout(() => location.reload(), 1000); // Wait 1 second before reloading to ensure new data exists on backend
+        })
+        .catch(console.err);
+    })
+    .catch(console.err);
+
+  // TODO: Add a modal or other HTML feedback based on the backup status here? Refresh page?
+  return;
+}
+
+$('.backup-button').on('click', makeImmediateBackup);

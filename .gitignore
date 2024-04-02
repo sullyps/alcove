@@ -8,6 +8,8 @@ logs
 etc/alcove/*
 config/*
 dist
+notes.md
+todo.md
 
 # Temporary disk storage for tests
 tests/tmp**

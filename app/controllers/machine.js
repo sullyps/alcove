@@ -8,6 +8,13 @@ const path = require('path');
     logger = require('../../lib/config/log4js').getLogger();
 
 let config, db;
+let getFolderSize;
+
+// Interpreter will throw 'Must use import to load ES Module' when not imported with 'import()' for this package
+// import() is async, so we're using a hacky way to get "top level async" without defining any unnessasary async functions
+(async() => {
+  getFolderSize = (await import("get-folder-size")).default;
+})();
 
 router.get('/:name',(req, res, next) => {
   // Attempt to grab the machine that is requested
@@ -29,14 +36,18 @@ router.get('/:name',(req, res, next) => {
   db = models.getDatabase();
 
   getBackupEvents(machine, machine.buckets.length)
-  .then(backupEvents => {
+  .then(data => {
+    const backupEvents = [];
+    backupEvents.push(...data.backupEvents);
+    backupEvents.push(...data.requestedBackupEvents);
+
     const machineInfo = {
       title: `${machine.name} :: Alcove Backup System`,
       machine: machine,
-      backupCalendar: backupEvents.calendar,
-      backupEvents: backupEvents.backupEvents
+      backupCalendar: data.calendar,
+      backupEvents,
     };
-    //machineInfo.backupEvents.sort((a, b) => b.backupTime - a.backupTime);
+    machineInfo.backupEvents.sort((a, b) => b.backupTime - a.backupTime);
     res.render('machine', machineInfo);
   });
 });
@@ -146,13 +157,67 @@ function getBackupEvents(machine, CALENDAR_ROWS = 5)
           transferSize: util.getFormattedSize(bucket.backup.transferSize), 
           transferTimeSec: util.getFormattedTimespan(bucket.backup.transferTimeSec),
           rsyncExitCode: bucket.backup.rsyncExitCode, 
-          rsyncExitReason: bucket.backup.rsyncExitReason
+          rsyncExitReason: bucket.backup.rsyncExitReason,
+          requested: false
         };
       });
 
-    resolve({
-      calendar: calendarMatrix,
-      backupEvents: backupEvents
-    });
+    // Use a system call here to check for backups that aren't attached to the bucket logic (IE. manually requested backups)
+    system.getBackupEvents(new Date(0), machine.name)
+      .then(allBackupEvents => {
+        const requestedBackupEvents = allBackupEvents
+          .filter(backupEvent => backupEvent.requested)
+
+        // Getting the folder sizes is an async task, handle it by making an array of promises and awaiting them all with Promise.all
+        const promises = requestedBackupEvents.map(backup => {
+          return getFolderSize.strict(backup.dir) // Returning here returns a promise (getFolderSize.strict returns a promise)
+            .then(size => {
+              return ({ 
+                date: util.getFormattedDate(new Date(Date.parse(backup.backupTime))), 
+                size: util.getFormattedSize(size),
+                transferSize: util.getFormattedSize(backup.transferSize), 
+                transferTimeSec: util.getFormattedTimespan(backup.transferTimeSec),
+                rsyncExitCode: backup.rsyncExitCode, 
+                rsyncExitReason: backup.rsyncExitReason,
+                requested: true
+              })
+            })
+            .catch(error => {
+              logger.error(`Error getting size of folder for requested backup: ${error}`)
+              return ({ 
+                date: util.getFormattedDate(new Date(Date.parse(backup.backupTime))), 
+                size: util.getFormattedSize(backup.size), // Will eventually just be parsed to 'unknown' on frontend
+                transferSize: util.getFormattedSize(backup.transferSize), 
+                transferTimeSec: util.getFormattedTimespan(backup.transferTimeSec),
+                rsyncExitCode: backup.rsyncExitCode, 
+                rsyncExitReason: backup.rsyncExitReason,
+                requested: true
+              })
+            })
+          });
+
+        // Wait for all of the promises with the backup folder sizes to resolve before sending back the list of backup events
+        Promise.all(promises)
+          .then(successfulBackupEvents => {
+            resolve({
+              calendar: calendarMatrix,
+              backupEvents,
+              requestedBackupEvents: successfulBackupEvents
+            });
+          })
+          .catch(err => {
+            logger.error(`Error validing promises while collecting requested backups: ${err}`);
+            resolve({
+              calendar: calendarMatrix,
+              backupEvents,
+              requestedBackupEvents: [] // TODO: Change this to return whatever doesn't make an error?
+            })
+          })
+
+      })
+      .catch(error => {
+        logger.error(`Error querying / parsing requested backup events on machine controller: ${error}`);
+        reject(error);
+      });
   });
 }

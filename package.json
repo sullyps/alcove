@@ -28,6 +28,7 @@
     "express": "^4.17",
     "express-session": "^1.17",
     "fs-extra": "^9.0",
+    "get-folder-size": "^4.0.0",
     "glob": "^7.1",
     "https": "^1.0",
     "ini": "^1.3",

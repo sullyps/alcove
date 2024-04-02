@@ -5,6 +5,10 @@ const express = require('express'),
       logging = require('../../../lib/config/log4js');
 
 const logger = logging.getLogger();
+
+/**
+ * API Route that returns information about the backup server's avaiable storage
+ */
 router.get('/size',(req, res, next) => {
   Promise.all([system.getUsedSpaceDisplay(), system.getFreeSpaceDisplay()])
     .then(results => {

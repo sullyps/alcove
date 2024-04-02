@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
       'type' : DataTypes.STRING,
       'validate' : {
         'notEmpty' : {
-          'msg' : 'An machine name is required'
+          'msg' : 'A machine name is required'
         }
       }
     },
@@ -17,6 +17,7 @@ module.exports = (sequelize, DataTypes) => {
     'transferSize' : DataTypes.INTEGER,
     'transferTimeSec' : DataTypes.INTEGER,
     'dir' : DataTypes.STRING,
+    'requested': DataTypes.BOOLEAN
   }, {
     classMethods: {
       associate: (models) => {
