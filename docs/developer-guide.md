@@ -238,6 +238,8 @@ Before beginning work on Alcove, you should read the [design guide](design-guide
 
 In addition, you should read this [article](https://nvie.com/posts/a-successful-git-branching-model/) about GitFlow. Alcove uses GitFlow to maintain a simple version history.
 
+You should also check out [this file](./backup-process-guide.excalidraw) by opening it at https://excalidraw.com (or if you're using Visual Studio Code, open it with the Excalidraw extension). This contains a flowchart that further explains how the backup process works.
+
 You should also take note of two other docs:
 
 - The exit codes [guide](exit-codes.md) explains what each exit code means.
