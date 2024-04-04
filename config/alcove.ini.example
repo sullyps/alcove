@@ -106,7 +106,7 @@
 ; If this section is skipped, the emails will attempt to send directly using
 ; the local sendmail executable for the machine
 ; Note that gmail accounts configured for sending emails must authorize less
-; secure apps as described at https://support.google.com/a/answer/6260879
+; secure apps by generating an app password (see https://support.google.com/accounts/answer/185833?hl=en)
 [notifications.smtp]
 ; Hostname for the smtp server through which the emails are sent.
 ;host='smtp.gmail.com'
@@ -117,7 +117,7 @@
 ; Authentication username for the outgoing emails.
 ;user='example@gmail.com'
 
-; Authentication password for the outgoing emails.
+; Authentication password for the outgoing emails. (For gmail accounts, use your app password)
 ;pass='password1234'
 
 ; SMS

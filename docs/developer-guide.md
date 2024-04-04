@@ -97,7 +97,8 @@ apt-get install sqlite3
 
 To run Alcove, you must create a system configuration and any number of machine configurations. The system configuration controls general behavior such as where to send email notifications, and each machine configuration specifies how to back up that machine.
 
-To create a system configuration, create a file in `<project_root>/etc/alcove` called `alcove.ini` with the contents of `<project_root>/config/alcove.ini.example`. Then, go through the file and uncomment/set the following settings:
+To create a system configuration, create a file in `<project_root>/etc/alcove` (create the folder(s) if they don't already exist) called
+`alcove.ini` with the contents of `<project_root>/config/alcove.ini.example`. Then, go through the file and uncomment/set the following settings:
 
 | Option Name | Option Value | Explanation |
 |:------------|:-------------|:------------|
@@ -115,7 +116,7 @@ To create a system configuration, create a file in `<project_root>/etc/alcove` c
 
 [Here](./developer-config-examples.md#system-configuration) is the full system configuration file if you want to copy and paste it.
 
-Creating a machine configuration file is much simpler. Simply create a file in `<project_root>/etc/alcove/machines` called `machine.ini` with the contents of `<project_root>/config/machines/machine.ini.example`. Then, go through the file and uncomment/set the following settings:
+Creating a machine configuration file is much simpler. Simply create a file in `<project_root>/etc/alcove/machines` (Creating any directories that may not already exist) called `machine.ini` with the contents of `<project_root>/config/machines/machine.ini.example`. Then, go through the file and uncomment/set the following settings:
 
 | Option Name | Option Value | Explanation |
 |:------------|:-------------|:------------|
@@ -144,7 +145,7 @@ openssl ecparam -out ssl.key -name prime256v1 -genkey
 openssl req -x509 -new -key ssl.key -out ssl.crt -days 365 -subj "/C=US/ST=Iowa/L=Coralville/O=Bio::Neos, Inc./CN=localhost"
 ```
 
-When you're done, you can `cd` back to the project root.
+When you're done, you can run `cd <the project_root absolute path>` to go back to the project root.
 
 The final step is to generate an SSH key for connecting to machines (in this case, just `localhost`). To generate the key, run the following command and choose the default settings whenever prompted (this means you should accept the default location and not use a password):
 
