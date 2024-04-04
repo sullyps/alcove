@@ -107,11 +107,11 @@ To create a system configuration, create a file in `<project_root>/etc/alcove` c
 | `secure.cert` | `'./etc/alcove/ssl/ssl.crt'` | Uses `ssl.crt` for HTTPS |
 | `summary_schedule` | `'0,1,2,3,4,5,6;[17:01]'` | Sends summary emails at 17:01 UTC every day of the week |
 | `email_to[]` | `'your.email@gmail.com'` | Where to send summary emails; this should probably be a spam email |
-| `email_from` | `'your.email@gmail.com'` | Where to send summary emails from; this can be the same as `email_to[]`; if you are using a Gmail account, you must allow access from "less secure apps" as per [this article](https://support.google.com/accounts/answer/6010255) |
+| `email_from` | `'your.email@gmail.com'` | Where to send summary emails from; this can be the same as `email_to[]`; if you are using a Gmail account, you must allow access from "less secure apps". To allow this, create an "app password" via [these instructions](https://support.google.com/accounts/answer/185833?hl=en) |
 | `notifications.smtp.host` | `'smtp.gmail.com'` | The host of the SMTP server; `smtp.gmail.com` if `email_from` is a Gmail account |
 | `notifications.smtp.port` | `587` | The port of the SMTP server; `587` if `email_from` is a Gmail account |
 | `notifications.smtp.user` | `'your.email@gmail.com'` | The same email as `email_from` |
-| `notifications.smtp.pass` | `'your_password'` | The password to `email_from` |
+| `notifications.smtp.pass` | `'your_password'` | The password to `email_from` **NOTE: If this is a Gmail account, use your app password** |
 
 [Here](./developer-config-examples.md#system-configuration) is the full system configuration file if you want to copy and paste it.
 
@@ -236,11 +236,11 @@ Alcove schedules backups in `<project_root>/lib/system.js` by reading the schedu
 
 Before beginning work on Alcove, you should read the [design guide](design-guide.md). This guide explains much of the thinking behind why Alcove works the way it does.
 
-In addition, you should read this [article](https://nvie.com/posts/a-successful-git-branching-model/) about GitFlow. Alcove uses GitFlow to maintain a simple version history.
-
 You should also check out [this file](./backup-process-guide.excalidraw) by opening it at https://excalidraw.com (or if you're using Visual Studio Code, open it with the Excalidraw extension). This contains a flowchart that further explains how the backup process works.
 
-You should also take note of two other docs:
+In addition, you should read this [article](https://nvie.com/posts/a-successful-git-branching-model/) about GitFlow. Alcove uses GitFlow to maintain a simple version history.
+
+Also, take note of two other docs:
 
 - The exit codes [guide](exit-codes.md) explains what each exit code means.
 - The SMS [guide](sms-guide.md) explains how to set up SMS notifications (in addition to regular email notifications).
