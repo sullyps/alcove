@@ -126,7 +126,7 @@ Creating a machine configuration file is much simpler. Simply create a file in `
 | `ignore_extensions[]` | `.testignored` | Does not back up files with the extension `.testignored` |
 | `ignore_files[]` | `/backup-test/ignored` | Does not back up files in the directory `/backup-test/ignored` |
 | `ignore_files[]` | `/backup-test/ignore-me.txt` | Does not back up the file `/backup-test/ignore-me.txt` |
-| `schedule` | `"0,1,2,3,4,5,6(7)\|1(4);[17:00]"` | Backs up the machine at 17:00 UTC every day; keeps the last 7 copies of backups from everyday and the last 4 copies of Monday backups |
+| `schedule` | `"0,1,2,3,4,5,6(7)\|1(4);[17:00]"` | Backs up the machine at 17:00 UTC every day; keeps the last 7 copies of backups from everyday and the last 4 copies of Monday backups **NOTE: When copying this value directly from the markdown file, remove the backslash. It is only present to correctly format the table in markdown.** |
 
 [Here](./developer-config-examples.md#machine-configuration) is the full machine configuration file if you want to copy and paste it.
 
@@ -139,6 +139,12 @@ mkdir /backup-test && echo "This file should be ignored because of its extension
 ```
 
 Next, to enable HTTPS on the monitoring interface, you need to generate an SSL certificate. To do this, create an `ssl` folder in the `<project_root>/etc/alcove` directory. Then, run the following two commands (from the container) in that folder:
+
+**IMPORTANT: Currently, the project only seems to load when the `ssl.key` and `ssl.crt` files are placed in `/etc/ssl`, but the instructions say to put the ssl files in /etc/alcove. This needs to be updated. For now, you can use the following commands to get the system to boot**
+```shell script
+cd etc/alcove/ssl # From project root
+cp ssl.key /etc/ssl && cp ssl.crt /etc/ssl # Copy the key and crt files to <machine root>/ssl
+```
 
 ```shell script
 openssl ecparam -out ssl.key -name prime256v1 -genkey
