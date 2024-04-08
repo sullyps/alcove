@@ -9,6 +9,7 @@ etc/alcove/*
 config/*
 dist
 todo.md
+notes.md
 
 # Temporary disk storage for tests
 tests/tmp**

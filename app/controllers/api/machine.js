@@ -11,17 +11,8 @@ let config, db;
 
 const logger = require('../../../lib/config/log4js').getLogger();
 
-router.get('/:name/trigger-backup', (req, res, next) => {
-	// Attempt to grab the machine that is requested
-	let machine = system.getMachines()[req.params.name];
-	
-	// the modified response object from the callback
-	let machineStats = {
-		name: machine.name,
-		size: machine.totalSize.size,
-		schedule: machine.schedule,
-		backupDirectories: machine.backupDirectories
-	};
+router.get('/:name/backup-now', (req, res, next) => {
+	const machine = system.getMachines()[req.params.name];
 
 	if (!machine) {
 		logger.warn(
@@ -37,11 +28,22 @@ router.get('/:name/trigger-backup', (req, res, next) => {
 	}
 
 	// on success, send back the machineStats object from above
-	rsync.runRsync(system.getConfig(), machine, () => {
+	// TODO: it might actually be worth running rsync here, because there would only be on flag that would need to be changed
+	rsync.runRequestedRsync(system.getConfig(), machine, (error, rsyncStats) => {
+		if (error) {
+			logger.error('Error running requested rsync:', error);
+			return res.status(500).json({
+				success: false,
+				message: `Backup of ${machine.name} was not successful. Check the logs for more info.`,
+			});
+		}
+
+		system.insertRequestedBackup(machine, rsyncStats);
+
 		res.json({
 			success: true,
 			message: `backup successful`,
-			machineStats: `${JSON.stringify(machineStats)}`
+			machineStats: `${JSON.stringify(rsyncStats)}`
 		});
 	});
 });

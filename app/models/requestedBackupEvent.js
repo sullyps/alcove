@@ -1,7 +1,11 @@
 'use strict';
 
+/*
+RequestedBackupEvent is similar to backup event, but without the bucket and schedule fields.
+It is also stored in the RequestedBackupEvents table rather than the BackupEvents table for organization purposes.
+*/
 module.exports = (sequelize, DataTypes) => {
-  let BackupEvent = sequelize.define('BackupEvent', {
+  let RequestedBackupEvent = sequelize.define('RequestedBackupEvent', {
     'machine' : {
       'type' : DataTypes.STRING,
       'validate' : {
@@ -27,5 +31,5 @@ module.exports = (sequelize, DataTypes) => {
     'updatedAt' : false
   });
 
-  return BackupEvent;
+  return RequestedBackupEvent;
 };

@@ -8,6 +8,7 @@
           <a href="/dashboard"><img id="dashboard-logo" src="/logo.png"></a>
           <h1>Machine: {{ machine.name }}</h1>
           <h1></h1>
+          <button id="backup-now-button">Backup now</button>
         </div>
         <div class="ten wide column">
           <div class="ui calendar" id="inline-calendar"></div>
@@ -72,6 +73,20 @@
 {#  <script src="/js/vendor/jquery.tablesort.min.js"></script>#}
 {#  <script src="/js/machine.js"></script>#}
  <script>
+  function sendBackupRequest(machineName) {
+    fetch(`/api/machine/${machineName}/backup-now`)
+      .then(data => {
+        console.log(data);
+      })
+      .catch(err => {
+        console.error('Error fetching machine data:', err);
+      });
+  }
+
+  const backupNowButton = document.getElementById('backup-now-button');
+
+  backupNowButton.addEventListener('click', () => sendBackupRequest("{{ machine.name }}"));
+
   let backupCalendar = [];
   {% for week in backupCalendar %}
     {% for day in week %}
