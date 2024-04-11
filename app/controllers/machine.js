@@ -28,22 +28,46 @@ router.get('/:name',(req, res, next) => {
   config = system.getConfig();
   db = models.getDatabase();
 
-  getBackupEvents(machine, machine.buckets.length)
-  .then(backupEvents => {
-    const machineInfo = {
-      title: `${machine.name} :: Alcove Backup System`,
-      machine: machine,
-      backupCalendar: backupEvents.calendar,
-      backupEvents: backupEvents.backupEvents
-    };
-    //machineInfo.backupEvents.sort((a, b) => b.backupTime - a.backupTime);
-    res.render('machine', machineInfo);
-  });
+  system.getRequestedBackupEvents(machine.name)
+    .then(requestedBackupEvents => {
+      logger.info(`requestedBackupEvents: ${JSON.stringify(requestedBackupEvents)}`);
+      getBackupEvents(machine, machine.buckets.length)
+      .then(backupEvents => {
+        const machineInfo = {
+          title: `${machine.name} :: Alcove Backup System`,
+          machine: machine,
+          backupCalendar: backupEvents.calendar,
+          backupEvents: backupEvents.backupEvents,
+          requestedBackupEvents: formatRequestedBackupEvents(requestedBackupEvents)
+        };
+        machineInfo.backupEvents.sort((a, b) => b.backupTime - a.backupTime);
+        res.render('machine', machineInfo);
+      });
+    });
+
 });
 
 module.exports = app => {
   app.use('/machine', router);
 };
+
+/**
+ * Formats an array of RequestedBackupEvents from the database to display properly
+ * on the web panel.
+ * @param requestedBackupEvents The array of RequestedBackupEvents to format
+ */
+function formatRequestedBackupEvents(requestedBackupEvents) {
+  return requestedBackupEvents
+  .sort((a, b) => b.backupTime - a.backupTime)
+  .map(requestedBackupEvent => ({
+    date: util.getFormattedDate(new Date(Date.parse(requestedBackupEvent.backupTime))), 
+    size: util.getFormattedSize(requestedBackupEvent.transferSize),
+    transferSize: util.getFormattedSize(requestedBackupEvent.transferSize), 
+    transferTimeSec: util.getFormattedTimespan(requestedBackupEvent.transferTimeSec),
+    rsyncExitCode: requestedBackupEvent.rsyncExitCode, 
+    rsyncExitReason: requestedBackupEvent.rsyncExitReason
+  }));
+}
 
 /**
  * Gets a history of all the backups on the given machine

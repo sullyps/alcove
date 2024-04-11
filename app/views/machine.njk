@@ -47,12 +47,40 @@
             </tr>
             </thead>
             <tbody>
+            {% for backupEvent in requestedBackupEvents %}  {# Always display requestedBackupEvents first #}
+              <tr>
+                {% if backupEvent.rsyncExitCode %}
+                  <td class="collapsing negative">
+                    <i class="user circle icon" title="This backup was requested by a user."></i>
+                    <i class="exclamation circle icon" title="This backup was not successful."></i>
+                    {{ backupEvent.date }}
+                  </td>
+                {% else %}
+                  <td class="collapsing positive">
+                    <i class="user circle icon" title="This backup was requested by a user."></i>
+                    <i class="check circle icon" title="This backup was successful."></i>
+                    {{ backupEvent.date }}
+                  </td>
+                {% endif %}
+                <td class="collapsing">{{ backupEvent.size }}</td>
+                <td class="collapsing">{{ backupEvent.transferSize }}</td>
+                <td class="collapsing">{{ backupEvent.transferTimeSec }}</td>
+                <td class="collapsing">{{ backupEvent.rsyncExitCode }}</td>
+                <td>{{ backupEvent.rsyncExitReason }}</td>
+              </tr>
+            {% endfor %}
             {% for backupEvent in backupEvents %}
               <tr>
                 {% if backupEvent.rsyncExitCode %}
-                  <td class="collapsing negative"><i class="exclamation circle icon"></i>{{ backupEvent.date }}</td>
+                  <td class="collapsing negative">
+                    <i class="exclamation circle icon" title="This backup was not successful."></i>
+                    {{ backupEvent.date }}
+                  </td>
                 {% else %}
-                  <td class="collapsing positive"><i class="check circle icon"></i>{{ backupEvent.date }}</td>
+                  <td class="collapsing positive">
+                    <i class="check circle icon" title="This backup was successful."></i>
+                    {{ backupEvent.date }}
+                  </td>
                 {% endif %}
                 <td class="collapsing">{{ backupEvent.size }}</td>
                 <td class="collapsing">{{ backupEvent.transferSize }}</td>

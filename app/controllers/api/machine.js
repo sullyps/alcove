@@ -38,7 +38,7 @@ router.get('/:name/backup-now', (req, res, next) => {
 			});
 		}
 
-		system.insertRequestedBackup(machine, rsyncStats);
+		system.insertRequestedBackupEvent(machine, rsyncStats);
 
 		res.json({
 			success: true,
