@@ -115,17 +115,12 @@ body {
 }
 
 /* Machine Dashboard */
-#backup-now-button {
-  background-color: limegreen;
-  border: none;
-  border-radius: 10px;
-  padding: 10px 20px;
-  font-size: medium;
-  font-weight: bold;
+.filter-button {
+  margin-left: 15px;
 }
 
-#backup-now-button:hover {
-  background-color: green;
+#subheader {
+  margin-bottom: 30px;
 }
 
 .machine-dashboard-calendar-today-border {

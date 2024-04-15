@@ -70,7 +70,11 @@
       {% for machine in machines %}
       <tr id="{{ machine.name | lower }}-row">
           <td>
-            <a href="/machine/{{ machine.name }}" class="dashboard-bold"> {{ machine.name }} </a>
+            <a
+              href="/machine/{{ machine.name }}?showRequestedBackups=true&showScheduledBackups=true" 
+              class="dashboard-bold">
+              {{ machine.name }}
+            </a>
           </td>
 
           {% for machine in machines %}

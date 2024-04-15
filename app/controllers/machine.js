@@ -10,8 +10,13 @@ const path = require('path');
 let config, db;
 
 router.get('/:name',(req, res, next) => {
+  // Cast query parameters from string representations of booleans to actual booleans
+  const showRequestedBackups = req.query.showRequestedBackups === 'true';
+  const showScheduledBackups = req.query.showScheduledBackups === 'true';
+
   // Attempt to grab the machine that is requested
   let machine = system.getMachines()[req.params.name];
+
   if (!machine)
   {
     logger.warn('Request for unknown machine with name: "' + req.params.name + '"');
@@ -30,7 +35,6 @@ router.get('/:name',(req, res, next) => {
 
   system.getRequestedBackupEvents(machine.name)
     .then(requestedBackupEvents => {
-      logger.info(`requestedBackupEvents: ${JSON.stringify(requestedBackupEvents)}`);
       getBackupEvents(machine, machine.buckets.length)
       .then(backupEvents => {
         const machineInfo = {
@@ -38,9 +42,12 @@ router.get('/:name',(req, res, next) => {
           machine: machine,
           backupCalendar: backupEvents.calendar,
           backupEvents: backupEvents.backupEvents,
-          requestedBackupEvents: formatRequestedBackupEvents(requestedBackupEvents)
+          requestedBackupEvents: formatRequestedBackupEvents(requestedBackupEvents),
+          showRequestedBackups,
+          showScheduledBackups
         };
-        machineInfo.backupEvents.sort((a, b) => b.backupTime - a.backupTime);
+        machineInfo.backupEvents.reverse(); // Sets the correct order for the backup events (Newest to oldest)
+        logger.info(`machineInfo: ${JSON.stringify(machineInfo.backupEvents)}`);
         res.render('machine', machineInfo);
       });
     });
@@ -163,6 +170,7 @@ function getBackupEvents(machine, CALENDAR_ROWS = 5)
       .filter(bucket => {
         return (bucket.backup)
       })
+      .sort((a, b) => b.backup.date - a.backup.date)
       .map(bucket => {
         return { 
           date: util.getFormattedDate(new Date(Date.parse(bucket.backup.date))), 

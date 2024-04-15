@@ -7,8 +7,26 @@
         <div class="six wide column">
           <a href="/dashboard"><img id="dashboard-logo" src="/logo.png"></a>
           <h1>Machine: {{ machine.name }}</h1>
-          <h1></h1>
+          {% if showRequestedBackups and showScheduledBackups %}
+            <h2 id="subheader">Showing: All backups</h2>
+          {% elif showRequestedBackups %}
+            <h2 id="subheader">Showing: Requested backups</h2>
+          {% elif showScheduledBackups %}
+            <h2 id="subheader">Showing: Scheduled backups</h2>
+          {% else %}
+            <h2 id="subheader">Click one of the buttons to show backups</h2>
+          {% endif %}
           <button id="backup-now-button">Backup now</button>
+          {% if showRequestedBackups %}
+            <button class="filter-button" id="hide-requested-backups-button">Hide requested backups</button>
+          {% else %}
+            <button class="filter-button" id="hide-requested-backups-button">Show requested backups</button>
+          {% endif %}
+          {% if showScheduledBackups %}
+            <button class="filter-button" id="hide-scheduled-backups-button">Hide scheduled backups</button>
+          {% else %}
+            <button class="filter-button" id="hide-scheduled-backups-button">Show scheduled backups</button>
+          {% endif %}
         </div>
         <div class="ten wide column">
           <div class="ui calendar" id="inline-calendar"></div>
@@ -47,48 +65,52 @@
             </tr>
             </thead>
             <tbody>
-            {% for backupEvent in requestedBackupEvents %}  {# Always display requestedBackupEvents first #}
-              <tr>
-                {% if backupEvent.rsyncExitCode %}
-                  <td class="collapsing negative">
-                    <i class="user circle icon" title="This backup was requested by a user."></i>
-                    <i class="exclamation circle icon" title="This backup was not successful."></i>
-                    {{ backupEvent.date }}
-                  </td>
-                {% else %}
-                  <td class="collapsing positive">
-                    <i class="user circle icon" title="This backup was requested by a user."></i>
-                    <i class="check circle icon" title="This backup was successful."></i>
-                    {{ backupEvent.date }}
-                  </td>
-                {% endif %}
-                <td class="collapsing">{{ backupEvent.size }}</td>
-                <td class="collapsing">{{ backupEvent.transferSize }}</td>
-                <td class="collapsing">{{ backupEvent.transferTimeSec }}</td>
-                <td class="collapsing">{{ backupEvent.rsyncExitCode }}</td>
-                <td>{{ backupEvent.rsyncExitReason }}</td>
-              </tr>
-            {% endfor %}
-            {% for backupEvent in backupEvents %}
-              <tr>
-                {% if backupEvent.rsyncExitCode %}
-                  <td class="collapsing negative">
-                    <i class="exclamation circle icon" title="This backup was not successful."></i>
-                    {{ backupEvent.date }}
-                  </td>
-                {% else %}
-                  <td class="collapsing positive">
-                    <i class="check circle icon" title="This backup was successful."></i>
-                    {{ backupEvent.date }}
-                  </td>
-                {% endif %}
-                <td class="collapsing">{{ backupEvent.size }}</td>
-                <td class="collapsing">{{ backupEvent.transferSize }}</td>
-                <td class="collapsing">{{ backupEvent.transferTimeSec }}</td>
-                <td class="collapsing">{{ backupEvent.rsyncExitCode }}</td>
-                <td>{{ backupEvent.rsyncExitReason }}</td>
-              </tr>
-            {% endfor %}
+            {% if showRequestedBackups %}
+              {% for backupEvent in requestedBackupEvents %}  {# Always display requestedBackupEvents first #}
+                <tr>
+                  {% if backupEvent.rsyncExitCode %}
+                    <td class="collapsing negative">
+                      <i class="user circle icon" title="This backup was requested by a user."></i>
+                      <i class="exclamation circle icon" title="This backup was not successful."></i>
+                      {{ backupEvent.date }}
+                    </td>
+                  {% else %}
+                    <td class="collapsing positive">
+                      <i class="user circle icon" title="This backup was requested by a user."></i>
+                      <i class="check circle icon" title="This backup was successful."></i>
+                      {{ backupEvent.date }}
+                    </td>
+                  {% endif %}
+                  <td class="collapsing">{{ backupEvent.size }}</td>
+                  <td class="collapsing">{{ backupEvent.transferSize }}</td>
+                  <td class="collapsing">{{ backupEvent.transferTimeSec }}</td>
+                  <td class="collapsing">{{ backupEvent.rsyncExitCode }}</td>
+                  <td>{{ backupEvent.rsyncExitReason }}</td>
+                </tr>
+              {% endfor %}
+            {% endif %}
+            {% if showScheduledBackups %}
+              {% for backupEvent in backupEvents %}
+                <tr>
+                  {% if backupEvent.rsyncExitCode %}
+                    <td class="collapsing negative">
+                      <i class="exclamation circle icon" title="This backup was not successful."></i>
+                      {{ backupEvent.date }}
+                    </td>
+                  {% else %}
+                    <td class="collapsing positive">
+                      <i class="check circle icon" title="This backup was successful."></i>
+                      {{ backupEvent.date }}
+                    </td>
+                  {% endif %}
+                  <td class="collapsing">{{ backupEvent.size }}</td>
+                  <td class="collapsing">{{ backupEvent.transferSize }}</td>
+                  <td class="collapsing">{{ backupEvent.transferTimeSec }}</td>
+                  <td class="collapsing">{{ backupEvent.rsyncExitCode }}</td>
+                  <td>{{ backupEvent.rsyncExitReason }}</td>
+                </tr>
+              {% endfor %}
+            {% endif %}
             </tbody>
           </table>
         </div>
@@ -111,9 +133,25 @@
       });
   }
 
+  function toggleRequestedBackups() {
+    const url = new URL(location.href);
+    url.searchParams.set('showRequestedBackups', !{{ showRequestedBackups }});
+    location.assign(url.search);
+  }
+
+  function toggleScheduledBackups() {
+    const url = new URL(location.href);
+    url.searchParams.set('showScheduledBackups', !{{ showScheduledBackups }});
+    location.assign(url.search);
+  }
+
   const backupNowButton = document.getElementById('backup-now-button');
+  const hideRequestedBackupsButton = document.getElementById('hide-requested-backups-button');
+  const hideScheduledBackupsButton = document.getElementById('hide-scheduled-backups-button');
 
   backupNowButton.addEventListener('click', () => sendBackupRequest("{{ machine.name }}"));
+  hideRequestedBackupsButton.addEventListener('click', toggleRequestedBackups);
+  hideScheduledBackupsButton.addEventListener('click', toggleScheduledBackups);
 
   let backupCalendar = [];
   {% for week in backupCalendar %}
