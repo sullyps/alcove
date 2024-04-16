@@ -71,7 +71,8 @@
       <tr id="{{ machine.name | lower }}-row">
           <td>
             <a
-              href="/machine/{{ machine.name }}?showRequestedBackups=true&showScheduledBackups=true" 
+              id ="machine-link"
+              href="/machine/{{ machine.name }}?showRequestedBackups=true&showScheduledBackups=true?" 
               class="dashboard-bold">
               {{ machine.name }}
             </a>
@@ -134,6 +135,19 @@
       {% endfor %}
     </tbody>
   </table>
+  <div id="gmt-offset-panel" class="ui segment">
+    <h3 id="gmt-header">Timezone GMT Offset:</h3>
+    <div id="gmt-row">
+      <p class="gmt-child">GMT:</p>
+      <input id="gmt-input" class="gmt-child" type="text" placeholder="+x/-x" />
+      <p p id="extra-gmt-text">(In hours)</p>
+    </div>
+    <h6 id="gmt-description">
+      (This is used to display backups in your timezone,
+      <a href="https://www.google.com/search?q=whats+my+timezone" target="_blank">&nbsp get it here</a>
+      )
+    </h6>
+  </div>
 </div>
 <div class="template" id="sizePopupTemplate">
   <div class="content">
@@ -149,5 +163,59 @@
 {% block js %}
   <script src="/js/vendor/jquery.tablesort.min.js"></script>
   <script src="/js/dashboard.js"></script>
+  <script>
+    const gmtInputElement = document.getElementById('gmt-input');
+    const machineLinkElement = document.getElementById('machine-link');
+    const currentGmtOffset = localStorage.getItem('gmtOffsetHours');
+
+    function setMachineLinkGMT(gmtOffsetHours) {
+      if (!gmtOffsetHours)
+        return console.error('Tried setting the GMT offset in the machine link to a falsy value, aborting...');
+
+      const url = new URL(machineLinkElement.href);
+      url.searchParams.set('gmtOffsetHours', gmtOffsetHours);
+      machineLinkElement.href = url.href;
+    }
+
+    if (isNaN(currentGmtOffset)) {
+      gmtInputElement.value = '';
+      setMachineLinkGMT(null);
+    } else {
+      gmtInputElement.value = (currentGmtOffset > 0 ? '+' : '') + currentGmtOffset;
+      console.log('setting machine link param');
+      setMachineLinkGMT(currentGmtOffset);
+    }
+
+    gmtInputElement.addEventListener('input', onGmtChange);
+
+    function onGmtChange(event) {
+      const newGmt = gmtInputElement.value;
+
+      if (newGmt.split('+').length > 2 || newGmt.split('-').length > 2) {
+        localStorage.setItem('gmtOffsetHours', null);
+        return console.error('GMT offset has multiple signs, abandoning..');
+      }
+
+      if (!newGmt) {
+        localStorage.setItem('gmtOffsetHours', null);
+        return console.error('No GMT!');
+      }
+
+      if (!newGmt.startsWith('-') && !newGmt.startsWith('+')) {
+        localStorage.setItem('gmtOffsetHours', null);
+        return console.error('Cant parse GMT, needs + or -')
+      }
+
+      const parsedNewGmt = Number(newGmt);
+
+      if (isNaN(parsedNewGmt)) {
+        localStorage.setItem('gmtOffsetHours', null);
+        return console.error('Number could not be parsed (returned NaN)')
+      }
+
+      localStorage.setItem('gmtOffsetHours', Number(newGmt));
+      setMachineLinkGMT(Number(newGmt));
+    }
+  </script>
   <script class="text/javascript"> $('table').tablesort(); </script>
 {% endblock %}
