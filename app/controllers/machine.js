@@ -44,8 +44,6 @@ router.get('/:name',(req, res, next) => {
     .then(requestedBackupEvents => {
       getBackupEvents(machine, machine.buckets.length)
       .then(backupEvents => {
-        //logger.info('BACKUP_EVENTS', JSON.stringify(backupEvents.backupEvents));
-
         const machineInfo = {
           title: `${machine.name} :: Alcove Backup System`,
           machine: machine,
@@ -57,7 +55,6 @@ router.get('/:name',(req, res, next) => {
           showScheduledBackups,
         };
         machineInfo.backupEvents.reverse(); // Sets the correct order for the backup events (Newest to oldest)
-        logger.info(`machineInfo: ${JSON.stringify(machineInfo.backupEvents)}`);
         res.render('machine', machineInfo);
       });
     });
@@ -90,8 +87,13 @@ function applyGmtOffset(backupEvent, gmtOffsetHours) {
   return backupEvent;
 }
 
+/**
+ * Internal function that formats backup event data correctly right before they're rendered on the web panel.
+ * - Applies the correct timezone offset to each backup event
+ * @param {*} backupEvents The list of BackupEvents to be processed
+ * @param {*} gmtOffsetHours the GMT offset machine data request
+ */
 function formatBackupEvents(backupEvents, gmtOffsetHours) {
-  logger.info('BACKUP_EVENTS:', JSON.stringify(backupEvents));
   return backupEvents
     .map(backupEvent => {
       backupEvent.backupTime = new Date(backupEvent.date).toISOString()
@@ -107,8 +109,8 @@ function formatBackupEvents(backupEvents, gmtOffsetHours) {
 /**
  * Formats an array of RequestedBackupEvents from the database to display properly
  * on the web panel.
- * This function sorts the events from newest to oldest, then applies the correct GMT offset which is
- * specified by the user in the web panel.
+ * - Sorts BackupEvents from newest to oldest
+ * - Applies the requested backup time offset to each RequestedBackupEvent
  * @param requestedBackupEvents The array of RequestedBackupEvents to format
  * @param gmtOffsetHours The offset (in hours) from GMT time (which the backup dates are saved in)
  */
