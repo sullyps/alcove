@@ -128,6 +128,50 @@ body
   float:right;
 }
 
+#gmt-offset-panel {
+  align-self: center;
+  width: 50%;
+  transform: translate(50%, 0);
+}
+
+#gmt-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#gmt-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+#gmt-input {
+  height: 20px;
+  width: 40px;
+  margin-left: 5px;
+  margin-bottom: 10px;
+}
+
+#extra-gmt-text {
+  margin-left: 5px;
+  margin-bottom: 10px;
+}
+
+#gmt-description {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+}
+
+.gmt-child {
+  flex-grow: 0;
+  flex-shrink: 0;
+  flex-direction: row;
+}
+
 .dashboard-header-segment
 {
   text-align:center;

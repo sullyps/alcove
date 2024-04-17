@@ -56,7 +56,11 @@
           <table class="ui striped selectable sortable celled table" id="machine-table">
             <thead>
             <tr>
-              <th class="collapsing">Backup Time</th>
+              {% if gmtOffsetHours >= 0 %}
+                <th class="collapsing">Backup Time (GMT +{{ gmtOffsetHours }}:00)</th>
+              {% else %}
+                <th class="collapsing">Backup Time (GMT {{ gmtOffsetHours }}:00)</th>
+              {% endif %}
               <th class="collapsing">Size on Disk</th>
               <th class="collapsing">Transfer Size</th>
               <th class="collapsing">Transfer Time</th>
