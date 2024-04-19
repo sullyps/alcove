@@ -223,6 +223,31 @@ body {
   height: 100%;
 }
 
+.backup-day {
+  color: green;
+  font-style: italic;
+}
+
+.backup-time {
+  color: darkcyan;
+  font-style: italic;
+}
+
+.backup-amount {
+  color: darkcyan;
+  font-style: italic;
+}
+
+.schedule-description {
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+#schedule-description-container {
+  margin-top: 20px;
+}
+
 .x-axis {
   text-align: center;
   padding: 0.5em 0 2.5em;

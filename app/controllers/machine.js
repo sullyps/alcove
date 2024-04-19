@@ -40,6 +40,11 @@ router.get('/:name',(req, res, next) => {
   config = system.getConfig();
   db = models.getDatabase();
 
+  const schedule = config.machines[machine.name].schedule;
+  const scheduleInfo = util.getInfoFromSchedule(schedule, gmtOffsetHours);
+
+  logger.info('SCHEDULE_INFO:', scheduleInfo);
+
   system.getRequestedBackupEvents(machine.name)
     .then(requestedBackupEvents => {
       getBackupEvents(machine, machine.buckets.length)
@@ -50,6 +55,7 @@ router.get('/:name',(req, res, next) => {
           backupCalendar: backupEvents.calendar,
           backupEvents: formatBackupEvents(backupEvents.backupEvents, gmtOffsetHours),
           requestedBackupEvents: formatRequestedBackupEvents(requestedBackupEvents, gmtOffsetHours),
+          scheduleInfo,
           gmtOffsetHours,
           showRequestedBackups,
           showScheduledBackups,

@@ -30,6 +30,24 @@
         </div>
         <div class="ten wide column">
           <div class="ui calendar" id="inline-calendar"></div>
+          <div id="schedule-description-container">
+            <h3 class="schedule-description">
+              Backing up
+              {% if scheduleInfo.backupEveryday %}
+                <span class="backup-day"> everyday </span>
+              {% else %}
+                every 
+                <span class="backup-day">
+                  {% for day in scheduleInfo.scheduledDays %}
+                    {{ day }}
+                  {% endfor %}
+                </span>
+              {% endif %}
+            </h3>
+            <h3 class="schedule-description">at
+              <span class="backup-time">{{ scheduleInfo.backupTime }}</span>
+            </h3>
+          </div>
         </div>
       </div>
 
