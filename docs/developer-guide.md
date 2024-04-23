@@ -138,13 +138,7 @@ To finish up your configuration, you need to create some mock files on which to 
 mkdir /backup-test && echo "This file should be ignored because of its extension" > /backup-test/ext-ignore.testignored && echo "This file should be backed up" > /backup-test/essay.txt && echo "This Markdown file should be backed up" > /backup-test/another-file.md && mkdir /backup-test/ignored && echo "This file should be ignored because of the directory in which it is located" > /backup-test/ignored/dir-ignore.txt && echo "This file should be ignored because it is specifically ignored in the machine config" > /backup-test/ignore-me.txt
 ```
 
-Next, to enable HTTPS on the monitoring interface, you need to generate an SSL certificate. To do this, create an `ssl` folder in the `<project_root>/etc/alcove` directory. Then, run the following two commands (from the container) in that folder:
-
-**IMPORTANT: Currently, the project only seems to load when the `ssl.key` and `ssl.crt` files are placed in `/etc/ssl`, but the instructions say to put the ssl files in /etc/alcove. This needs to be updated. For now, you can use the following commands to get the system to boot**
-```shell script
-cd etc/alcove/ssl # From project root
-cp ssl.key /etc/ssl && cp ssl.crt /etc/ssl # Copy the key and crt files to <machine root>/ssl
-```
+Next, to enable HTTPS on the monitoring interface, you need to generate an SSL certificate. To do this, create an `ssl` folder in the `<project_root>/etc` directory. Then, run the following two commands (from the container) in that folder:
 
 ```shell script
 openssl ecparam -out ssl.key -name prime256v1 -genkey

@@ -36,7 +36,7 @@
               {% if scheduleInfo.backupEveryday %}
                 <span class="backup-day"> everyday </span>
               {% elif scheduleInfo.backupEverydayExcept %}
-                <span> everyday except <span class="backup-day">{{ scheduleInfo.backupEverydayExcept }}</span></span>
+                everyday <span id="except-backup-day">except {{ scheduleInfo.backupEverydayExcept }}</span>
               {% else %}
                 every 
                 <span class="backup-day">

@@ -6,6 +6,7 @@ resources/htpassword
 data
 logs
 etc/alcove/*
+etc/ssl
 config/*
 dist
 todo.md
