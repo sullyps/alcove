@@ -43,8 +43,6 @@ router.get('/:name',(req, res, next) => {
   const schedule = config.machines[machine.name].schedule;
   const scheduleInfo = util.getInfoFromSchedule(schedule, gmtOffsetHours);
 
-  logger.info('SCHEDULE_INFO:', scheduleInfo);
-
   system.getRequestedBackupEvents(machine.name)
     .then(requestedBackupEvents => {
       getBackupEvents(machine, machine.buckets.length)

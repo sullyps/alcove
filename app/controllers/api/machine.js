@@ -32,6 +32,9 @@ router.get('/:name/backup-now', (req, res, next) => {
 	rsync.runRequestedRsync(system.getConfig(), machine, (error, rsyncStats) => {
 		if (error) {
 			logger.error('Error running requested rsync:', error);
+
+			system.insertRequestedBackupEvent(machine, rsyncStats);
+
 			return res.status(500).json({
 				success: false,
 				message: `Backup of ${machine.name} was not successful. Check the logs for more info.`,

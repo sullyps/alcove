@@ -181,6 +181,59 @@ body
 
 
 /* Machine Dashboard */
+#backup-now-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  background-color: forestgreen;
+  align-self: flex-end;
+  margin-right: 10px;
+
+  justify-self: center;
+  justify-content: center;
+}
+
+#backup-now-button:hover {
+  background-color: rgb(25, 103, 25);
+}
+
+.filter-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  background-color: #4b94cb;
+  margin-right: 10px;
+}
+
+.filter-button:hover {
+  background-color: #4172b0;
+}
+
+@media only screen and (max-width: 1452px) {
+  #backup-now-button {
+    width: 170px;
+    position: absolute;
+    padding: 5px 10px;
+    left: 14px;
+  }
+
+  #hide-requested-backups-button {
+    position: absolute;
+    padding: 5px 10px;
+    left: 14px;
+    bottom: 13%;
+  }
+
+  #hide-scheduled-backups-button {
+    position: absolute;
+    padding: 5px 10px;
+    left: 14px;
+    bottom: 0%
+  }
+}
+
 .machine-dashboard-calendar-today-border
 {
   border: 1px solid black !important;

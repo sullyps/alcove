@@ -35,11 +35,13 @@
               Backing up
               {% if scheduleInfo.backupEveryday %}
                 <span class="backup-day"> everyday </span>
+              {% elif scheduleInfo.backupEverydayExcept %}
+                <span> everyday except <span class="backup-day">{{ scheduleInfo.backupEverydayExcept }}</span></span>
               {% else %}
                 every 
                 <span class="backup-day">
-                  {% for day in scheduleInfo.scheduledDays %}
-                    {{ day }}
+                  {% for i in range(0, scheduleInfo.scheduledDays.length) %}
+                    {{ scheduleInfo.scheduledDays[i] + ("," if i != scheduleInfo.scheduledDays.length - 1) + (" and " if i == scheduleInfo.scheduledDays.length - 2) }}
                   {% endfor %}
                 </span>
               {% endif %}
