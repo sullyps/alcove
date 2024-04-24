@@ -1,24 +1,35 @@
 const express = require('express'),
 	router = express.Router(),
-	fs = require('fs'),
-	path = require('path'),
 	system = require('../../../lib/system'),
 	models = require('../../models'),
-	rsync = require('../../../lib/rsync'),
-	util = require('../../../lib/util');
+	rsync = require('../../../lib/rsync');
 
 let config, db;
 
 const logger = require('../../../lib/config/log4js').getLogger();
 
-router.get('/:name/backup-now', (req, res, next) => {
+// Holds names of machine(s) that are currently being backed up
+let loadingMachineNames = [];
+
+// Endpoint that returns the backup status of a specified machine
+router.get('/:name/backup-status', (req, res, _next) => {
+	return res
+	.status(200)
+	.json({
+		success: true,
+		loading: loadingMachineNames.includes(req.params.name)
+	});
+});
+
+// Endpoint that creates an immediate backup a specified machine
+router.get('/:name/backup-now', async (req, res, _next) => {
 	const machine = system.getMachines()[req.params.name];
+
+	if (!loadingMachineNames.includes(req.params.name))
+		loadingMachineNames.push(req.params.name);
 
 	if (!machine) {
 		logger.warn(
-			'API Request for unknown machine with name: "' + req.params.name + '"'
-		);
-		console.log(
 			'API Request for unknown machine with name: "' + req.params.name + '"'
 		);
 
@@ -30,6 +41,11 @@ router.get('/:name/backup-now', (req, res, next) => {
 	// on success, send back the machineStats object from above
 	// TODO: it might actually be worth running rsync here, because there would only be on flag that would need to be changed
 	rsync.runRequestedRsync(system.getConfig(), machine, (error, rsyncStats) => {
+		loadingMachineNames.splice(
+			loadingMachineNames.findIndex(machineName => machineName === req.params.name),
+			1
+		);
+	
 		if (error) {
 			logger.error('Error running requested rsync:', error);
 
@@ -42,12 +58,6 @@ router.get('/:name/backup-now', (req, res, next) => {
 		}
 
 		system.insertRequestedBackupEvent(machine, rsyncStats);
-
-		res.json({
-			success: true,
-			message: `backup successful`,
-			machineStats: `${JSON.stringify(rsyncStats)}`
-		});
 	});
 });
 

@@ -1,12 +1,18 @@
 {% extends 'layout.njk' %}
 
 {% block content %}
+<head>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+  />
+</head>
   <div>
     <div class="ui fluid stackable grid" id="dashboard-header-grid">
       <div class="row" id="dashboard-header-row-top">
         <div class="six wide column">
           <a href="/dashboard"><img id="dashboard-logo" src="/logo.png"></a>
-          <h1>Machine: {{ machine.name }}</h1>
+          <h1 id="machine-name-text">Machine: {{ machine.name }}</h1>
           {% if showRequestedBackups and showScheduledBackups %}
             <h2 id="subheader">Showing: All backups</h2>
           {% elif showRequestedBackups %}
@@ -147,7 +153,41 @@
 {#  <script src="/js/vendor/jquery.tablesort.min.js"></script>#}
 {#  <script src="/js/machine.js"></script>#}
  <script>
+  // Handles a loading indicator element on the page while a backup is being made
+  function loadNewBackup(machineName) {
+    const interval = setInterval(() => {
+      const getMachineStatus = new Promise((res, rej) => {
+        fetch(`/api/machine/${machineName}/backup-status`)
+          .then(data => {
+            data.json().then(jsonData => {
+              if (!jsonData.loading) {
+                clearInterval(interval);
+                res();
+              }
+            });
+          })
+          .catch(err => {
+            clearInterval(interval);
+            rej(err);
+          });
+      });
+
+      getMachineStatus
+        .finally(() => location.assign(new URL(location.href)));
+    }, 1000);
+  }
+
   function sendBackupRequest(machineName) {
+    const machineNameElement = document.getElementById('machine-name-text');
+    machineNameElement.innerText = "Backing up {{ machine.name }}..."
+
+    machineNameElement.classList.add(
+      'animate__animated',
+      'animate__flash',
+      'animate__infinite',
+      'animate__slower',
+    );
+
     fetch(`/api/machine/${machineName}/backup-now`)
       .then(data => {
         console.log(data);
@@ -155,6 +195,8 @@
       .catch(err => {
         console.error('Error fetching machine data:', err);
       });
+
+      loadNewBackup(machineName);
   }
 
   function toggleRequestedBackups() {
